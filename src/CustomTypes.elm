@@ -23,6 +23,7 @@ type Msg
     | NewShape ShapeType
     | InputSelectedShape Int
     | InputData String String
+    | StopDrag
 
 
 type alias ShapeData =
@@ -31,7 +32,7 @@ type alias ShapeData =
     , followMouse : Bool
     , id : Int
     , size : (Float, Float)
-    , updateSize : Bool
+    , updateSize : (Bool, Bool)
     , fillColor : String
     }
 

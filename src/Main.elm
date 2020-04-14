@@ -34,7 +34,7 @@ init _ =
         (InputShapeData "50" "50" "50" "50" "blue")
     , Cmd.none )
 
-initShape = ShapeData Rect (1, 1) False 1 (100, 100) False "blue"
+initShape = ShapeData Rect (1, 1) False 1 (100, 100) (False, False) "blue"
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -51,7 +51,7 @@ update msg model =
                     , width = String.fromFloat <| Tuple.first selectedShapeData.size
                     , height = String.fromFloat <| Tuple.second selectedShapeData.size
                     , fillColor = selectedShapeData.fillColor
-                    }  
+                    }
             in
             ({ model
             | mousePosition = pos
@@ -66,8 +66,6 @@ update msg model =
                             newData
                         else shapeData
                     ) model.shapes
-                
-                
             in
             ({ model
             | shapes = newShapes
@@ -76,7 +74,7 @@ update msg model =
             
         NewShape shapeType ->
             let newId = model.lastId + 1
-                newShape = ShapeData shapeType (50, 50) False newId (50, 50) False "purple"
+                newShape = ShapeData shapeType (50, 50) False newId (50, 50) (False, False) "purple"
             in
             ({ model
             | shapes = model.shapes ++ [newShape]
@@ -120,6 +118,18 @@ update msg model =
             | inputShapeData = newInputShapeData
             , shapes = newShapes
             }, Cmd.none)
+        
+        StopDrag ->
+            let newShapes = 
+                    List.map (\shape ->
+                        { shape
+                        | followMouse = False
+                        , updateSize = (False, False) 
+                        }) model.shapes
+            in
+            ({ model
+            | shapes = newShapes
+            }, Cmd.none)
             
 
 
@@ -131,7 +141,7 @@ view model =
             else customEllipse shapeData model.selectedShape
             ) model.shapes
     in
-    Html.div [] 
+    Html.div [ He.onMouseUp StopDrag ] 
         [ Svg.svg 
             [ Sa.width "1000", Sa.height "400"
             , Ha.style "border" "solid 1px"

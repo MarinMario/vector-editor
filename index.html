@@ -10570,7 +10570,7 @@ var $author$project$Main$initShape = A7(
 	false,
 	1,
 	_Utils_Tuple2(100, 100),
-	false,
+	_Utils_Tuple2(false, false),
 	'blue');
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
@@ -10605,7 +10605,9 @@ var $author$project$HelperFunctions$dragShape = function (model) {
 				shape,
 				{
 					position: shape.followMouse ? newPosition : shape.position,
-					size: shape.updateSize ? newSize : shape.size
+					size: _Utils_Tuple2(
+						shape.updateSize.a ? newSize.a : shape.size.a,
+						shape.updateSize.b ? newSize.b : shape.size.b)
 				});
 		},
 		model.shapes);
@@ -10687,7 +10689,7 @@ var $author$project$Main$update = F2(
 					false,
 					newId,
 					_Utils_Tuple2(50, 50),
-					false,
+					_Utils_Tuple2(false, false),
 					'purple');
 				return _Utils_Tuple2(
 					_Utils_update(
@@ -10707,7 +10709,7 @@ var $author$project$Main$update = F2(
 						model,
 						{selectedShape: val}),
 					$elm$core$Platform$Cmd$none);
-			default:
+			case 'InputData':
 				var vtc = msg.a;
 				var val = msg.b;
 				var isd = model.inputShapeData;
@@ -10770,12 +10772,30 @@ var $author$project$Main$update = F2(
 						model,
 						{inputShapeData: newInputShapeData, shapes: newShapes}),
 					$elm$core$Platform$Cmd$none);
+			default:
+				var newShapes = A2(
+					$elm$core$List$map,
+					function (shape) {
+						return _Utils_update(
+							shape,
+							{
+								followMouse: false,
+								updateSize: _Utils_Tuple2(false, false)
+							});
+					},
+					model.shapes);
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{shapes: newShapes}),
+					$elm$core$Platform$Cmd$none);
 		}
 	});
 var $author$project$CustomTypes$Ellipse = {$: 'Ellipse'};
 var $author$project$CustomTypes$MoveMouse = function (a) {
 	return {$: 'MoveMouse', a: a};
 };
+var $author$project$CustomTypes$StopDrag = {$: 'StopDrag'};
 var $elm$html$Html$br = _VirtualDom_node('br');
 var $author$project$CustomTypes$EditShape = function (a) {
 	return {$: 'EditShape', a: a};
@@ -10790,30 +10810,20 @@ var $elm$svg$Svg$Events$onMouseDown = function (msg) {
 		'mousedown',
 		$elm$json$Json$Decode$succeed(msg));
 };
-var $elm$svg$Svg$Events$onMouseUp = function (msg) {
-	return A2(
-		$elm$html$Html$Events$on,
-		'mouseup',
-		$elm$json$Json$Decode$succeed(msg));
-};
 var $elm$svg$Svg$rect = $elm$svg$Svg$trustedNode('rect');
-var $author$project$Components$shapeProps = function (shapeData) {
-	return {height: shapeData.size.b, width: shapeData.size.a, xPos: shapeData.position.a, yPos: shapeData.position.b};
-};
 var $elm$svg$Svg$Attributes$width = _VirtualDom_attribute('width');
 var $elm$svg$Svg$Attributes$x = _VirtualDom_attribute('x');
 var $elm$svg$Svg$Attributes$y = _VirtualDom_attribute('y');
-var $author$project$Components$changeSizeHandle = F2(
-	function (shapeData, selectedShape) {
-		var p = $author$project$Components$shapeProps(shapeData);
+var $author$project$ResizeHandles$handle = F6(
+	function (shapeData, selectedShape, x, y, bool1, bool2) {
 		return _Utils_eq(shapeData.id, selectedShape) ? A2(
 			$elm$svg$Svg$rect,
 			_List_fromArray(
 				[
 					$elm$svg$Svg$Attributes$x(
-					$elm$core$String$fromFloat((p.xPos + p.width) - 10)),
+					$elm$core$String$fromFloat(x)),
 					$elm$svg$Svg$Attributes$y(
-					$elm$core$String$fromFloat((p.yPos + p.height) - 10)),
+					$elm$core$String$fromFloat(y)),
 					$elm$svg$Svg$Attributes$width('20'),
 					$elm$svg$Svg$Attributes$height('20'),
 					$elm$svg$Svg$Attributes$fill('yellow'),
@@ -10821,20 +10831,41 @@ var $author$project$Components$changeSizeHandle = F2(
 					$author$project$CustomTypes$EditShape(
 						_Utils_update(
 							shapeData,
-							{updateSize: true}))),
-					$elm$svg$Svg$Events$onMouseUp(
-					$author$project$CustomTypes$EditShape(
-						_Utils_update(
-							shapeData,
-							{updateSize: false})))
+							{
+								updateSize: _Utils_Tuple2(bool1, bool2)
+							})))
 				]),
 			_List_Nil) : A2($elm$svg$Svg$g, _List_Nil, _List_Nil);
+	});
+var $author$project$ResizeHandles$shapeProps = function (shapeData) {
+	return {height: shapeData.size.b, width: shapeData.size.a, xPos: shapeData.position.a, yPos: shapeData.position.b};
+};
+var $author$project$ResizeHandles$changeHeightHandle = F2(
+	function (shapeData, selectedShape) {
+		var p = $author$project$ResizeHandles$shapeProps(shapeData);
+		return A6($author$project$ResizeHandles$handle, shapeData, selectedShape, (p.xPos + (p.width / 2)) - 10, (p.yPos + p.height) - 10, false, true);
+	});
+var $author$project$ResizeHandles$changeSizeHandle = F2(
+	function (shapeData, selectedShape) {
+		var p = $author$project$ResizeHandles$shapeProps(shapeData);
+		return A6($author$project$ResizeHandles$handle, shapeData, selectedShape, (p.xPos + p.width) - 10, (p.yPos + p.height) - 10, true, true);
+	});
+var $author$project$ResizeHandles$changeWidthHandle = F2(
+	function (shapeData, selectedShape) {
+		var p = $author$project$ResizeHandles$shapeProps(shapeData);
+		return A6($author$project$ResizeHandles$handle, shapeData, selectedShape, (p.xPos + p.width) - 10, (p.yPos + (p.height / 2)) - 10, true, false);
 	});
 var $elm$svg$Svg$Attributes$cx = _VirtualDom_attribute('cx');
 var $elm$svg$Svg$Attributes$cy = _VirtualDom_attribute('cy');
 var $elm$svg$Svg$ellipse = $elm$svg$Svg$trustedNode('ellipse');
 var $elm$svg$Svg$Attributes$rx = _VirtualDom_attribute('rx');
 var $elm$svg$Svg$Attributes$ry = _VirtualDom_attribute('ry');
+var $elm$svg$Svg$Events$onMouseUp = function (msg) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'mouseup',
+		$elm$json$Json$Decode$succeed(msg));
+};
 var $author$project$Components$shapeEvents = function (shapeData) {
 	return $elm$svg$Svg$g(
 		_List_fromArray(
@@ -10853,7 +10884,7 @@ var $author$project$Components$shapeEvents = function (shapeData) {
 };
 var $author$project$Components$customEllipse = F2(
 	function (shapeData, selectedShape) {
-		var p = $author$project$Components$shapeProps(shapeData);
+		var p = $author$project$ResizeHandles$shapeProps(shapeData);
 		return A2(
 			$elm$svg$Svg$g,
 			_List_Nil,
@@ -10880,12 +10911,14 @@ var $author$project$Components$customEllipse = F2(
 								]),
 							_List_Nil)
 						])),
-					A2($author$project$Components$changeSizeHandle, shapeData, selectedShape)
+					A2($author$project$ResizeHandles$changeSizeHandle, shapeData, selectedShape),
+					A2($author$project$ResizeHandles$changeWidthHandle, shapeData, selectedShape),
+					A2($author$project$ResizeHandles$changeHeightHandle, shapeData, selectedShape)
 				]));
 	});
 var $author$project$Components$customRect = F2(
 	function (shapeData, selectedShape) {
-		var p = $author$project$Components$shapeProps(shapeData);
+		var p = $author$project$ResizeHandles$shapeProps(shapeData);
 		return A2(
 			$elm$svg$Svg$g,
 			_List_Nil,
@@ -10912,7 +10945,9 @@ var $author$project$Components$customRect = F2(
 								]),
 							_List_Nil)
 						])),
-					A2($author$project$Components$changeSizeHandle, shapeData, selectedShape)
+					A2($author$project$ResizeHandles$changeSizeHandle, shapeData, selectedShape),
+					A2($author$project$ResizeHandles$changeWidthHandle, shapeData, selectedShape),
+					A2($author$project$ResizeHandles$changeHeightHandle, shapeData, selectedShape)
 				]));
 	});
 var $author$project$CustomTypes$InputData = F2(
@@ -11081,7 +11116,10 @@ var $author$project$Main$view = function (model) {
 		model.shapes);
 	return A2(
 		$elm$html$Html$div,
-		_List_Nil,
+		_List_fromArray(
+			[
+				$elm$html$Html$Events$onMouseUp($author$project$CustomTypes$StopDrag)
+			]),
 		_List_fromArray(
 			[
 				A2(
@@ -11106,7 +11144,7 @@ var $author$project$Main$view = function (model) {
 var $author$project$Main$main = $elm$browser$Browser$element(
 	{init: $author$project$Main$init, subscriptions: $author$project$Main$subscriptions, update: $author$project$Main$update, view: $author$project$Main$view});
 _Platform_export({'Main':{'init':$author$project$Main$main(
-	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"CustomTypes.Msg","aliases":{"CustomTypes.Position":{"args":[],"type":"( Basics.Float, Basics.Float )"},"CustomTypes.ShapeData":{"args":[],"type":"{ shapeType : CustomTypes.ShapeType, position : CustomTypes.Position, followMouse : Basics.Bool, id : Basics.Int, size : ( Basics.Float, Basics.Float ), updateSize : Basics.Bool, fillColor : String.String }"}},"unions":{"CustomTypes.Msg":{"args":[],"tags":{"MoveMouse":["CustomTypes.Position"],"EditShape":["CustomTypes.ShapeData"],"NewShape":["CustomTypes.ShapeType"],"InputSelectedShape":["Basics.Int"],"InputData":["String.String","String.String"]}},"Basics.Bool":{"args":[],"tags":{"True":[],"False":[]}},"Basics.Float":{"args":[],"tags":{"Float":[]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"CustomTypes.ShapeType":{"args":[],"tags":{"Rect":[],"Ellipse":[]}},"String.String":{"args":[],"tags":{"String":[]}}}}})}});}(this));
+	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"CustomTypes.Msg","aliases":{"CustomTypes.Position":{"args":[],"type":"( Basics.Float, Basics.Float )"},"CustomTypes.ShapeData":{"args":[],"type":"{ shapeType : CustomTypes.ShapeType, position : CustomTypes.Position, followMouse : Basics.Bool, id : Basics.Int, size : ( Basics.Float, Basics.Float ), updateSize : ( Basics.Bool, Basics.Bool ), fillColor : String.String }"}},"unions":{"CustomTypes.Msg":{"args":[],"tags":{"MoveMouse":["CustomTypes.Position"],"EditShape":["CustomTypes.ShapeData"],"NewShape":["CustomTypes.ShapeType"],"InputSelectedShape":["Basics.Int"],"InputData":["String.String","String.String"],"StopDrag":[]}},"Basics.Bool":{"args":[],"tags":{"True":[],"False":[]}},"Basics.Float":{"args":[],"tags":{"Float":[]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"CustomTypes.ShapeType":{"args":[],"tags":{"Rect":[],"Ellipse":[]}},"String.String":{"args":[],"tags":{"String":[]}}}}})}});}(this));
 
   var app = Elm.Main.init({ node: document.getElementById("elm") });
 }

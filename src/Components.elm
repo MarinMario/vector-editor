@@ -10,13 +10,7 @@ import Svg.Events as Se
 import Svg.Attributes as Sa
 
 import CustomTypes exposing (..)
-
-shapeProps shapeData =
-    { xPos = Tuple.first shapeData.position
-    , yPos = Tuple.second shapeData.position
-    , width = Tuple.first shapeData.size
-    , height = Tuple.second shapeData.size
-    }
+import ResizeHandles exposing (..)
 
 shapeEvents shapeData =
     Svg.g 
@@ -37,6 +31,8 @@ customRect shapeData selectedShape =
                 ] []
             ]
         , changeSizeHandle shapeData selectedShape
+        , changeWidthHandle shapeData selectedShape
+        , changeHeightHandle shapeData selectedShape
         ]
 
 customEllipse : ShapeData -> Int -> Svg Msg
@@ -52,6 +48,8 @@ customEllipse shapeData selectedShape =
                 ] []
             ]
         , changeSizeHandle shapeData selectedShape
+        , changeWidthHandle shapeData selectedShape
+        , changeHeightHandle shapeData selectedShape
         ]
 
 inputDataFields : Model -> Html Msg
@@ -70,18 +68,7 @@ customInputField whatValue sameButString =
         , Html.input [ Ha.value whatValue, He.onInput <| InputData sameButString ] []
         ]
 
-changeSizeHandle : ShapeData -> Int -> Svg Msg
-changeSizeHandle shapeData selectedShape =
-    let p = shapeProps shapeData 
-    in
-    if shapeData.id == selectedShape then
-        Svg.rect 
-            [ Sa.x <| String.fromFloat <| p.xPos + p.width - 10, Sa.y <| String.fromFloat <| p.yPos + p.height - 10
-            , Sa.width "20", Sa.height "20", Sa.fill "yellow" 
-            , Se.onMouseDown <| EditShape { shapeData | updateSize = True }
-            , Se.onMouseUp <| EditShape { shapeData | updateSize = False }
-            ] []
-    else Svg.g [] []
+
 
 newShapeButton : ShapeType -> String -> Html Msg
 newShapeButton shapeType text =

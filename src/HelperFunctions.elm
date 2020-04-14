@@ -12,14 +12,26 @@ dragShape model =
             shapey = Tuple.second shape.position
             shapew = Tuple.first shape.size
             shapeh = Tuple.second shape.size
+
+            newSizeX = mousex - shapex
+            newSizeY = mousey - shapey
             newSize =
-                ( mousex - shapex
-                , mousey - shapey
-                )
-            newPosition = 
-                ( mousex - shapew / 2
-                , mousey - shapeh / 2
-                )
+                if newSizeX > 10 && newSizeY > 10 then
+                    (newSizeX, newSizeY)
+                else if newSizeX > 10 && newSizeY < 10 then
+                    (newSizeX, 10)
+                else if newSizeX < 10 && newSizeY > 10 then
+                    (10, newSizeY)
+                else (10, 10)
+
+            newPosition =
+                case shape.shapeType of
+                    Rect -> 
+                        ( mousex - shapew / 2
+                        , mousey - shapeh / 2
+                        )
+                    Ellipse -> 
+                        ( mousex, mousey )
         in
         { shape
         | position =

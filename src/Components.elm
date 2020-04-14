@@ -48,8 +48,8 @@ customEllipse shapeData selectedShape =
                 ] []
             ]
         , changeSizeHandle shapeData selectedShape
-        , changeWidthHandle shapeData selectedShape
-        , changeHeightHandle shapeData selectedShape
+        , ellipseWidthHandle shapeData selectedShape
+        , ellipseHeightHandle shapeData selectedShape
         ]
 
 inputDataFields : Model -> Html Msg
@@ -67,8 +67,6 @@ customInputField whatValue sameButString =
         [ Html.text <| sameButString ++ ": "
         , Html.input [ Ha.value whatValue, He.onInput <| InputData sameButString ] []
         ]
-
-
 
 newShapeButton : ShapeType -> String -> Html Msg
 newShapeButton shapeType text =

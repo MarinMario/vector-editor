@@ -55,3 +55,20 @@ handle shapeData selectedShape x y bool1 bool2=
             ] []
     else Svg.g [] []
 
+ellipseHeightHandle shapeData selectedShape =
+    let p = shapeProps shapeData 
+    in
+    handle 
+        shapeData selectedShape 
+        (p.xPos - 10) 
+        (p.yPos + p.height - 10) 
+        False True
+
+ellipseWidthHandle shapeData selectedShape =
+    let p = shapeProps shapeData 
+    in
+    handle 
+        shapeData selectedShape 
+        (p.xPos + p.width - 10) 
+        (p.yPos - 10) 
+        True False

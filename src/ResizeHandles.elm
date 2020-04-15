@@ -6,6 +6,7 @@ import Svg.Attributes as Sa
 
 import CustomTypes exposing (..)
 
+import Array
 shapeProps shapeData =
     { xPos = Tuple.first shapeData.position
     , yPos = Tuple.second shapeData.position
@@ -72,3 +73,18 @@ ellipseWidthHandle shapeData selectedShape =
         (p.xPos + p.width - 10) 
         (p.yPos - 10) 
         True False
+
+polylineHandle : ShapeData -> Int -> Int -> Svg Msg
+polylineHandle shapeData selectedShape pointsToHandle =
+    let pointsArray = Array.fromList shapeData.points
+        currentPoints = Maybe.withDefault [0, 0] <| Array.get pointsToHandle pointsArray
+        pth = Array.fromList currentPoints
+    in
+    if shapeData.id == selectedShape then
+        Svg.circle 
+            [ Sa.cx <| String.fromFloat <| Maybe.withDefault 0 <| Array.get 0 pth
+            , Sa.cy <| String.fromFloat <| Maybe.withDefault 0 <| Array.get 1 pth
+            , Sa.r "10", Sa.fill "yellow" 
+            , Se.onMouseDown <| EditShape { shapeData | updatePoints = Just pointsToHandle }
+            ] []
+    else Svg.g [] []

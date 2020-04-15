@@ -31,10 +31,8 @@ init : flags -> (Model, Cmd Msg)
 init _ =
     ( Model (1, 1) 
         [initShape] 1 1 
-        (InputShapeData "50" "50" "50" "50" "blue")
+        (InputShapeData "50" "50" "50" "50" "blue" "0 0")
     , Cmd.none )
-
-initShape = ShapeData Rect (1, 1) False 1 (100, 100) (False, False) "blue"
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -51,6 +49,7 @@ update msg model =
                     , width = String.fromFloat <| Tuple.first selectedShapeData.size
                     , height = String.fromFloat <| Tuple.second selectedShapeData.size
                     , fillColor = selectedShapeData.fillColor
+                    , points = pointsToString selectedShapeData.points 
                     }
             in
             ({ model
@@ -74,7 +73,11 @@ update msg model =
             
         NewShape shapeType ->
             let newId = model.lastId + 1
-                newShape = ShapeData shapeType (50, 50) False newId (50, 50) (False, False) "purple"
+                newShape = 
+                    ShapeData shapeType (50, 50) 
+                        False newId (50, 50) 
+                        (False, False) "purple" 
+                        [[0, 20], [110, 20]] Nothing
             in
             ({ model
             | shapes = model.shapes ++ [newShape]
@@ -95,6 +98,7 @@ update msg model =
                         "width" -> { isd | width = val }
                         "height" -> { isd | height = val }
                         "fillColor" -> { isd | fillColor = val }
+                        "points" -> { isd | points = val}
                         _ -> isd
                 
                 newShapes =
@@ -125,11 +129,16 @@ update msg model =
                         { shape
                         | followMouse = False
                         , updateSize = (False, False) 
+                        , updatePoints = Nothing
                         }) model.shapes
             in
             ({ model
             | shapes = newShapes
             }, Cmd.none)
+        
+        AddNewPoint ->
+            ( addNewPoint model
+            , Cmd.none)
             
 
 
@@ -138,7 +147,9 @@ view model =
     let shapes = List.map (\shapeData -> 
             if shapeData.shapeType == Rect then 
                 customRect shapeData model.selectedShape
-            else customEllipse shapeData model.selectedShape
+            else if shapeData.shapeType == Ellipse then 
+                customEllipse shapeData model.selectedShape
+            else customPolyline shapeData model.selectedShape
             ) model.shapes
     in
     Html.div [ He.onMouseUp StopDrag ] 
@@ -146,10 +157,12 @@ view model =
             [ Sa.width "1000", Sa.height "400"
             , Ha.style "border" "solid 1px"
             , Mouse.onMove (\event -> MoveMouse event.clientPos)
+            , He.onDoubleClick AddNewPoint
             ] shapes
         , Html.br [] []
         , newShapeButton Rect "Rect"
         , newShapeButton Ellipse "Ellipse"
+        , newShapeButton Polyline "Polyline"
         , inputDataFields model
         ]
     

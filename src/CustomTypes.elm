@@ -1,13 +1,12 @@
 module CustomTypes exposing (..)
 
 type alias Model =
-    { mousePosition : Position
+    { mousePosition : (Float, Float)
     , shapes : List ShapeData
     , lastId : Int
     , selectedShape : Int
     , inputShapeData : InputShapeData
     }
-type alias Position = (Float, Float)
 
 type alias InputShapeData =
     { xPos : String
@@ -15,27 +14,32 @@ type alias InputShapeData =
     , width : String
     , height : String
     , fillColor : String
+    , points : String
     }
 
 type Msg
-    = MoveMouse Position
+    = MoveMouse (Float, Float)
     | EditShape ShapeData
     | NewShape ShapeType
     | InputSelectedShape Int
     | InputData String String
     | StopDrag
+    | AddNewPoint
 
 
 type alias ShapeData =
     { shapeType : ShapeType 
-    , position : Position
+    , position : (Float, Float)
     , followMouse : Bool
     , id : Int
     , size : (Float, Float)
     , updateSize : (Bool, Bool)
     , fillColor : String
+    , points : List (List Float)
+    , updatePoints : Maybe Int
     }
 
 type ShapeType
     = Rect
     | Ellipse
+    | Polyline

@@ -10,6 +10,7 @@ import Svg.Events as Se
 import Svg.Attributes as Sa
 
 import CustomTypes exposing (..)
+import HelperFunctions exposing (pointsToString)
 import ResizeHandles exposing (..)
 
 shapeEvents shapeData =
@@ -52,6 +53,24 @@ customEllipse shapeData selectedShape =
         , ellipseHeightHandle shapeData selectedShape
         ]
 
+customPolyline shapeData selectedShape =
+    let p = shapeProps shapeData 
+        width = String.fromFloat p.width
+    in
+    Svg.g []
+        [ shapeEvents shapeData
+            [ Svg.polyline
+                [ Sa.points <| pointsToString shapeData.points
+                , Sa.fill shapeData.fillColor
+                , Sa.style <| "fill:none;stroke-width:" ++ width
+                , Sa.stroke shapeData.fillColor
+                ] []
+            ]
+        , Svg.g [] 
+            <| List.indexedMap 
+                (\index _ -> polylineHandle shapeData selectedShape index) shapeData.points
+        ]
+
 inputDataFields : Model -> Html Msg
 inputDataFields model =
     Html.div [] 
@@ -60,6 +79,7 @@ inputDataFields model =
         , customInputField model.inputShapeData.width "width"
         , customInputField model.inputShapeData.height "height"
         , customInputField model.inputShapeData.fillColor "fillColor"
+        , customInputField model.inputShapeData.points "points"
         ]
 
 customInputField whatValue sameButString =

@@ -78,6 +78,7 @@ inputDataFields model =
         , customInputField model.inputShapeData.yPos "yPos"
         , customInputField model.inputShapeData.width "width"
         , customInputField model.inputShapeData.height "height"
+        , customInputField model.inputShapeData.zIndex "zIndex"
         , customInputField model.inputShapeData.fillColor "fillColor"
         , customInputField model.inputShapeData.points "points"
         ]

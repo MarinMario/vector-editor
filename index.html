@@ -10550,34 +10550,45 @@ var $elm$core$Basics$never = function (_v0) {
 	}
 };
 var $elm$browser$Browser$element = _Browser_element;
-var $author$project$CustomTypes$InputShapeData = F6(
-	function (xPos, yPos, width, height, fillColor, points) {
-		return {fillColor: fillColor, height: height, points: points, width: width, xPos: xPos, yPos: yPos};
+var $author$project$CustomTypes$InputShapeData = F7(
+	function (xPos, yPos, width, height, fillColor, points, zIndex) {
+		return {fillColor: fillColor, height: height, points: points, width: width, xPos: xPos, yPos: yPos, zIndex: zIndex};
 	});
 var $author$project$CustomTypes$Model = F5(
 	function (mousePosition, shapes, lastId, selectedShape, inputShapeData) {
 		return {inputShapeData: inputShapeData, lastId: lastId, mousePosition: mousePosition, selectedShape: selectedShape, shapes: shapes};
 	});
 var $author$project$CustomTypes$Rect = {$: 'Rect'};
-var $author$project$CustomTypes$ShapeData = F9(
-	function (shapeType, position, followMouse, id, size, updateSize, fillColor, points, updatePoints) {
-		return {fillColor: fillColor, followMouse: followMouse, id: id, points: points, position: position, shapeType: shapeType, size: size, updatePoints: updatePoints, updateSize: updateSize};
-	});
-var $author$project$HelperFunctions$initShape = A9(
-	$author$project$CustomTypes$ShapeData,
-	$author$project$CustomTypes$Rect,
-	_Utils_Tuple2(1, 1),
-	false,
-	1,
-	_Utils_Tuple2(100, 100),
-	_Utils_Tuple2(false, false),
-	'blue',
+var $author$project$CustomTypes$ShapeData = function (shapeType) {
+	return function (position) {
+		return function (followMouse) {
+			return function (id) {
+				return function (size) {
+					return function (updateSize) {
+						return function (fillColor) {
+							return function (points) {
+								return function (updatePoints) {
+									return function (zIndex) {
+										return {fillColor: fillColor, followMouse: followMouse, id: id, points: points, position: position, shapeType: shapeType, size: size, updatePoints: updatePoints, updateSize: updateSize, zIndex: zIndex};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
+var $author$project$HelperFunctions$initShape = $author$project$CustomTypes$ShapeData($author$project$CustomTypes$Rect)(
+	_Utils_Tuple2(1, 1))(false)(1)(
+	_Utils_Tuple2(100, 100))(
+	_Utils_Tuple2(false, false))('blue')(
 	_List_fromArray(
 		[
 			_List_fromArray(
 			[0, 0])
-		]),
-	$elm$core$Maybe$Nothing);
+		]))($elm$core$Maybe$Nothing)(1);
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
 		A5(
@@ -10587,7 +10598,7 @@ var $author$project$Main$init = function (_v0) {
 				[$author$project$HelperFunctions$initShape]),
 			1,
 			1,
-			A6($author$project$CustomTypes$InputShapeData, '50', '50', '50', '50', 'blue', '0 0')),
+			A7($author$project$CustomTypes$InputShapeData, '50', '50', '50', '50', 'blue', '0 0', '1')),
 		$elm$core$Platform$Cmd$none);
 };
 var $elm$core$Platform$Sub$batch = _Platform_batch;
@@ -10738,14 +10749,18 @@ var $author$project$Main$update = F2(
 						$author$project$HelperFunctions$initShape,
 						$elm$core$List$head(ssd));
 				}();
-				var newInputShapeData = {
-					fillColor: selectedShapeData.fillColor,
-					height: $elm$core$String$fromFloat(selectedShapeData.size.b),
-					points: $author$project$HelperFunctions$pointsToString(selectedShapeData.points),
-					width: $elm$core$String$fromFloat(selectedShapeData.size.a),
-					xPos: $elm$core$String$fromFloat(selectedShapeData.position.a),
-					yPos: $elm$core$String$fromFloat(selectedShapeData.position.b)
-				};
+				var inputShapeData = model.inputShapeData;
+				var newInputShapeData = _Utils_update(
+					inputShapeData,
+					{
+						fillColor: selectedShapeData.fillColor,
+						height: $elm$core$String$fromFloat(selectedShapeData.size.b),
+						points: $author$project$HelperFunctions$pointsToString(selectedShapeData.points),
+						width: $elm$core$String$fromFloat(selectedShapeData.size.a),
+						xPos: $elm$core$String$fromFloat(selectedShapeData.position.a),
+						yPos: $elm$core$String$fromFloat(selectedShapeData.position.b),
+						zIndex: $elm$core$String$fromInt(selectedShapeData.zIndex)
+					});
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
@@ -10771,23 +10786,17 @@ var $author$project$Main$update = F2(
 			case 'NewShape':
 				var shapeType = msg.a;
 				var newId = model.lastId + 1;
-				var newShape = A9(
-					$author$project$CustomTypes$ShapeData,
-					shapeType,
-					_Utils_Tuple2(50, 50),
-					false,
-					newId,
-					_Utils_Tuple2(50, 50),
-					_Utils_Tuple2(false, false),
-					'purple',
+				var newShape = $author$project$CustomTypes$ShapeData(shapeType)(
+					_Utils_Tuple2(50, 50))(false)(newId)(
+					_Utils_Tuple2(50, 50))(
+					_Utils_Tuple2(false, false))('purple')(
 					_List_fromArray(
 						[
 							_List_fromArray(
 							[0, 20]),
 							_List_fromArray(
 							[110, 20])
-						]),
-					$elm$core$Maybe$Nothing);
+						]))($elm$core$Maybe$Nothing)(1);
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
@@ -10832,10 +10841,10 @@ var $author$project$Main$update = F2(
 							return _Utils_update(
 								isd,
 								{fillColor: val});
-						case 'points':
+						case 'zIndex':
 							return _Utils_update(
 								isd,
-								{points: val});
+								{zIndex: val});
 						default:
 							return isd;
 					}
@@ -10864,7 +10873,11 @@ var $author$project$Main$update = F2(
 									A2(
 										$elm$core$Maybe$withDefault,
 										0,
-										$elm$core$String$toFloat(newInputShapeData.height)))
+										$elm$core$String$toFloat(newInputShapeData.height))),
+								zIndex: A2(
+									$elm$core$Maybe$withDefault,
+									1,
+									$elm$core$String$toInt(newInputShapeData.zIndex))
 							}) : shape;
 					},
 					model.shapes);
@@ -10895,7 +10908,7 @@ var $author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					$author$project$HelperFunctions$addNewPoint(model),
 					$elm$core$Platform$Cmd$none);
-			default:
+			case 'DeleteSelectedShapes':
 				var newShapes = A2(
 					$elm$core$List$filter,
 					function (shape) {
@@ -10907,10 +10920,39 @@ var $author$project$Main$update = F2(
 						model,
 						{shapes: newShapes}),
 					$elm$core$Platform$Cmd$none);
+			default:
+				var selectedShapeData = A2(
+					$elm$core$Maybe$withDefault,
+					$author$project$HelperFunctions$initShape,
+					$elm$core$List$head(
+						A2(
+							$elm$core$List$filter,
+							function (shape) {
+								return _Utils_eq(shape.id, model.selectedShape);
+							},
+							model.shapes)));
+				var nextId = model.lastId + 1;
+				var newShapes = _Utils_ap(
+					model.shapes,
+					_List_fromArray(
+						[
+							_Utils_update(
+							selectedShapeData,
+							{
+								id: nextId,
+								position: _Utils_Tuple2(100, 100)
+							})
+						]));
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{lastId: nextId, shapes: newShapes}),
+					$elm$core$Platform$Cmd$none);
 		}
 	});
 var $author$project$CustomTypes$AddNewPoint = {$: 'AddNewPoint'};
-var $author$project$CustomTypes$DeleteSelectedShape = {$: 'DeleteSelectedShape'};
+var $author$project$CustomTypes$DeleteSelectedShapes = {$: 'DeleteSelectedShapes'};
+var $author$project$CustomTypes$DuplicateSelectedShapes = {$: 'DuplicateSelectedShapes'};
 var $author$project$CustomTypes$Ellipse = {$: 'Ellipse'};
 var $author$project$CustomTypes$MoveMouse = function (a) {
 	return {$: 'MoveMouse', a: a};
@@ -11194,6 +11236,7 @@ var $author$project$Components$inputDataFields = function (model) {
 				A2($author$project$Components$customInputField, model.inputShapeData.yPos, 'yPos'),
 				A2($author$project$Components$customInputField, model.inputShapeData.width, 'width'),
 				A2($author$project$Components$customInputField, model.inputShapeData.height, 'height'),
+				A2($author$project$Components$customInputField, model.inputShapeData.zIndex, 'zIndex'),
 				A2($author$project$Components$customInputField, model.inputShapeData.fillColor, 'fillColor'),
 				A2($author$project$Components$customInputField, model.inputShapeData.points, 'points')
 			]));
@@ -11324,14 +11367,21 @@ var $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$onWithOptions = F3(
 				$mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$eventDecoder));
 	});
 var $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$onMove = A2($mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$onWithOptions, 'mousemove', $mpizenberg$elm_pointer_events$Html$Events$Extra$Mouse$defaultOptions);
+var $elm$core$List$sortBy = _List_sortBy;
 var $elm$svg$Svg$svg = $elm$svg$Svg$trustedNode('svg');
 var $author$project$Main$view = function (model) {
+	var orderedData = A2(
+		$elm$core$List$sortBy,
+		function ($) {
+			return $.zIndex;
+		},
+		model.shapes);
 	var shapes = A2(
 		$elm$core$List$map,
 		function (shapeData) {
 			return _Utils_eq(shapeData.shapeType, $author$project$CustomTypes$Rect) ? A2($author$project$Components$customRect, shapeData, model.selectedShape) : (_Utils_eq(shapeData.shapeType, $author$project$CustomTypes$Ellipse) ? A2($author$project$Components$customEllipse, shapeData, model.selectedShape) : A2($author$project$Components$customPolyline, shapeData, model.selectedShape));
 		},
-		model.shapes);
+		orderedData);
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
@@ -11362,11 +11412,21 @@ var $author$project$Main$view = function (model) {
 				$elm$html$Html$button,
 				_List_fromArray(
 					[
-						$elm$html$Html$Events$onClick($author$project$CustomTypes$DeleteSelectedShape)
+						$elm$html$Html$Events$onClick($author$project$CustomTypes$DeleteSelectedShapes)
 					]),
 				_List_fromArray(
 					[
 						$elm$html$Html$text('Delete')
+					])),
+				A2(
+				$elm$html$Html$button,
+				_List_fromArray(
+					[
+						$elm$html$Html$Events$onClick($author$project$CustomTypes$DuplicateSelectedShapes)
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Duplicate')
 					])),
 				A2(
 				$elm$html$Html$div,
@@ -11382,7 +11442,7 @@ var $author$project$Main$view = function (model) {
 var $author$project$Main$main = $elm$browser$Browser$element(
 	{init: $author$project$Main$init, subscriptions: $author$project$Main$subscriptions, update: $author$project$Main$update, view: $author$project$Main$view});
 _Platform_export({'Main':{'init':$author$project$Main$main(
-	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"CustomTypes.Msg","aliases":{"CustomTypes.ShapeData":{"args":[],"type":"{ shapeType : CustomTypes.ShapeType, position : ( Basics.Float, Basics.Float ), followMouse : Basics.Bool, id : Basics.Int, size : ( Basics.Float, Basics.Float ), updateSize : ( Basics.Bool, Basics.Bool ), fillColor : String.String, points : List.List (List.List Basics.Float), updatePoints : Maybe.Maybe Basics.Int }"}},"unions":{"CustomTypes.Msg":{"args":[],"tags":{"MoveMouse":["( Basics.Float, Basics.Float )"],"EditShape":["CustomTypes.ShapeData"],"NewShape":["CustomTypes.ShapeType"],"InputSelectedShape":["Basics.Int"],"InputData":["String.String","String.String"],"StopDrag":[],"AddNewPoint":[],"DeleteSelectedShape":[]}},"Basics.Bool":{"args":[],"tags":{"True":[],"False":[]}},"Basics.Float":{"args":[],"tags":{"Float":[]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"List.List":{"args":["a"],"tags":{}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"CustomTypes.ShapeType":{"args":[],"tags":{"Rect":[],"Ellipse":[],"Polyline":[]}},"String.String":{"args":[],"tags":{"String":[]}}}}})}});}(this));
+	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"CustomTypes.Msg","aliases":{"CustomTypes.ShapeData":{"args":[],"type":"{ shapeType : CustomTypes.ShapeType, position : ( Basics.Float, Basics.Float ), followMouse : Basics.Bool, id : Basics.Int, size : ( Basics.Float, Basics.Float ), updateSize : ( Basics.Bool, Basics.Bool ), fillColor : String.String, points : List.List (List.List Basics.Float), updatePoints : Maybe.Maybe Basics.Int, zIndex : Basics.Int }"}},"unions":{"CustomTypes.Msg":{"args":[],"tags":{"MoveMouse":["( Basics.Float, Basics.Float )"],"EditShape":["CustomTypes.ShapeData"],"NewShape":["CustomTypes.ShapeType"],"InputSelectedShape":["Basics.Int"],"InputData":["String.String","String.String"],"StopDrag":[],"AddNewPoint":[],"DeleteSelectedShapes":[],"DuplicateSelectedShapes":[]}},"Basics.Bool":{"args":[],"tags":{"True":[],"False":[]}},"Basics.Float":{"args":[],"tags":{"Float":[]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"List.List":{"args":["a"],"tags":{}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"CustomTypes.ShapeType":{"args":[],"tags":{"Rect":[],"Ellipse":[],"Polyline":[]}},"String.String":{"args":[],"tags":{"String":[]}}}}})}});}(this));
 
   var app = Elm.Main.init({ node: document.getElementById("elm") });
 }

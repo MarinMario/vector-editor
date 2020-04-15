@@ -31,7 +31,7 @@ init : flags -> (Model, Cmd Msg)
 init _ =
     ( Model (1, 1) 
         [initShape] 1 1 
-        (InputShapeData "50" "50" "50" "50" "blue" "0 0")
+        (InputShapeData "50" "50" "50" "50" "blue" "0 0" "1")
     , Cmd.none )
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -43,13 +43,16 @@ update msg model =
                     in
                     Maybe.withDefault initShape <| List.head ssd
 
+                inputShapeData = model.inputShapeData
                 newInputShapeData =
-                    { xPos = String.fromFloat <| Tuple.first selectedShapeData.position
+                    { inputShapeData
+                    | xPos = String.fromFloat <| Tuple.first selectedShapeData.position
                     , yPos = String.fromFloat <| Tuple.second selectedShapeData.position
                     , width = String.fromFloat <| Tuple.first selectedShapeData.size
                     , height = String.fromFloat <| Tuple.second selectedShapeData.size
                     , fillColor = selectedShapeData.fillColor
                     , points = pointsToString selectedShapeData.points 
+                    , zIndex = String.fromInt <| selectedShapeData.zIndex
                     }
             in
             ({ model
@@ -77,7 +80,7 @@ update msg model =
                     ShapeData shapeType (50, 50) 
                         False newId (50, 50) 
                         (False, False) "purple" 
-                        [[0, 20], [110, 20]] Nothing
+                        [[0, 20], [110, 20]] Nothing 1
             in
             ({ model
             | shapes = model.shapes ++ [newShape]
@@ -98,7 +101,7 @@ update msg model =
                         "width" -> { isd | width = val }
                         "height" -> { isd | height = val }
                         "fillColor" -> { isd | fillColor = val }
-                        "points" -> { isd | points = val}
+                        "zIndex" -> { isd | zIndex = val }
                         _ -> isd
                 
                 newShapes =
@@ -114,6 +117,7 @@ update msg model =
                                 , Maybe.withDefault 0 <| String.toFloat newInputShapeData.height
                                 )
                             , fillColor = newInputShapeData.fillColor
+                            , zIndex = Maybe.withDefault 1 <| String.toInt newInputShapeData.zIndex
                             }
                         else shape
                     ) model.shapes
@@ -178,7 +182,10 @@ view model =
             else if shapeData.shapeType == Ellipse then 
                 customEllipse shapeData model.selectedShape
             else customPolyline shapeData model.selectedShape
-            ) model.shapes
+            ) orderedData
+        
+        orderedData =
+            List.sortBy .zIndex model.shapes
     in
     Html.div [ He.onMouseUp StopDrag ] 
         [ Svg.svg 

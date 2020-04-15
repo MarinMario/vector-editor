@@ -2,9 +2,7 @@ module HelperFunctions exposing (..)
 
 import CustomTypes exposing (..)
 
-import Array
-
-initShape = ShapeData Rect (1, 1) False 1 (100, 100) (False, False) "blue" [[0, 0]] Nothing
+initShape = ShapeData Rect (1, 1) False 1 (100, 100) (False, False) "blue" [[0, 0]] Nothing 1
 
 dragShape : Model -> List ShapeData
 dragShape model =

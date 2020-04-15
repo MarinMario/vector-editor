@@ -15,6 +15,7 @@ type alias InputShapeData =
     , height : String
     , fillColor : String
     , points : String
+    , zIndex : String
     }
 
 type Msg
@@ -39,6 +40,7 @@ type alias ShapeData =
     , fillColor : String
     , points : List (List Float)
     , updatePoints : Maybe Int
+    , zIndex : Int
     }
 
 type ShapeType

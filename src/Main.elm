@@ -140,7 +140,7 @@ update msg model =
             ( addNewPoint model
             , Cmd.none)
         
-        DeleteSelectedShape ->
+        DeleteSelectedShapes ->
             let newShapes =
                     List.filter 
                     (\shape -> shape.id /= model.selectedShape)
@@ -150,6 +150,25 @@ update msg model =
             | shapes = newShapes
             }, Cmd.none)
 
+        DuplicateSelectedShapes ->
+            let selectedShapeData =
+                    Maybe.withDefault initShape 
+                        <| List.head 
+                        <| List.filter 
+                            (\shape -> shape.id == model.selectedShape) 
+                            model.shapes
+                
+                nextId = model.lastId + 1
+                newShapes = model.shapes ++ 
+                    [{ selectedShapeData
+                    | position = (100, 100)
+                    , id = nextId
+                    }]
+            in
+            ({ model
+            | shapes = newShapes
+            , lastId = nextId
+            }, Cmd.none)
 
 view : Model -> Html Msg
 view model =
@@ -172,7 +191,8 @@ view model =
         , newShapeButton Rect "Rect"
         , newShapeButton Ellipse "Ellipse"
         , newShapeButton Polyline "Polyline"
-        , Html.button [ He.onClick DeleteSelectedShape ] [ Html.text "Delete" ]
+        , Html.button [ He.onClick DeleteSelectedShapes ] [ Html.text "Delete" ]
+        , Html.button [ He.onClick DuplicateSelectedShapes ] [ Html.text "Duplicate" ]
         , Html.div [] [ Html.text <| "Shape id: " ++ String.fromInt model.selectedShape ]
         , inputDataFields model
         ]

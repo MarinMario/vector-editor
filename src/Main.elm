@@ -31,7 +31,7 @@ init : flags -> (Model, Cmd Msg)
 init _ =
     ( Model (1, 1) 
         [initShape] 1 1 
-        (InputShapeData "50" "50" "50" "50" "blue" "0 0" "1")
+        (InputShapeData "50" "50" "50" "50" "blue" "0 0" "1" "5" "black")
     , Cmd.none )
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -53,6 +53,8 @@ update msg model =
                     , fillColor = selectedShapeData.fillColor
                     , points = pointsToString selectedShapeData.points 
                     , zIndex = String.fromInt <| selectedShapeData.zIndex
+                    , strokeWidth = String.fromFloat <| selectedShapeData.strokeWidth
+                    , strokeColor = selectedShapeData.strokeColor
                     }
             in
             ({ model
@@ -79,8 +81,9 @@ update msg model =
                 newShape = 
                     ShapeData shapeType (50, 50) 
                         False newId (50, 50) 
-                        (False, False) "purple" 
-                        [[0, 20], [110, 20]] Nothing 1
+                        (False, False) "grey" 
+                        [[0, 20], [110, 20]] Nothing 
+                        1 5 "black"
             in
             ({ model
             | shapes = model.shapes ++ [newShape]
@@ -102,6 +105,8 @@ update msg model =
                         "height" -> { isd | height = val }
                         "fillColor" -> { isd | fillColor = val }
                         "zIndex" -> { isd | zIndex = val }
+                        "strokeWidth" -> { isd | strokeWidth = val }
+                        "strokeColor" -> { isd | strokeColor = val }
                         _ -> isd
                 
                 newShapes =
@@ -118,6 +123,8 @@ update msg model =
                                 )
                             , fillColor = newInputShapeData.fillColor
                             , zIndex = Maybe.withDefault 1 <| String.toInt newInputShapeData.zIndex
+                            , strokeWidth = Maybe.withDefault 3 <| String.toFloat newInputShapeData.strokeWidth
+                            , strokeColor = newInputShapeData.strokeColor
                             }
                         else shape
                     ) model.shapes

@@ -29,6 +29,8 @@ customRect shapeData selectedShape =
                 [ Sa.x <| String.fromFloat p.xPos, Sa.y <| String.fromFloat p.yPos
                 , Sa.width <| String.fromFloat p.width, Sa.height <| String.fromFloat p.height
                 , Sa.fill shapeData.fillColor
+                , Sa.strokeWidth <| String.fromFloat shapeData.strokeWidth
+                , Sa.stroke shapeData.strokeColor
                 ] []
             ]
         , changeSizeHandle shapeData selectedShape
@@ -46,6 +48,8 @@ customEllipse shapeData selectedShape =
                 [ Sa.cx <| String.fromFloat p.xPos, Sa.cy <| String.fromFloat p.yPos
                 , Sa.rx <| String.fromFloat p.width, Sa.ry <| String.fromFloat p.height
                 , Sa.fill shapeData.fillColor
+                , Sa.strokeWidth <| String.fromFloat shapeData.strokeWidth
+                , Sa.stroke shapeData.strokeColor
                 ] []
             ]
         , changeSizeHandle shapeData selectedShape
@@ -54,16 +58,15 @@ customEllipse shapeData selectedShape =
         ]
 
 customPolyline shapeData selectedShape =
-    let p = shapeProps shapeData 
-        width = String.fromFloat p.width
+    let strokeWidth = String.fromFloat shapeData.strokeWidth
     in
     Svg.g []
         [ shapeEvents shapeData
             [ Svg.polyline
                 [ Sa.points <| pointsToString shapeData.points
                 , Sa.fill shapeData.fillColor
-                , Sa.style <| "fill:none;stroke-width:" ++ width
-                , Sa.stroke shapeData.fillColor
+                , Sa.style <| "fill:none;stroke-width:" ++ strokeWidth
+                , Sa.stroke shapeData.strokeColor
                 ] []
             ]
         , Svg.g [] 
@@ -78,8 +81,10 @@ inputDataFields model =
         , customInputField model.inputShapeData.yPos "yPos"
         , customInputField model.inputShapeData.width "width"
         , customInputField model.inputShapeData.height "height"
+        , customInputField model.inputShapeData.strokeWidth "strokeWidth"
         , customInputField model.inputShapeData.zIndex "zIndex"
         , customInputField model.inputShapeData.fillColor "fillColor"
+        , customInputField model.inputShapeData.strokeColor "strokeColor"
         , customInputField model.inputShapeData.points "points"
         ]
 

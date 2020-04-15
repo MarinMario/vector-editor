@@ -139,7 +139,16 @@ update msg model =
         AddNewPoint ->
             ( addNewPoint model
             , Cmd.none)
-            
+        
+        DeleteSelectedShape ->
+            let newShapes =
+                    List.filter 
+                    (\shape -> shape.id /= model.selectedShape)
+                    model.shapes
+            in
+            ({ model
+            | shapes = newShapes
+            }, Cmd.none)
 
 
 view : Model -> Html Msg
@@ -163,6 +172,8 @@ view model =
         , newShapeButton Rect "Rect"
         , newShapeButton Ellipse "Ellipse"
         , newShapeButton Polyline "Polyline"
+        , Html.button [ He.onClick DeleteSelectedShape ] [ Html.text "Delete" ]
+        , Html.div [] [ Html.text <| "Shape id: " ++ String.fromInt model.selectedShape ]
         , inputDataFields model
         ]
     

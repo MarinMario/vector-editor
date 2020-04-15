@@ -25,6 +25,7 @@ type Msg
     | InputData String String
     | StopDrag
     | AddNewPoint
+    | DeleteSelectedShape
 
 
 type alias ShapeData =

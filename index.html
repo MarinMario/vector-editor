@@ -10891,13 +10891,26 @@ var $author$project$Main$update = F2(
 						model,
 						{shapes: newShapes}),
 					$elm$core$Platform$Cmd$none);
-			default:
+			case 'AddNewPoint':
 				return _Utils_Tuple2(
 					$author$project$HelperFunctions$addNewPoint(model),
+					$elm$core$Platform$Cmd$none);
+			default:
+				var newShapes = A2(
+					$elm$core$List$filter,
+					function (shape) {
+						return !_Utils_eq(shape.id, model.selectedShape);
+					},
+					model.shapes);
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{shapes: newShapes}),
 					$elm$core$Platform$Cmd$none);
 		}
 	});
 var $author$project$CustomTypes$AddNewPoint = {$: 'AddNewPoint'};
+var $author$project$CustomTypes$DeleteSelectedShape = {$: 'DeleteSelectedShape'};
 var $author$project$CustomTypes$Ellipse = {$: 'Ellipse'};
 var $author$project$CustomTypes$MoveMouse = function (a) {
 	return {$: 'MoveMouse', a: a};
@@ -11345,13 +11358,31 @@ var $author$project$Main$view = function (model) {
 				A2($author$project$Components$newShapeButton, $author$project$CustomTypes$Rect, 'Rect'),
 				A2($author$project$Components$newShapeButton, $author$project$CustomTypes$Ellipse, 'Ellipse'),
 				A2($author$project$Components$newShapeButton, $author$project$CustomTypes$Polyline, 'Polyline'),
+				A2(
+				$elm$html$Html$button,
+				_List_fromArray(
+					[
+						$elm$html$Html$Events$onClick($author$project$CustomTypes$DeleteSelectedShape)
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Delete')
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text(
+						'Shape id: ' + $elm$core$String$fromInt(model.selectedShape))
+					])),
 				$author$project$Components$inputDataFields(model)
 			]));
 };
 var $author$project$Main$main = $elm$browser$Browser$element(
 	{init: $author$project$Main$init, subscriptions: $author$project$Main$subscriptions, update: $author$project$Main$update, view: $author$project$Main$view});
 _Platform_export({'Main':{'init':$author$project$Main$main(
-	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"CustomTypes.Msg","aliases":{"CustomTypes.ShapeData":{"args":[],"type":"{ shapeType : CustomTypes.ShapeType, position : ( Basics.Float, Basics.Float ), followMouse : Basics.Bool, id : Basics.Int, size : ( Basics.Float, Basics.Float ), updateSize : ( Basics.Bool, Basics.Bool ), fillColor : String.String, points : List.List (List.List Basics.Float), updatePoints : Maybe.Maybe Basics.Int }"}},"unions":{"CustomTypes.Msg":{"args":[],"tags":{"MoveMouse":["( Basics.Float, Basics.Float )"],"EditShape":["CustomTypes.ShapeData"],"NewShape":["CustomTypes.ShapeType"],"InputSelectedShape":["Basics.Int"],"InputData":["String.String","String.String"],"StopDrag":[],"AddNewPoint":[]}},"Basics.Bool":{"args":[],"tags":{"True":[],"False":[]}},"Basics.Float":{"args":[],"tags":{"Float":[]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"List.List":{"args":["a"],"tags":{}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"CustomTypes.ShapeType":{"args":[],"tags":{"Rect":[],"Ellipse":[],"Polyline":[]}},"String.String":{"args":[],"tags":{"String":[]}}}}})}});}(this));
+	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"CustomTypes.Msg","aliases":{"CustomTypes.ShapeData":{"args":[],"type":"{ shapeType : CustomTypes.ShapeType, position : ( Basics.Float, Basics.Float ), followMouse : Basics.Bool, id : Basics.Int, size : ( Basics.Float, Basics.Float ), updateSize : ( Basics.Bool, Basics.Bool ), fillColor : String.String, points : List.List (List.List Basics.Float), updatePoints : Maybe.Maybe Basics.Int }"}},"unions":{"CustomTypes.Msg":{"args":[],"tags":{"MoveMouse":["( Basics.Float, Basics.Float )"],"EditShape":["CustomTypes.ShapeData"],"NewShape":["CustomTypes.ShapeType"],"InputSelectedShape":["Basics.Int"],"InputData":["String.String","String.String"],"StopDrag":[],"AddNewPoint":[],"DeleteSelectedShape":[]}},"Basics.Bool":{"args":[],"tags":{"True":[],"False":[]}},"Basics.Float":{"args":[],"tags":{"Float":[]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"List.List":{"args":["a"],"tags":{}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"CustomTypes.ShapeType":{"args":[],"tags":{"Rect":[],"Ellipse":[],"Polyline":[]}},"String.String":{"args":[],"tags":{"String":[]}}}}})}});}(this));
 
   var app = Elm.Main.init({ node: document.getElementById("elm") });
 }

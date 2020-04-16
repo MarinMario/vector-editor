@@ -2,6 +2,8 @@ module HelperFunctions exposing (..)
 
 import CustomTypes exposing (..)
 
+import Array
+
 initShape : ShapeData
 initShape = 
     { shapeType = Rect
@@ -49,9 +51,9 @@ dragShape model =
                     Ellipse -> 
                         ( mousex, mousey )
                     Polyline -> 
-                        (mousex, mousey)
+                        ( mousex, mousey )
 
-            newPoints = 
+            dragPointPoints = 
                 case shape.updatePoints of
                     Just pointsId ->
                         List.indexedMap (\index points ->
@@ -60,6 +62,14 @@ dragShape model =
                             else points
                         ) shape.points
                     Nothing -> shape.points
+            followMousePoints =
+                List.map (\point ->
+                    let ap = Array.fromList point
+                        px = Maybe.withDefault 0 <| Array.get 0 ap
+                        py = Maybe.withDefault 0 <| Array.get 1 ap
+                    in
+                    [px, py]
+                ) shape.points
         in
         { shape
         | position =
@@ -68,7 +78,8 @@ dragShape model =
             ( if Tuple.first shape.updateSize then Tuple.first newSize else Tuple.first shape.size
             , if Tuple.second shape.updateSize then Tuple.second newSize else Tuple.second shape.size
             )
-        , points = newPoints
+        , points = 
+            if shape.followMouse then followMousePoints else dragPointPoints
         }) model.shapes
 
 pointsToString points =
@@ -96,3 +107,10 @@ addNewPoint model =
             ) model.shapes
     in
     { model | shapes = newShapes }
+
+getSelectedShapeData model =
+    Maybe.withDefault initShape 
+        <| List.head 
+        <| List.filter 
+            (\shape -> shape.id == model.selectedShape) 
+            model.shapes

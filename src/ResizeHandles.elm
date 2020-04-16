@@ -4,6 +4,8 @@ import Svg exposing (Svg)
 import Svg.Events as Se
 import Svg.Attributes as Sa
 
+import Html.Events as He
+
 import CustomTypes exposing (..)
 
 import Array
@@ -79,12 +81,12 @@ polylineHandle shapeData selectedShape pointsToHandle =
     let pointsArray = Array.fromList shapeData.points
         currentPoints = Maybe.withDefault [0, 0] <| Array.get pointsToHandle pointsArray
         pth = Array.fromList currentPoints
-        p = shapeProps shapeData
-        x = String.fromFloat p.xPos
-        y = String.fromFloat p.yPos
+        -- p = shapeProps shapeData
+        -- x = String.fromFloat p.xPos
+        -- y = String.fromFloat p.yPos
 
-        cx = (Maybe.withDefault 0 <| Array.get 0 pth)
-        cy = (Maybe.withDefault 0 <| Array.get 1 pth)
+        cx = Maybe.withDefault 0 <| Array.get 0 pth
+        cy = Maybe.withDefault 0 <| Array.get 1 pth
     in
     if shapeData.id == selectedShape then
         Svg.circle 
@@ -92,6 +94,7 @@ polylineHandle shapeData selectedShape pointsToHandle =
             , Sa.cy <| String.fromFloat cy
             , Sa.r "10", Sa.fill "yellow"
             , Se.onMouseDown <| EditShape { shapeData | updatePoints = Just pointsToHandle }
+            , He.onDoubleClick <| DeleteLinePoints pointsToHandle
             -- , Sa.transform <| "translate(" ++ x ++ " " ++ y ++ ")"
             ] []
     else Svg.g [] []

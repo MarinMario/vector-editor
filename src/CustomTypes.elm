@@ -30,6 +30,7 @@ type Msg
     | AddNewPoint
     | DeleteSelectedShapes
     | DuplicateSelectedShapes
+    | DeleteLinePoints Int
 
 
 type alias ShapeData =

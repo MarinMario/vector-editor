@@ -81,14 +81,14 @@ customPolyline shapeData selectedShape =
 inputDataFields : Model -> Html Msg
 inputDataFields model =
     Html.div [] 
-        [ customInputField Xpos model.inputShapeData.xPos "xPos"
-        , customInputField Ypos model.inputShapeData.yPos "yPos"
+        [ customInputField Xpos model.inputShapeData.xPos "x"
+        , customInputField Ypos model.inputShapeData.yPos "y"
         , customInputField Width model.inputShapeData.width "width"
         , customInputField Height model.inputShapeData.height "height"
-        , customInputField StrokeWidth model.inputShapeData.strokeWidth "strokeWidth"
-        , customInputField Zindex model.inputShapeData.zIndex "zIndex"
-        , customInputField FillColor model.inputShapeData.fillColor "fillColor"
-        , customInputField StrokeColor model.inputShapeData.strokeColor "strokeColor"
+        , customInputField StrokeWidth model.inputShapeData.strokeWidth "stroke-width"
+        , customInputField Zindex model.inputShapeData.zIndex "z-index"
+        , customInputField FillColor model.inputShapeData.fillColor "fill-color"
+        , customInputField StrokeColor model.inputShapeData.strokeColor "stroke-color"
         , customInputField Points model.inputShapeData.points "points"
         ]
 

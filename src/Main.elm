@@ -16,6 +16,7 @@ import Components exposing (..)
 import CustomTypes exposing (..)
 import HelperFunctions exposing (..)
 
+import Array
 
 main : Program () Model Msg
 main =
@@ -38,10 +39,7 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
     case msg of
         MoveMouse pos ->
-            let selectedShapeData =
-                    let ssd = List.filter (\shape -> shape.id == model.selectedShape) model.shapes
-                    in
-                    Maybe.withDefault initShape <| List.head ssd
+            let selectedShapeData = getSelectedShapeData model
 
                 inputShapeData = model.inputShapeData
                 newInputShapeData =
@@ -162,12 +160,7 @@ update msg model =
             }, Cmd.none)
 
         DuplicateSelectedShapes ->
-            let selectedShapeData =
-                    Maybe.withDefault initShape 
-                        <| List.head 
-                        <| List.filter 
-                            (\shape -> shape.id == model.selectedShape) 
-                            model.shapes
+            let selectedShapeData = getSelectedShapeData model
                 
                 nextId = model.lastId + 1
                 newShapes = model.shapes ++ 
@@ -180,17 +173,41 @@ update msg model =
             | shapes = newShapes
             , lastId = nextId
             }, Cmd.none)
+        
+        DeleteLinePoints pointIndex ->
+            let selectedShapeData = getSelectedShapeData model
+                pointData = 
+                    Array.fromList selectedShapeData.points
+                        |> Array.get pointIndex
+                        |> Maybe.withDefault [0, 0]
+                updatedPoints =
+                    List.filter (\point -> point /= pointData) selectedShapeData.points
+                    
+                updatedSelectedShape = { selectedShapeData | points = updatedPoints }
+                updatedShapes =
+                    List.map (\shape ->
+                        if shape.id == updatedSelectedShape.id then
+                            updatedSelectedShape
+                        else shape
+                    ) model.shapes
+            in
+            ({ model
+            | shapes = updatedShapes
+            }, Cmd.none)
+        
 
 view : Model -> Html Msg
 view model =
     let shapes = List.map (\shapeData -> 
-            if shapeData.shapeType == Rect then 
-                customRect shapeData model.selectedShape
-            else if shapeData.shapeType == Ellipse then 
-                customEllipse shapeData model.selectedShape
-            else customPolyline shapeData model.selectedShape
+            case shapeData.shapeType of
+                Rect ->
+                    customRect shapeData model.selectedShape
+                Ellipse -> 
+                    customEllipse shapeData model.selectedShape
+                Polyline ->
+                     customPolyline shapeData model.selectedShape
             ) orderedData
-        
+
         orderedData =
             List.sortBy .zIndex model.shapes
     in

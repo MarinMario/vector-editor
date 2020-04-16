@@ -31,7 +31,7 @@ init : flags -> (Model, Cmd Msg)
 init _ =
     ( Model (1, 1) 
         [initShape] 1 1 
-        (InputShapeData "50" "50" "50" "50" "blue" "0 0" "1" "5" "black")
+        (InputShapeData "0" "0" "50" "50" "blue" "0 0" "1" "5" "black")
     , Cmd.none )
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -79,11 +79,10 @@ update msg model =
         NewShape shapeType ->
             let newId = model.lastId + 1
                 newShape = 
-                    ShapeData shapeType (50, 50) 
-                        False newId (50, 50) 
-                        (False, False) "grey" 
-                        [[0, 20], [110, 20]] Nothing 
-                        1 5 "black"
+                    { initShape 
+                    | shapeType = shapeType
+                    , id = newId
+                    }
             in
             ({ model
             | shapes = model.shapes ++ [newShape]
@@ -99,15 +98,16 @@ update msg model =
             let isd = model.inputShapeData
                 newInputShapeData =
                     case vtc of
-                        "xPos" -> { isd | xPos = val }
-                        "yPos" -> { isd | yPos = val }
-                        "width" -> { isd | width = val }
-                        "height" -> { isd | height = val }
-                        "fillColor" -> { isd | fillColor = val }
-                        "zIndex" -> { isd | zIndex = val }
-                        "strokeWidth" -> { isd | strokeWidth = val }
-                        "strokeColor" -> { isd | strokeColor = val }
-                        _ -> isd
+                        Xpos -> { isd | xPos = val }
+                        Ypos -> { isd | yPos = val }
+                        Width -> { isd | width = val }
+                        Height -> { isd | height = val }
+                        FillColor -> { isd | fillColor = val }
+                        Zindex -> { isd | zIndex = val }
+                        StrokeWidth -> { isd | strokeWidth = val }
+                        StrokeColor -> { isd | strokeColor = val }
+                        Points -> isd
+
                 
                 newShapes =
                     List.map (\shape ->

@@ -59,6 +59,9 @@ customEllipse shapeData selectedShape =
 
 customPolyline shapeData selectedShape =
     let strokeWidth = String.fromFloat shapeData.strokeWidth
+        p = shapeProps shapeData
+        x = String.fromFloat p.xPos
+        y = String.fromFloat p.yPos
     in
     Svg.g []
         [ shapeEvents shapeData
@@ -67,6 +70,7 @@ customPolyline shapeData selectedShape =
                 , Sa.fill shapeData.fillColor
                 , Sa.style <| "fill:none;stroke-width:" ++ strokeWidth
                 , Sa.stroke shapeData.strokeColor
+                -- , Sa.transform <| "translate(" ++ x ++ " " ++ y ++ ")"
                 ] []
             ]
         , Svg.g [] 
@@ -77,21 +81,22 @@ customPolyline shapeData selectedShape =
 inputDataFields : Model -> Html Msg
 inputDataFields model =
     Html.div [] 
-        [ customInputField model.inputShapeData.xPos "xPos"
-        , customInputField model.inputShapeData.yPos "yPos"
-        , customInputField model.inputShapeData.width "width"
-        , customInputField model.inputShapeData.height "height"
-        , customInputField model.inputShapeData.strokeWidth "strokeWidth"
-        , customInputField model.inputShapeData.zIndex "zIndex"
-        , customInputField model.inputShapeData.fillColor "fillColor"
-        , customInputField model.inputShapeData.strokeColor "strokeColor"
-        , customInputField model.inputShapeData.points "points"
+        [ customInputField Xpos model.inputShapeData.xPos "xPos"
+        , customInputField Ypos model.inputShapeData.yPos "yPos"
+        , customInputField Width model.inputShapeData.width "width"
+        , customInputField Height model.inputShapeData.height "height"
+        , customInputField StrokeWidth model.inputShapeData.strokeWidth "strokeWidth"
+        , customInputField Zindex model.inputShapeData.zIndex "zIndex"
+        , customInputField FillColor model.inputShapeData.fillColor "fillColor"
+        , customInputField StrokeColor model.inputShapeData.strokeColor "strokeColor"
+        , customInputField Points model.inputShapeData.points "points"
         ]
 
-customInputField whatValue sameButString =
+customInputField : InputProperty -> String -> String -> Html Msg
+customInputField property whatValue text =
     Html.div [] 
-        [ Html.text <| sameButString ++ ": "
-        , Html.input [ Ha.value whatValue, He.onInput <| InputData sameButString ] []
+        [ Html.text <| text ++ ": "
+        , Html.input [ Ha.value whatValue, He.onInput <| InputData property ] []
         ]
 
 newShapeButton : ShapeType -> String -> Html Msg

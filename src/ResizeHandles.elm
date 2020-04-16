@@ -79,12 +79,19 @@ polylineHandle shapeData selectedShape pointsToHandle =
     let pointsArray = Array.fromList shapeData.points
         currentPoints = Maybe.withDefault [0, 0] <| Array.get pointsToHandle pointsArray
         pth = Array.fromList currentPoints
+        p = shapeProps shapeData
+        x = String.fromFloat p.xPos
+        y = String.fromFloat p.yPos
+
+        cx = (Maybe.withDefault 0 <| Array.get 0 pth)
+        cy = (Maybe.withDefault 0 <| Array.get 1 pth)
     in
     if shapeData.id == selectedShape then
         Svg.circle 
-            [ Sa.cx <| String.fromFloat <| Maybe.withDefault 0 <| Array.get 0 pth
-            , Sa.cy <| String.fromFloat <| Maybe.withDefault 0 <| Array.get 1 pth
-            , Sa.r "10", Sa.fill "yellow" 
+            [ Sa.cx <| String.fromFloat cx
+            , Sa.cy <| String.fromFloat cy
+            , Sa.r "10", Sa.fill "yellow"
             , Se.onMouseDown <| EditShape { shapeData | updatePoints = Just pointsToHandle }
+            -- , Sa.transform <| "translate(" ++ x ++ " " ++ y ++ ")"
             ] []
     else Svg.g [] []

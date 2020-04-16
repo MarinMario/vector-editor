@@ -25,7 +25,7 @@ type Msg
     | EditShape ShapeData
     | NewShape ShapeType
     | InputSelectedShape Int
-    | InputData String String
+    | InputData InputProperty String
     | StopDrag
     | AddNewPoint
     | DeleteSelectedShapes
@@ -51,3 +51,14 @@ type ShapeType
     = Rect
     | Ellipse
     | Polyline
+
+type InputProperty 
+    = Xpos
+    | Ypos
+    | Width
+    | Height
+    | FillColor
+    | Zindex
+    | StrokeWidth
+    | StrokeColor
+    | Points

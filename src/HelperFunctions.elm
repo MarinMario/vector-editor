@@ -2,7 +2,21 @@ module HelperFunctions exposing (..)
 
 import CustomTypes exposing (..)
 
-initShape = ShapeData Rect (1, 1) False 1 (100, 100) (False, False) "grey" [[0, 0]] Nothing 1 5 "black"
+initShape : ShapeData
+initShape = 
+    { shapeType = Rect
+    , position = (50, 50)
+    , followMouse = False
+    , id = 1
+    , size = (50, 50)
+    , updateSize = (False, False)
+    , fillColor = "grey"
+    , points = [[20,20], [100, 100]]
+    , updatePoints = Nothing
+    , zIndex = 1
+    , strokeWidth = 5
+    , strokeColor = "black"
+    }
 
 dragShape : Model -> List ShapeData
 dragShape model =
@@ -34,7 +48,8 @@ dragShape model =
                         )
                     Ellipse -> 
                         ( mousex, mousey )
-                    _ -> (mousex, mousey)
+                    Polyline -> 
+                        (mousex, mousey)
 
             newPoints = 
                 case shape.updatePoints of

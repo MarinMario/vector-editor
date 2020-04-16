@@ -89,12 +89,19 @@ polylineHandle shapeData selectedShape pointsToHandle =
         cy = Maybe.withDefault 0 <| Array.get 1 pth
     in
     if shapeData.id == selectedShape then
-        Svg.circle 
-            [ Sa.cx <| String.fromFloat cx
-            , Sa.cy <| String.fromFloat cy
-            , Sa.r "10", Sa.fill "yellow"
-            , Se.onMouseDown <| EditShape { shapeData | updatePoints = Just pointsToHandle }
-            , He.onDoubleClick <| DeleteLinePoints pointsToHandle
-            -- , Sa.transform <| "translate(" ++ x ++ " " ++ y ++ ")"
-            ] []
+        Svg.g []
+            [ Svg.circle 
+                [ Sa.cx <| String.fromFloat cx
+                , Sa.cy <| String.fromFloat cy
+                , Sa.r "10", Sa.fill "yellow"
+                , Se.onMouseDown <| EditShape { shapeData | updatePoints = Just pointsToHandle }
+                -- , Sa.transform <| "translate(" ++ x ++ " " ++ y ++ ")"
+                ] []
+            , Svg.rect 
+                [ Sa.x <| String.fromFloat (cx + 15)
+                , Sa.y <| String.fromFloat (cy - 15)
+                , Sa.width "10", Sa.height "10", Sa.fill "red"
+                , He.onClick <| DeleteLinePoints pointsToHandle
+                ] []
+            ]
     else Svg.g [] []

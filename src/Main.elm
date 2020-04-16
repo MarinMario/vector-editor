@@ -150,10 +150,7 @@ update msg model =
             , Cmd.none)
         
         DeleteSelectedShapes ->
-            let newShapes =
-                    List.filter 
-                    (\shape -> shape.id /= model.selectedShape)
-                    model.shapes
+            let newShapes = deleteSelectedShape model
             in
             ({ model
             | shapes = newShapes
@@ -192,7 +189,10 @@ update msg model =
                     ) model.shapes
             in
             ({ model
-            | shapes = updatedShapes
+            | shapes = 
+                if List.length selectedShapeData.points <= 2 then
+                    deleteSelectedShape model
+                else updatedShapes
             }, Cmd.none)
         
 

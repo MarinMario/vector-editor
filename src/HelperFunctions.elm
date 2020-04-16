@@ -102,7 +102,9 @@ addNewPoint model =
         newShapes = 
             List.map (\shape -> 
                 if shape.id == model.selectedShape && selectedShapeData.shapeType == Polyline then
-                   { shape | points = shape.points ++ [[mousex, mousey]] }
+                    { shape
+                    | points = selectedShapeData.points ++ [[mousex, mousey]]
+                    }
                 else shape
             ) model.shapes
     in
@@ -114,3 +116,8 @@ getSelectedShapeData model =
         <| List.filter 
             (\shape -> shape.id == model.selectedShape) 
             model.shapes
+
+deleteSelectedShape model =
+    List.filter 
+        (\shape -> shape.id /= model.selectedShape)
+        model.shapes

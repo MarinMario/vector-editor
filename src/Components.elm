@@ -27,11 +27,10 @@ customRect shapeData selectedShape =
                 , Sa.fill shapeData.fillColor
                 , Sa.strokeWidth <| String.fromFloat shapeData.strokeWidth
                 , Sa.stroke shapeData.strokeColor
+                , He.onClick <| InputSelectedShape shapeData.id
                 ] []
             ]
-        , changeSizeHandle shapeData selectedShape
-        , changeWidthHandle shapeData selectedShape
-        , changeHeightHandle shapeData selectedShape
+        , handles shapeData selectedShape
         , moveHandle shapeData
         ]
 
@@ -47,11 +46,10 @@ customEllipse shapeData selectedShape =
                 , Sa.fill shapeData.fillColor
                 , Sa.strokeWidth <| String.fromFloat shapeData.strokeWidth
                 , Sa.stroke shapeData.strokeColor
+                , He.onClick <| InputSelectedShape shapeData.id
                 ] []
             ]
-        , changeSizeHandle shapeData selectedShape
-        , ellipseWidthHandle shapeData selectedShape
-        , ellipseHeightHandle shapeData selectedShape
+        , handles shapeData selectedShape
         , moveHandle shapeData
         ]
 
@@ -71,6 +69,7 @@ customPolyline shapeData selectedShape =
                 , Sa.style <| "fill:none;stroke-width:" ++ strokeWidth
                 , Sa.stroke shapeData.strokeColor
                 -- , Sa.transform <| "translate(" ++ x ++ " " ++ y ++ ")"
+                , He.onClick <| InputSelectedShape shapeData.id
                 ] []
             ]
         , Svg.g [] 

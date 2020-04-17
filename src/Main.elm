@@ -72,7 +72,6 @@ update msg model =
             in
             ({ model
             | shapes = newShapes
-            , selectedShape = newData.id
             }, Cmd.none)
             
         NewShape shapeType ->

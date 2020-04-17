@@ -27,11 +27,11 @@ customRect shapeData selectedShape =
                 , Sa.fill shapeData.fillColor
                 , Sa.strokeWidth <| String.fromFloat shapeData.strokeWidth
                 , Sa.stroke shapeData.strokeColor
-                , He.onClick <| InputSelectedShape shapeData.id
+                , He.onMouseDown <| InputSelectedShape shapeData.id
                 ] []
             ]
-        , handles shapeData selectedShape
-        , moveHandle shapeData
+        , rectHandles shapeData selectedShape
+        , moveHandle shapeData (p.width / 2) ( p.height / 2)
         ]
 
 customEllipse : ShapeData -> Int -> Svg Msg
@@ -46,11 +46,11 @@ customEllipse shapeData selectedShape =
                 , Sa.fill shapeData.fillColor
                 , Sa.strokeWidth <| String.fromFloat shapeData.strokeWidth
                 , Sa.stroke shapeData.strokeColor
-                , He.onClick <| InputSelectedShape shapeData.id
+                , He.onMouseDown <| InputSelectedShape shapeData.id
                 ] []
             ]
-        , handles shapeData selectedShape
-        , moveHandle shapeData
+        , ellipseHandles shapeData selectedShape
+        , moveHandle shapeData 0 0
         ]
 
 customPolyline shapeData selectedShape =
@@ -78,7 +78,7 @@ customPolyline shapeData selectedShape =
             <| List.map (\point -> 
                     createPointButton shapeData selectedShape point.order) 
             <| List.take (List.length shapeData.points - 1) shapeData.points
-        , moveHandle shapeData
+        -- , moveHandle shapeData
         ]
 
 inputDataFields : Model -> Html Msg

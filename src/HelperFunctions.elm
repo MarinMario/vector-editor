@@ -50,8 +50,8 @@ dragShape model =
             newPosition =
                 case shape.shapeType of
                     Rect -> 
-                        ( mousex
-                        , mousey
+                        ( mousex - shapew / 2
+                        , mousey - shapeh / 2
                         )
                     Ellipse -> 
                         ( mousex, mousey )

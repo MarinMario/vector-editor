@@ -101,14 +101,14 @@ polylineHandle shapeData selectedShape pointToHandle =
             ]
     else Svg.g [] []
 
-moveHandle : ShapeData -> Svg Msg
-moveHandle shapeData =
-    let x = Tuple.first shapeData.position - 10
-        y = Tuple.second shapeData.position - 10
+moveHandle : ShapeData -> Float -> Float -> Svg Msg
+moveHandle shapeData xpos ypos =
+    let x = Tuple.first shapeData.position - 10 + xpos
+        y = Tuple.second shapeData.position - 10 + ypos
     in
     if shapeData.hovered then
         Svg.g [ He.onMouseDown <| InputSelectedShape shapeData.id ] 
-            [ Svg.rect 
+            [ Svg.rect
                 [ Sa.x <| String.fromFloat x
                 , Sa.y <| String.fromFloat y
                 , Sa.width "20", Sa.height "20", Sa.fill "blue" 
@@ -119,11 +119,20 @@ moveHandle shapeData =
             ]
     else Svg.g [] []
 
-handles shapeData selectedShape =
+ellipseHandles shapeData selectedShape =
     if shapeData.id == selectedShape then
         Svg.g [] 
             [ changeSizeHandle shapeData selectedShape
             , ellipseWidthHandle shapeData selectedShape
             , ellipseHeightHandle shapeData selectedShape
+            ]
+    else Svg.g [] []
+
+rectHandles shapeData selectedShape =
+    if shapeData.id == selectedShape then
+        Svg.g [] 
+            [ changeSizeHandle shapeData selectedShape
+            , changeWidthHandle shapeData selectedShape
+            , changeHeightHandle shapeData selectedShape
             ]
     else Svg.g [] []

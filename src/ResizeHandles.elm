@@ -80,12 +80,14 @@ ellipseWidthHandle shapeData selectedShape =
 polylineHandle : ShapeData -> Int -> Float -> Svg Msg
 polylineHandle shapeData selectedShape pointToHandle =
     let selectedPoint = getSelectedPoint shapeData pointToHandle
+        x = String.fromFloat <| selectedPoint.x -- + Tuple.first shapeData.position
+        y = String.fromFloat <| selectedPoint.y -- + Tuple.second shapeData.position
     in
     if shapeData.id == selectedShape then
         Svg.g []
             [ Svg.circle 
-                [ Sa.cx <| String.fromFloat selectedPoint.x
-                , Sa.cy <| String.fromFloat selectedPoint.y
+                [ Sa.cx x
+                , Sa.cy y
                 , Sa.r "10", Sa.fill "yellow"
                 , Se.onMouseDown <| EditShape { shapeData | updatePoint = Just pointToHandle }
                 -- , Sa.transform <| "translate(" ++ x ++ " " ++ y ++ ")"
@@ -99,4 +101,20 @@ polylineHandle shapeData selectedShape pointToHandle =
             ]
     else Svg.g [] []
 
-
+moveHandle : ShapeData -> Svg Msg
+moveHandle shapeData =
+    let x = Tuple.first shapeData.position - 15
+        y = Tuple.second shapeData.position
+    in
+    if shapeData.hovered then
+        Svg.g [] 
+            [ Svg.rect 
+                [ Sa.x <| String.fromFloat x
+                , Sa.y <| String.fromFloat y
+                , Sa.width "30", Sa.height "30", Sa.fill "blue" 
+                , Se.onMouseDown <| EditShape { shapeData | followMouse = True }
+                , He.onMouseOver <| EditShape { shapeData | hovered = True}
+                , He.onMouseOut <| EditShape { shapeData | hovered = False }
+                ] []
+            ]
+    else Svg.g [] []

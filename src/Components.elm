@@ -15,18 +15,12 @@ import HelperFunctions exposing (pointsToString, getSelectedPoint)
 
 import Array
 
-shapeEvents shapeData =
-    Svg.g 
-        [ Se.onMouseDown <| EditShape { shapeData | followMouse = True }
-        , Se.onMouseUp <| EditShape { shapeData | followMouse = False }
-        ]
-
 customRect : ShapeData -> Int -> Svg Msg
 customRect shapeData selectedShape =
     let p = shapeProps shapeData 
     in
     Svg.g []
-        [ shapeEvents shapeData
+        [ hoverEventContainer shapeData
             [ Svg.rect 
                 [ Sa.x <| String.fromFloat p.xPos, Sa.y <| String.fromFloat p.yPos
                 , Sa.width <| String.fromFloat p.width, Sa.height <| String.fromFloat p.height
@@ -38,6 +32,7 @@ customRect shapeData selectedShape =
         , changeSizeHandle shapeData selectedShape
         , changeWidthHandle shapeData selectedShape
         , changeHeightHandle shapeData selectedShape
+        , moveHandle shapeData
         ]
 
 customEllipse : ShapeData -> Int -> Svg Msg
@@ -45,7 +40,7 @@ customEllipse shapeData selectedShape =
     let p = shapeProps shapeData 
     in
     Svg.g []
-        [ shapeEvents shapeData
+        [ hoverEventContainer shapeData
             [ Svg.ellipse
                 [ Sa.cx <| String.fromFloat p.xPos, Sa.cy <| String.fromFloat p.yPos
                 , Sa.rx <| String.fromFloat p.width, Sa.ry <| String.fromFloat p.height
@@ -57,6 +52,7 @@ customEllipse shapeData selectedShape =
         , changeSizeHandle shapeData selectedShape
         , ellipseWidthHandle shapeData selectedShape
         , ellipseHeightHandle shapeData selectedShape
+        , moveHandle shapeData
         ]
 
 customPolyline shapeData selectedShape =
@@ -68,9 +64,9 @@ customPolyline shapeData selectedShape =
         -- selectedPoint = getSelectedPoint shapeData
     in
     Svg.g []
-        [ shapeEvents shapeData
+        [ hoverEventContainer shapeData
             [ Svg.polyline
-                [ Sa.points <| pointsToString shapeData.points
+                [ Sa.points <| pointsToString shapeData
                 , Sa.fill shapeData.fillColor
                 , Sa.style <| "fill:none;stroke-width:" ++ strokeWidth
                 , Sa.stroke shapeData.strokeColor
@@ -83,6 +79,7 @@ customPolyline shapeData selectedShape =
             <| List.map (\point -> 
                     createPointButton shapeData selectedShape point.order) 
             <| List.take (List.length shapeData.points - 1) shapeData.points
+        , moveHandle shapeData
         ]
 
 inputDataFields : Model -> Html Msg
@@ -124,7 +121,6 @@ createPointButton shapeData selectedShape pointOrder =
         
         x = (point1.x + point2.x) / 2
         y = (point1.y + point2.y) / 2
-
         defaultPoint = PolylinePoint 0 0 0
         pointsArray = Array.fromList shapeData.points
         testOrder = (point1.order + point2.order) / 2
@@ -140,3 +136,9 @@ createPointButton shapeData selectedShape pointOrder =
             , Se.onClick <| AddNewPoint testOrder
             ] []
     else Svg.g [] []
+
+hoverEventContainer shapeData =
+    Svg.g
+        [ Se.onMouseOver <| EditShape { shapeData | hovered = True } 
+        , Se.onMouseOut <| EditShape { shapeData | hovered = False }
+        ]

@@ -46,6 +46,7 @@ type alias ShapeData =
     , zIndex : Int
     , strokeWidth : Float
     , strokeColor : String
+    , hovered : Bool
     }
 
 type alias PolylinePoint =

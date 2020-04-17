@@ -2,6 +2,10 @@ module HelperFunctions exposing (..)
 
 import CustomTypes exposing (..)
 
+import Svg exposing (svg)
+import Svg.Events as Se
+import Svg.Attributes as Sa
+
 initShape : ShapeData
 initShape = 
     { shapeType = Rect
@@ -16,6 +20,7 @@ initShape =
     , zIndex = 1
     , strokeWidth = 5
     , strokeColor = "black"
+    , hovered = False
     }
 
 initPoints = [PolylinePoint 1 20 20, PolylinePoint 2 100 100]
@@ -45,8 +50,8 @@ dragShape model =
             newPosition =
                 case shape.shapeType of
                     Rect -> 
-                        ( mousex - shapew / 2
-                        , mousey - shapeh / 2
+                        ( mousex
+                        , mousey
                         )
                     Ellipse -> 
                         ( mousex, mousey )
@@ -73,13 +78,14 @@ dragShape model =
         , points = updatedPoints
         }) model.shapes
 
-pointsToString points =
+pointsToString : ShapeData -> String
+pointsToString shapeData =
     List.map (\item -> 
-        let x = String.fromFloat item.x
-            y = String.fromFloat item.y
+        let x = String.fromFloat <| item.x
+            y = String.fromFloat <| item.y
         in
         x ++ "," ++ y 
-    ) points
+    ) shapeData.points
         |> String.join " "
 
 addNewPoint : Model -> Float -> Model

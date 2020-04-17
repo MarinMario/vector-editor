@@ -33,7 +33,6 @@ type Msg
     | DuplicateSelectedShapes
     | DeleteLinePoints Float
 
-
 type alias ShapeData =
     { shapeType : ShapeType 
     , position : (Float, Float)

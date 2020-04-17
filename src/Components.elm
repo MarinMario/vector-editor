@@ -82,7 +82,7 @@ customPolyline shapeData selectedShape =
         , Svg.g [] 
             <| List.map (\point -> 
                     createPointButton shapeData selectedShape point.order) 
-            <| List.filter (\point -> point.order /= 2) shapeData.points
+            <| List.take (List.length shapeData.points - 1) shapeData.points
         ]
 
 inputDataFields : Model -> Html Msg
@@ -128,8 +128,9 @@ createPointButton shapeData selectedShape pointOrder =
         defaultPoint = PolylinePoint 0 0 0
         pointsArray = Array.fromList shapeData.points
         testOrder = (point1.order + point2.order) / 2
-        pointOrders =
-            Array.fromList <| List.map (\point -> point.order) shapeData.points
+
+        -- pointOrders =
+        --     Array.fromList <| List.map (\point -> point.order) shapeData.points
     in
     if shapeData.id == selectedShape then
         Svg.circle 

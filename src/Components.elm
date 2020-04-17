@@ -10,8 +10,10 @@ import Svg.Events as Se
 import Svg.Attributes as Sa
 
 import CustomTypes exposing (..)
-import HelperFunctions exposing (pointsToString)
 import ResizeHandles exposing (..)
+import HelperFunctions exposing (pointsToString, getSelectedPoint)
+
+import Array
 
 shapeEvents shapeData =
     Svg.g 
@@ -59,9 +61,11 @@ customEllipse shapeData selectedShape =
 
 customPolyline shapeData selectedShape =
     let strokeWidth = String.fromFloat shapeData.strokeWidth
-        p = shapeProps shapeData
-        x = String.fromFloat p.xPos
-        y = String.fromFloat p.yPos
+        -- p = shapeProps shapeData
+        -- x = String.fromFloat p.xPos
+        -- y = String.fromFloat p.yPos
+
+        -- selectedPoint = getSelectedPoint shapeData
     in
     Svg.g []
         [ shapeEvents shapeData
@@ -74,8 +78,11 @@ customPolyline shapeData selectedShape =
                 ] []
             ]
         , Svg.g [] 
-            <| List.indexedMap 
-                (\index _ -> polylineHandle shapeData selectedShape index) shapeData.points
+            <| List.map (\point -> polylineHandle shapeData selectedShape point.order) shapeData.points
+        , Svg.g [] 
+            <| List.map (\point -> 
+                    createPointButton shapeData selectedShape point.order) 
+            <| List.filter (\point -> point.order /= 2) shapeData.points
         ]
 
 inputDataFields : Model -> Html Msg
@@ -102,3 +109,33 @@ customInputField property whatValue text =
 newShapeButton : ShapeType -> String -> Html Msg
 newShapeButton shapeType text =
     Html.button [ He.onClick <| NewShape shapeType ] [ Html.text text ]
+
+createPointButton shapeData selectedShape pointOrder =
+    let point1 = getSelectedPoint shapeData pointOrder
+        point2 = 
+            Array.indexedMap (\index point ->
+                if point.order == pointOrder then
+                    Maybe.withDefault defaultPoint <| Array.get (index + 1) pointsArray
+                else defaultPoint
+            ) pointsArray
+            |> Array.filter (\point -> point.order /= 0)
+            |> Array.get 0
+            |> Maybe.withDefault defaultPoint
+        
+        x = (point1.x + point2.x) / 2
+        y = (point1.y + point2.y) / 2
+
+        defaultPoint = PolylinePoint 0 0 0
+        pointsArray = Array.fromList shapeData.points
+        testOrder = (point1.order + point2.order) / 2
+        pointOrders =
+            Array.fromList <| List.map (\point -> point.order) shapeData.points
+    in
+    if shapeData.id == selectedShape then
+        Svg.circle 
+            [ Sa.cx <| String.fromFloat x
+            , Sa.cy <| String.fromFloat y
+            , Sa.r "10", Sa.fill "green"
+            , Se.onClick <| AddNewPoint testOrder
+            ] []
+    else Svg.g [] []

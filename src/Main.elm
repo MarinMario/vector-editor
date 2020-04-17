@@ -16,7 +16,6 @@ import Components exposing (..)
 import CustomTypes exposing (..)
 import HelperFunctions exposing (..)
 
-import Array
 
 main : Program () Model Msg
 main =
@@ -31,9 +30,11 @@ main =
 init : flags -> (Model, Cmd Msg)
 init _ =
     ( Model (1, 1) 
-        [initShape] 1 1 
+        [initShape] 1 1
         (InputShapeData "0" "0" "50" "50" "blue" "0 0" "1" "5" "black")
-    , Cmd.none )
+        1.5
+    , Cmd.none 
+    )
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -138,16 +139,17 @@ update msg model =
                         { shape
                         | followMouse = False
                         , updateSize = (False, False) 
-                        , updatePoints = Nothing
+                        , updatePoint = Nothing
                         }) model.shapes
             in
             ({ model
             | shapes = newShapes
             }, Cmd.none)
         
-        AddNewPoint ->
-            ( addNewPoint model
-            , Cmd.none)
+        AddNewPoint nextOrder ->
+            ( addNewPoint model nextOrder
+            , Cmd.none
+            )
         
         DeleteSelectedShapes ->
             let newShapes = deleteSelectedShape model
@@ -171,16 +173,12 @@ update msg model =
             , lastId = nextId
             }, Cmd.none)
         
-        DeleteLinePoints pointIndex ->
+        DeleteLinePoints pointOrder ->
             let selectedShapeData = getSelectedShapeData model
-                pointData = 
-                    Array.fromList selectedShapeData.points
-                        |> Array.get pointIndex
-                        |> Maybe.withDefault [0, 0]
                 updatedPoints =
-                    List.filter (\point -> point /= pointData) selectedShapeData.points
-                    
-                updatedSelectedShape = { selectedShapeData | points = updatedPoints }
+                    List.filter (\point -> point.order /= pointOrder) selectedShapeData.points
+                updatedSelectedShape =
+                    { selectedShapeData | points = updatedPoints }
                 updatedShapes =
                     List.map (\shape ->
                         if shape.id == updatedSelectedShape.id then
@@ -216,7 +214,6 @@ view model =
             [ Sa.width "1000", Sa.height "400"
             , Ha.style "border" "solid 1px"
             , Mouse.onMove (\event -> MoveMouse event.clientPos)
-            , He.onDoubleClick AddNewPoint
             ] shapes
         , Html.br [] []
         , newShapeButton Rect "Rect"

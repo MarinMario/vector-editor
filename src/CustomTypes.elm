@@ -6,6 +6,7 @@ type alias Model =
     , lastId : Int
     , selectedShape : Int
     , inputShapeData : InputShapeData
+    , nextPoint : Float
     }
 
 type alias InputShapeData =
@@ -27,10 +28,10 @@ type Msg
     | InputSelectedShape Int
     | InputData InputProperty String
     | StopDrag
-    | AddNewPoint
+    | AddNewPoint Float
     | DeleteSelectedShapes
     | DuplicateSelectedShapes
-    | DeleteLinePoints Int
+    | DeleteLinePoints Float
 
 
 type alias ShapeData =
@@ -41,12 +42,18 @@ type alias ShapeData =
     , size : (Float, Float)
     , updateSize : (Bool, Bool)
     , fillColor : String
-    , points : List (List Float)
-    , updatePoints : Maybe Int
+    , points : List PolylinePoint
+    , updatePoint : Maybe Float
     , zIndex : Int
     , strokeWidth : Float
     , strokeColor : String
     }
+
+type alias PolylinePoint =
+        { order : Float
+        , x : Float
+        , y : Float 
+        }
 
 type ShapeType
     = Rect

@@ -2,8 +2,6 @@ module HelperFunctions exposing (..)
 
 import CustomTypes exposing (..)
 
-import Array
-
 initShape : ShapeData
 initShape = 
     { shapeType = Rect
@@ -13,12 +11,14 @@ initShape =
     , size = (50, 50)
     , updateSize = (False, False)
     , fillColor = "grey"
-    , points = [[20,20], [100, 100]]
-    , updatePoints = Nothing
+    , points = initPoints
+    , updatePoint = Nothing
     , zIndex = 1
     , strokeWidth = 5
     , strokeColor = "black"
     }
+
+initPoints = [PolylinePoint 1 20 20, PolylinePoint 2 100 100]
 
 dragShape : Model -> List ShapeData
 dragShape model =
@@ -53,23 +53,15 @@ dragShape model =
                     Polyline -> 
                         ( mousex, mousey )
 
-            dragPointPoints = 
-                case shape.updatePoints of
-                    Just pointsId ->
-                        List.indexedMap (\index points ->
-                            if index == pointsId then
-                                [mousex, mousey]
-                            else points
+            updatedPoints =
+                case shape.updatePoint of
+                    Just one ->
+                        List.map (\point ->
+                            if point.order == one then
+                                { point | x = mousex, y = mousey }
+                            else point
                         ) shape.points
                     Nothing -> shape.points
-            followMousePoints =
-                List.map (\point ->
-                    let ap = Array.fromList point
-                        px = Maybe.withDefault 0 <| Array.get 0 ap
-                        py = Maybe.withDefault 0 <| Array.get 1 ap
-                    in
-                    [px, py]
-                ) shape.points
         in
         { shape
         | position =
@@ -78,37 +70,47 @@ dragShape model =
             ( if Tuple.first shape.updateSize then Tuple.first newSize else Tuple.first shape.size
             , if Tuple.second shape.updateSize then Tuple.second newSize else Tuple.second shape.size
             )
-        , points = 
-            if shape.followMouse then followMousePoints else dragPointPoints
+        , points = updatedPoints
         }) model.shapes
 
 pointsToString points =
     List.map (\item -> 
-        List.map (\ii -> String.fromFloat ii) item 
-            |> String.join ",") points
-            |> String.join " "
+        let x = String.fromFloat item.x
+            y = String.fromFloat item.y
+        in
+        x ++ "," ++ y 
+    ) points
+        |> String.join " "
 
-addNewPoint : Model -> Model
-addNewPoint model =
+addNewPoint : Model -> Float -> Model
+addNewPoint model nextOrder =
     let mousex = Tuple.first model.mousePosition
         mousey = Tuple.second model.mousePosition
-        selectedShapeData =
-            Maybe.withDefault initShape 
-                <| List.head 
-                <| List.filter 
-                    (\shape -> shape.id == model.selectedShape) 
-                    model.shapes
-        
+        selectedShapeData = getSelectedShapeData model
+
+        point1 = getSelectedPoint selectedShapeData <| nextOrder
+        point2 = getSelectedPoint selectedShapeData <| nextOrder / 1.5
+
+
+        updatedPoints =
+                selectedShapeData.points ++
+                [PolylinePoint 
+                    nextOrder mousex mousey
+                ] |> List.sortBy .order
+
         newShapes = 
             List.map (\shape -> 
                 if shape.id == model.selectedShape && selectedShapeData.shapeType == Polyline then
                     { shape
-                    | points = selectedShapeData.points ++ [[mousex, mousey]]
+                    | points = updatedPoints
                     }
                 else shape
             ) model.shapes
     in
-    { model | shapes = newShapes }
+    { model 
+    | shapes = newShapes
+    , nextPoint = nextOrder
+    }
 
 getSelectedShapeData model =
     Maybe.withDefault initShape 
@@ -121,3 +123,10 @@ deleteSelectedShape model =
     List.filter 
         (\shape -> shape.id /= model.selectedShape)
         model.shapes
+
+getSelectedPoint shapeData selectedPoint =
+    Maybe.withDefault (PolylinePoint 0 0 0)
+        <| List.head 
+        <| List.filter 
+            (\point -> point.order == selectedPoint) 
+            shapeData.points

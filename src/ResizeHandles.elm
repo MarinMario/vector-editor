@@ -7,6 +7,7 @@ import Svg.Attributes as Sa
 import Html.Events as He
 
 import CustomTypes exposing (..)
+import HelperFunctions exposing (getSelectedPoint)
 
 import Array
 shapeProps shapeData =
@@ -76,32 +77,26 @@ ellipseWidthHandle shapeData selectedShape =
         (p.yPos - 10) 
         True False
 
-polylineHandle : ShapeData -> Int -> Int -> Svg Msg
-polylineHandle shapeData selectedShape pointsToHandle =
-    let pointsArray = Array.fromList shapeData.points
-        currentPoints = Maybe.withDefault [0, 0] <| Array.get pointsToHandle pointsArray
-        pth = Array.fromList currentPoints
-        -- p = shapeProps shapeData
-        -- x = String.fromFloat p.xPos
-        -- y = String.fromFloat p.yPos
-
-        cx = Maybe.withDefault 0 <| Array.get 0 pth
-        cy = Maybe.withDefault 0 <| Array.get 1 pth
+polylineHandle : ShapeData -> Int -> Float -> Svg Msg
+polylineHandle shapeData selectedShape pointToHandle =
+    let selectedPoint = getSelectedPoint shapeData pointToHandle
     in
     if shapeData.id == selectedShape then
         Svg.g []
             [ Svg.circle 
-                [ Sa.cx <| String.fromFloat cx
-                , Sa.cy <| String.fromFloat cy
+                [ Sa.cx <| String.fromFloat selectedPoint.x
+                , Sa.cy <| String.fromFloat selectedPoint.y
                 , Sa.r "10", Sa.fill "yellow"
-                , Se.onMouseDown <| EditShape { shapeData | updatePoints = Just pointsToHandle }
+                , Se.onMouseDown <| EditShape { shapeData | updatePoint = Just pointToHandle }
                 -- , Sa.transform <| "translate(" ++ x ++ " " ++ y ++ ")"
                 ] []
             , Svg.rect 
-                [ Sa.x <| String.fromFloat (cx + 15)
-                , Sa.y <| String.fromFloat (cy - 15)
+                [ Sa.x <| String.fromFloat (selectedPoint.x + 15)
+                , Sa.y <| String.fromFloat (selectedPoint.y- 15)
                 , Sa.width "10", Sa.height "10", Sa.fill "red"
-                , He.onClick <| DeleteLinePoints pointsToHandle
+                , He.onClick <| DeleteLinePoints pointToHandle
                 ] []
             ]
     else Svg.g [] []
+
+

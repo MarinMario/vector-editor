@@ -165,37 +165,37 @@ convertShapeDataToString model =
                 in
                 case shapeData.shapeType of
                     Rect ->
-                        "<rect" ++ "\n" ++
+                        "<rect" ++
                             " x=" ++ x ++
                             " y=" ++ y ++
                             " width=" ++ w ++
                             " height=" ++ h ++
                             " fill=" ++ c ++
                             " stroke=" ++ sc ++
-                            " stroke-width=" ++ sw ++ "\n" ++
+                            " stroke-width=" ++ sw ++ 
                         " />"
                     Ellipse -> 
-                        "<ellipse" ++ "\n" ++
+                        "<ellipse" ++
                             " cx=" ++ x ++
                             " cy=" ++ y ++
                             " rx=" ++ w ++
                             " ry=" ++ h ++
                             " fill=" ++ c ++
                             " stroke=" ++ sc ++
-                            " stroke-width=" ++ sw ++ "\n" ++
+                            " stroke-width=" ++ sw ++
                         " />"
                     Polyline ->
-                        "<polyline" ++ "\n" ++
+                        "<polyline" ++
                             " points=" ++ points ++
                             " stroke=" ++ sc ++
                             " fill='none'" ++
-                            " stroke-width=" ++ sw ++ "\n" ++
+                            " stroke-width=" ++ sw ++
                         " />"
             
             ) model.shapes
     in
     "<svg width='1000' height='400' xmlns='http://www.w3.org/2000/svg'>" ++ "\n" ++
-        String.join " " shapeStringList ++ "\n" ++
+        String.join "\n" shapeStringList ++ "\n" ++
     "</svg>"
 
 downloadSvg : Model -> Cmd Msg

@@ -30,7 +30,7 @@ customRect shapeData selectedShape =
                 ] []
             ]
         , rectHandles shapeData selectedShape
-        , moveHandle shapeData (p.width / 2) ( p.height / 2)
+        , moveHandle shapeData selectedShape (p.width / 2) ( p.height / 2)
         ]
 
 customEllipse : ShapeData -> Int -> Svg Msg
@@ -49,7 +49,7 @@ customEllipse shapeData selectedShape =
                 ] []
             ]
         , ellipseHandles shapeData selectedShape
-        , moveHandle shapeData 0 0
+        , moveHandle shapeData selectedShape 0 0
         ]
 
 customPolyline shapeData selectedShape polytype =

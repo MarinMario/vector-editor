@@ -95,12 +95,12 @@ polylineHandle shapeData selectedShape pointToHandle =
             ]
     else Svg.g [] []
 
-moveHandle : ShapeData -> Float -> Float -> Svg Msg
-moveHandle shapeData xpos ypos =
+moveHandle : ShapeData -> Int -> Float -> Float -> Svg Msg
+moveHandle shapeData selectedShape xpos ypos =
     let x = Tuple.first shapeData.position - 10 + xpos
         y = Tuple.second shapeData.position - 10 + ypos
     in
-    if shapeData.hovered then
+    if shapeData.hovered || shapeData.id == selectedShape then
         Svg.g [ He.onMouseDown <| InputSelectedShape shapeData.id ] 
             [ Svg.rect
                 [ Sa.x <| String.fromFloat x

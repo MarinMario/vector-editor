@@ -138,3 +138,66 @@ getSelectedPoint shapeData selectedPoint =
         <| List.filter 
             (\point -> point.order == selectedPoint) 
             shapeData.points
+
+shapeProps shapeData =
+    { xPos = Tuple.first shapeData.position
+    , yPos = Tuple.second shapeData.position
+    , width = Tuple.first shapeData.size
+    , height = Tuple.second shapeData.size
+    , fillColor = shapeData.fillColor
+    , strokeWidth = shapeData.strokeWidth
+    , strokeColor = shapeData.strokeColor
+    }
+
+convertShapeDataToString : Model -> String
+convertShapeDataToString model =
+    let shapeStringList =
+            List.map (\shapeData ->
+                let p = shapeProps shapeData
+                    x = "'" ++ String.fromFloat p.xPos ++ "'"
+                    y = "'" ++ String.fromFloat p.yPos ++ "'"
+                    w = "'" ++ String.fromFloat p.width ++ "'"
+                    h = "'" ++ String.fromFloat p.height ++ "'"
+                    c = "'" ++ p.fillColor ++ "'"
+                    sw = "'" ++ String.fromFloat p.strokeWidth ++ "'"
+                    sc = "'" ++ p.strokeColor ++ "'"
+                    points = "'" ++ pointsToString shapeData ++ "'"
+                in
+                case shapeData.shapeType of
+                    Rect ->
+                        "<rect" ++ "\n" ++
+                            " x=" ++ x ++
+                            " y=" ++ y ++
+                            " width=" ++ w ++
+                            " height=" ++ h ++
+                            " fill=" ++ c ++
+                            " stroke=" ++ sc ++
+                            " stroke-width=" ++ sw ++ "\n" ++
+                        " />"
+                    Ellipse -> 
+                        "<ellipse" ++ "\n" ++
+                            " cx=" ++ x ++
+                            " cy=" ++ y ++
+                            " rx=" ++ w ++
+                            " ry=" ++ h ++
+                            " fill=" ++ c ++
+                            " stroke=" ++ sc ++
+                            " stroke-width=" ++ sw ++ "\n" ++
+                        " />"
+                    Polyline ->
+                        "<polyline" ++ "\n" ++
+                            " points=" ++ points ++
+                            " stroke=" ++ sc ++
+                            " fill='none'" ++
+                            " stroke-width=" ++ sw ++ "\n" ++
+                        " />"
+            
+            ) model.shapes
+    in
+    "<svg width='1000' height='400' xmlns='http://www.w3.org/2000/svg'>" ++ "\n" ++
+        String.join " " shapeStringList ++ "\n" ++
+    "</svg>"
+
+downloadSvg : Model -> Cmd Msg
+downloadSvg model =
+    Download.string "svgeditor.svg" "image/svg+xml" (convertShapeDataToString model)

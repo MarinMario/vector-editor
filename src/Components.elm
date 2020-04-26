@@ -10,7 +10,7 @@ import Svg.Attributes as Sa
 
 import CustomTypes exposing (..)
 import ResizeHandles exposing (..)
-import HelperFunctions exposing (pointsToString, getSelectedPoint)
+import HelperFunctions exposing (pointsToString, getSelectedPoint, shapeProps)
 
 import Array
 

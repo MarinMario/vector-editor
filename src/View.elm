@@ -31,4 +31,5 @@ view model =
         , Html.button [ He.onClick DuplicateSelectedShapes ] [ Html.text "Duplicate" ]
         , Html.div [] [ Html.text <| "Shape id: " ++ String.fromInt model.selectedShape ]
         , inputDataFields model
+        , Html.button [ He.onClick DownloadSvg ] [ Html.text "Download" ]
         ]

@@ -158,3 +158,6 @@ update msg model =
                     deleteSelectedShape model
                 else updatedShapes
             }, Cmd.none)
+        
+        DownloadSvg ->
+            (model, downloadSvg model)

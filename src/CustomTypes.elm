@@ -32,6 +32,7 @@ type Msg
     | DeleteSelectedShapes
     | DuplicateSelectedShapes
     | DeleteLinePoints Float
+    | DownloadSvg
 
 type alias ShapeData =
     { shapeType : ShapeType 

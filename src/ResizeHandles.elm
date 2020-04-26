@@ -7,15 +7,7 @@ import Svg.Attributes as Sa
 import Html.Events as He
 
 import CustomTypes exposing (..)
-import HelperFunctions exposing (getSelectedPoint)
-
-import Array
-shapeProps shapeData =
-    { xPos = Tuple.first shapeData.position
-    , yPos = Tuple.second shapeData.position
-    , width = Tuple.first shapeData.size
-    , height = Tuple.second shapeData.size
-    }
+import HelperFunctions exposing (getSelectedPoint, shapeProps)
 
 changeSizeHandle : ShapeData -> Int -> Svg Msg
 changeSizeHandle shapeData selectedShape =

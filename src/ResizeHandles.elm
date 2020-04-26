@@ -55,6 +55,7 @@ handle shapeData selectedShape x y bool1 bool2=
             [ Sa.x <| String.fromFloat x
             , Sa.y <| String.fromFloat y
             , Sa.width "20", Sa.height "20", Sa.fill "yellow" 
+            , Sa.rx "2", Sa.ry "2"
             , Se.onMouseDown <| EditShape { shapeData | updateSize = (bool1, bool2) }
             ] []
     else Svg.g [] []
@@ -96,6 +97,7 @@ polylineHandle shapeData selectedShape pointToHandle =
                 [ Sa.x <| String.fromFloat (selectedPoint.x + 15)
                 , Sa.y <| String.fromFloat (selectedPoint.y- 15)
                 , Sa.width "10", Sa.height "10", Sa.fill "red"
+                , Sa.rx "1", Sa.ry "2"
                 , He.onClick <| DeleteLinePoints pointToHandle
                 ] []
             ]
@@ -112,6 +114,7 @@ moveHandle shapeData xpos ypos =
                 [ Sa.x <| String.fromFloat x
                 , Sa.y <| String.fromFloat y
                 , Sa.width "20", Sa.height "20", Sa.fill "blue" 
+                , Sa.rx "2", Sa.ry "2"
                 , Se.onMouseDown <| EditShape { shapeData | followMouse = True }
                 , He.onMouseOver <| EditShape { shapeData | hovered = True}
                 , He.onMouseOut <| EditShape { shapeData | hovered = False }

@@ -6,6 +6,8 @@ import Svg exposing (svg)
 import Svg.Events as Se
 import Svg.Attributes as Sa
 
+import File.Download as Download
+
 initShape : ShapeData
 initShape = 
     { shapeType = Rect

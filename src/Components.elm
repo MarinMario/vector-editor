@@ -3,7 +3,6 @@ module Components exposing (..)
 import Html exposing (Html)
 import Html.Events as He
 import Html.Attributes as Ha
-import Html.Events.Extra.Mouse as Mouse
 
 import Svg exposing (Svg)
 import Svg.Events as Se
@@ -132,7 +131,7 @@ createPointButton shapeData selectedShape pointOrder =
             [ Sa.cx <| String.fromFloat x
             , Sa.cy <| String.fromFloat y
             , Sa.r "10", Sa.fill "green"
-            , Se.onClick <| AddNewPoint testOrder
+            , Se.onMouseDown <| AddNewPoint testOrder
             ] []
     else Svg.g [] []
 
@@ -141,3 +140,17 @@ hoverEventContainer shapeData =
         [ Se.onMouseOver <| EditShape { shapeData | hovered = True } 
         , Se.onMouseOut <| EditShape { shapeData | hovered = False }
         ]
+
+convertDataToSvg model =
+    let orderedData =
+            List.sortBy .zIndex model.shapes
+    in
+    List.map (\shapeData -> 
+        case shapeData.shapeType of
+            Rect ->
+                customRect shapeData model.selectedShape
+            Ellipse -> 
+                customEllipse shapeData model.selectedShape
+            Polyline ->
+                customPolyline shapeData model.selectedShape
+    ) orderedData

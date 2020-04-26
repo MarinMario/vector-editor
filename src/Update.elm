@@ -50,6 +50,11 @@ update msg model =
                     , fillColor =
                         if shapeType == Polyline then "none"
                         else initShape.fillColor
+                    , points =
+                        case shapeType of 
+                            Polygon -> 
+                                [PolylinePoint 1 20 20, PolylinePoint 1.5 20 100, PolylinePoint 2 100 100]
+                            _ -> initShape.points
                     }
             in
             ({ model

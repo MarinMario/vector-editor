@@ -55,10 +55,7 @@ dragShape model =
                         ( mousex - shapew / 2
                         , mousey - shapeh / 2
                         )
-                    Ellipse -> 
-                        ( mousex, mousey )
-                    Polyline -> 
-                        ( mousex, mousey )
+                    _ -> (mousex, mousey)
 
             updatedPoints =
                 case shape.updatePoint of
@@ -106,9 +103,10 @@ addNewPoint model nextOrder =
                     nextOrder mousex mousey
                 ] |> List.sortBy .order
 
+        st = selectedShapeData.shapeType
         newShapes = 
             List.map (\shape -> 
-                if shape.id == model.selectedShape && selectedShapeData.shapeType == Polyline then
+                if shape.id == model.selectedShape && (st == Polyline || st == Polygon) then
                     { shape
                     | points = updatedPoints
                     }
@@ -187,6 +185,13 @@ convertShapeDataToString model =
                         " />"
                     Polyline ->
                         "<polyline" ++
+                            " points=" ++ points ++
+                            " stroke=" ++ sc ++
+                            " fill='none'" ++
+                            " stroke-width=" ++ sw ++
+                        " />"
+                    Polygon ->
+                        "<polygon" ++
                             " points=" ++ points ++
                             " stroke=" ++ sc ++
                             " fill='none'" ++

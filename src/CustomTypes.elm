@@ -60,6 +60,7 @@ type ShapeType
     = Rect
     | Ellipse
     | Polyline
+    | Polygon
 
 type InputProperty 
     = Xpos

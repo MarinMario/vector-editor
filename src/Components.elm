@@ -52,17 +52,12 @@ customEllipse shapeData selectedShape =
         , moveHandle shapeData 0 0
         ]
 
-customPolyline shapeData selectedShape =
+customPolyline shapeData selectedShape polytype =
     let strokeWidth = String.fromFloat shapeData.strokeWidth
-        -- p = shapeProps shapeData
-        -- x = String.fromFloat p.xPos
-        -- y = String.fromFloat p.yPos
-
-        -- selectedPoint = getSelectedPoint shapeData
     in
     Svg.g []
         [ hoverEventContainer shapeData
-            [ Svg.polyline
+            [ polytype
                 [ Sa.points <| pointsToString shapeData
                 , Sa.fill shapeData.fillColor
                 , Sa.style <| "fill:" ++ shapeData.fillColor ++ ";stroke-width:" ++ strokeWidth
@@ -73,7 +68,7 @@ customPolyline shapeData selectedShape =
             ]
         , Svg.g [] 
             <| List.map (\point -> polylineHandle shapeData selectedShape point.order) shapeData.points
-        , Svg.g [] 
+        , Svg.g []
             <| List.map (\point -> 
                     createPointButton shapeData selectedShape point.order) 
             <| List.take (List.length shapeData.points - 1) shapeData.points
@@ -152,5 +147,7 @@ convertDataToSvg model =
             Ellipse -> 
                 customEllipse shapeData model.selectedShape
             Polyline ->
-                customPolyline shapeData model.selectedShape
+                customPolyline shapeData model.selectedShape Svg.polyline
+            Polygon ->
+                customPolyline shapeData model.selectedShape Svg.polygon
     ) orderedData

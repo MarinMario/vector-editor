@@ -26,7 +26,8 @@ view model =
         , Html.br [] []
         , newShapeButton Rect "Rect"
         , newShapeButton Ellipse "Ellipse"
-        , newShapeButton Polyline "Polyline"
+        , newShapeButton Polyline "Line"
+        , newShapeButton Polygon "Polygon"
         , Html.button [ He.onClick DeleteSelectedShapes ] [ Html.text "Delete" ]
         , Html.button [ He.onClick DuplicateSelectedShapes ] [ Html.text "Duplicate" ]
         , Html.div [] [ Html.text <| "Shape id: " ++ String.fromInt model.selectedShape ]

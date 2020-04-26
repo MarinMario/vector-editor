@@ -151,17 +151,18 @@ shapeProps shapeData =
 
 convertShapeDataToString : Model -> String
 convertShapeDataToString model =
-    let shapeStringList =
+    let inQuotes val = "'" ++ val ++ "'"
+        shapeStringList =
             List.map (\shapeData ->
                 let p = shapeProps shapeData
-                    x = "'" ++ String.fromFloat p.xPos ++ "'"
-                    y = "'" ++ String.fromFloat p.yPos ++ "'"
-                    w = "'" ++ String.fromFloat p.width ++ "'"
-                    h = "'" ++ String.fromFloat p.height ++ "'"
-                    c = "'" ++ p.fillColor ++ "'"
-                    sw = "'" ++ String.fromFloat p.strokeWidth ++ "'"
-                    sc = "'" ++ p.strokeColor ++ "'"
-                    points = "'" ++ pointsToString shapeData ++ "'"
+                    x = inQuotes <| String.fromFloat p.xPos
+                    y = inQuotes <| String.fromFloat p.yPos
+                    w = inQuotes <| String.fromFloat p.width
+                    h = inQuotes <| String.fromFloat p.height
+                    c = inQuotes <| p.fillColor
+                    sw = inQuotes <| String.fromFloat p.strokeWidth
+                    sc = inQuotes <| p.strokeColor
+                    points = inQuotes <| pointsToString shapeData
                 in
                 case shapeData.shapeType of
                     Rect ->

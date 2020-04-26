@@ -47,6 +47,9 @@ update msg model =
                     { initShape 
                     | shapeType = shapeType
                     , id = newId
+                    , fillColor =
+                        if shapeType == Polyline then "none"
+                        else initShape.fillColor
                     }
             in
             ({ model

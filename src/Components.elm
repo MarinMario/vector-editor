@@ -65,7 +65,7 @@ customPolyline shapeData selectedShape =
             [ Svg.polyline
                 [ Sa.points <| pointsToString shapeData
                 , Sa.fill shapeData.fillColor
-                , Sa.style <| "fill:none;stroke-width:" ++ strokeWidth
+                , Sa.style <| "fill:" ++ shapeData.fillColor ++ ";stroke-width:" ++ strokeWidth
                 , Sa.stroke shapeData.strokeColor
                 -- , Sa.transform <| "translate(" ++ x ++ " " ++ y ++ ")"
                 , He.onClick <| InputSelectedShape shapeData.id

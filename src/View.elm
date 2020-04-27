@@ -16,16 +16,22 @@ view model =
     Html.div [ He.onMouseUp StopDrag ]
         [ svgArea model
         , Html.br [] []
-        , tabButtons
+        , tabButtons model
         , case model.tab of
             None -> Html.div [] []
-            Properties ->
+            Canvas ->
                 Html.div []
                     [ newShapeButtons
-                    , Html.button [ He.onClick DeleteSelectedShapes ] [ Html.text "Delete" ]
+                    ]
+            Properties ->
+                Html.div []
+                    [ Html.button [ He.onClick DeleteSelectedShapes ] [ Html.text "Delete" ]
                     , Html.button [ He.onClick DuplicateSelectedShapes ] [ Html.text "Duplicate" ]
                     , Html.div [] [ Html.text <| "Shape id: " ++ String.fromInt model.selectedShape ]
                     , inputDataFields model
-                    , Html.button [ He.onClick DownloadSvg ] [ Html.text "Download" ]
+                    ]
+            Save ->
+                Html.div []
+                    [ Html.button [ He.onClick DownloadSvg ] [ Html.text "Download" ]
                     ]
         ]

@@ -77,4 +77,6 @@ type InputProperty
 
 type Tab
     = None
+    | Canvas
     | Properties
+    | Save

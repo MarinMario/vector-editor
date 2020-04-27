@@ -194,12 +194,17 @@ svgArea model =
         , Mouse.onMove (\event -> MoveMouse event.clientPos)
         ] <| convertDataToSvg model
 
-tabButtons : Html Msg
-tabButtons =
+tabButtons : Model -> Html Msg
+tabButtons model =
     let tabButton tab txt =  
-            Html.button [ He.onClick <| ChangeTab tab ] [ Html.text txt ]
+            Html.button 
+                [ Ha.class <| if model.tab == tab then "selectedTab" else "tab"
+                , He.onClick <| ChangeTab tab ] 
+                [ Html.text txt ]
     in
     Html.div []
         [ tabButton None "None"
+        , tabButton Canvas "Canvas"
         , tabButton Properties "Properties"
+        , tabButton Save "Save"
         ]

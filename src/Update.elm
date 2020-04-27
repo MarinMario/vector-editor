@@ -55,6 +55,8 @@ update msg model =
                             Polygon -> 
                                 [PolylinePoint 1 20 20, PolylinePoint 1.5 20 100, PolylinePoint 2 100 100]
                             _ -> initShape.points
+                    , strokeWidth =
+                        if shapeType == Label then 1 else initShape.strokeWidth
                     }
             in
             ({ model
@@ -80,8 +82,8 @@ update msg model =
                         StrokeWidth -> { isd | strokeWidth = val }
                         StrokeColor -> { isd | strokeColor = val }
                         Points -> isd
+                        LabelText -> { isd | labelText = val }
 
-                
                 newShapes =
                     List.map (\shape ->
                         if shape.id == model.selectedShape then
@@ -98,6 +100,7 @@ update msg model =
                             , zIndex = Maybe.withDefault 1 <| String.toInt newInputShapeData.zIndex
                             , strokeWidth = Maybe.withDefault 3 <| String.toFloat newInputShapeData.strokeWidth
                             , strokeColor = newInputShapeData.strokeColor
+                            , labelText = newInputShapeData.labelText
                             }
                         else shape
                     ) model.shapes

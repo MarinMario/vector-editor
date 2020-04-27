@@ -20,6 +20,7 @@ type alias InputShapeData =
     , zIndex : String
     , strokeWidth : String
     , strokeColor : String
+    , labelText : String
     }
 
 type Msg
@@ -50,6 +51,7 @@ type alias ShapeData =
     , strokeWidth : Float
     , strokeColor : String
     , hovered : Bool
+    , labelText : String
     }
 
 type alias PolylinePoint =
@@ -63,6 +65,7 @@ type ShapeType
     | Ellipse
     | Polyline
     | Polygon
+    | Label
 
 type InputProperty 
     = Xpos
@@ -74,6 +77,7 @@ type InputProperty
     | StrokeWidth
     | StrokeColor
     | Points
+    | LabelText
 
 type Tab
     = None

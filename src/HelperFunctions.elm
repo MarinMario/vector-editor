@@ -23,6 +23,7 @@ initShape =
     , strokeWidth = 5
     , strokeColor = "black"
     , hovered = False
+    , labelText = "This is a label"
     }
 
 initPoints = [PolylinePoint 1 20 20, PolylinePoint 2 100 100]
@@ -54,6 +55,10 @@ dragShape model =
                     Rect -> 
                         ( mousex - shapew / 2
                         , mousey - shapeh / 2
+                        )
+                    Label ->
+                        ( mousex + 10
+                        , mousey + 10
                         )
                     _ -> (mousex, mousey)
 
@@ -161,6 +166,8 @@ convertShapeDataToString model =
                     sw = inQuotes <| String.fromFloat p.strokeWidth
                     sc = inQuotes <| p.strokeColor
                     points = inQuotes <| pointsToString shapeData
+                    labelText = shapeData.labelText
+                    fontSize = inQuotes <| String.fromFloat p.width ++ "px"
                 in
                 case shapeData.shapeType of
                     Rect ->
@@ -197,6 +204,17 @@ convertShapeDataToString model =
                             " fill=" ++ c ++
                             " stroke-width=" ++ sw ++
                         " />"
+                    Label ->
+                        "<text" ++
+                            " x=" ++ x ++
+                            " y=" ++ y ++
+                            " stroke=" ++ sc ++
+                            " fill=" ++ c ++
+                            " stroke-width=" ++ sw ++
+                            " font-size=" ++ fontSize ++
+                        " >" ++ "\n" ++
+                            labelText ++ "\n" ++
+                        "</text>"
             
             ) <| orderShapes model.shapes
     in

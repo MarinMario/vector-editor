@@ -77,6 +77,27 @@ customPolyline shapeData selectedShape polytype =
         -- , moveHandle shapeData
         ]
 
+customLabel shapeData selectedShape =
+    let p = shapeProps shapeData
+        x = String.fromFloat p.xPos
+        y = String.fromFloat p.yPos
+        w = String.fromFloat p.width
+        sw = String.fromFloat p.strokeWidth
+    in
+    Svg.g []
+        [ hoverEventContainer shapeData
+            [ Svg.text_ 
+                [ Sa.x x, Sa.y y, Sa.fill shapeData.fillColor
+                , Sa.fontSize <| w ++ "px"
+                , Sa.stroke shapeData.strokeColor, Sa.strokeWidth sw
+                , He.onMouseDown <| InputSelectedShape shapeData.id
+                ] 
+                [ Svg.text shapeData.labelText ]
+            ]
+        , moveHandle shapeData selectedShape -10 -10
+        , changeWidthHandle shapeData selectedShape
+        ]
+
 inputDataFields : Model -> Html Msg
 inputDataFields model =
     let constantFields =
@@ -113,7 +134,15 @@ inputDataFields model =
                 ]
         Polygon ->
             Html.div [] 
-                [ customInputField Points model.inputShapeData.points "points"
+                [ customInputField Points model.inputShapeData.labelText "text"
+                , constantFields
+                ]
+        Label ->
+            Html.div []
+                [ customInputField Xpos model.inputShapeData.xPos "x"
+                , customInputField Xpos model.inputShapeData.xPos "y"
+                , customInputField Width model.inputShapeData.width "size"
+                , customInputField LabelText model.inputShapeData.labelText "text"
                 , constantFields
                 ]
 
@@ -175,6 +204,8 @@ convertDataToSvg model =
                 customPolyline shapeData model.selectedShape Svg.polyline
             Polygon ->
                 customPolyline shapeData model.selectedShape Svg.polygon
+            Label ->
+                customLabel shapeData model.selectedShape
     ) <| orderShapes model.shapes
 
 newShapeButtons : Html Msg
@@ -184,6 +215,7 @@ newShapeButtons =
         , newShapeButton Ellipse "Ellipse"
         , newShapeButton Polyline "Line"
         , newShapeButton Polygon "Polygon"
+        , newShapeButton Label "Label"
         ]
 
 svgArea : Model -> Svg Msg

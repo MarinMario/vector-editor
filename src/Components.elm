@@ -193,3 +193,13 @@ svgArea model =
         , Ha.style "border" "solid 1px"
         , Mouse.onMove (\event -> MoveMouse event.clientPos)
         ] <| convertDataToSvg model
+
+tabButtons : Html Msg
+tabButtons =
+    let tabButton tab txt =  
+            Html.button [ He.onClick <| ChangeTab tab ] [ Html.text txt ]
+    in
+    Html.div []
+        [ tabButton None "None"
+        , tabButton Properties "Properties"
+        ]

@@ -7,6 +7,7 @@ type alias Model =
     , selectedShape : Int
     , inputShapeData : InputShapeData
     , nextPoint : Float
+    , tab : Tab
     }
 
 type alias InputShapeData =
@@ -33,6 +34,7 @@ type Msg
     | DuplicateSelectedShapes
     | DeleteLinePoints Float
     | DownloadSvg
+    | ChangeTab Tab
 
 type alias ShapeData =
     { shapeType : ShapeType 
@@ -72,3 +74,7 @@ type InputProperty
     | StrokeWidth
     | StrokeColor
     | Points
+
+type Tab
+    = None
+    | Properties

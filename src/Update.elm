@@ -169,3 +169,7 @@ update msg model =
         
         DownloadSvg ->
             (model, downloadSvg model)
+        
+        ChangeTab tab ->
+            ({ model | tab = tab }
+            , Cmd.none )

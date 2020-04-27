@@ -48,6 +48,7 @@ handle shapeData selectedShape x y bool1 bool2=
             , Sa.y <| String.fromFloat y
             , Sa.width "20", Sa.height "20", Sa.fill "#84a9ac" 
             , Sa.rx "2", Sa.ry "2"
+            , Sa.class "shape"
             , Se.onMouseDown <| EditShape { shapeData | updateSize = (bool1, bool2) }
             ] []
     else Svg.g [] []

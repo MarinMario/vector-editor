@@ -235,7 +235,9 @@ sidebar model =
                     if model.tab == tab then "selectedTab" 
                     else if model.hoveredTab == Just tab then "hoveredTab"
                     else "tab"
-                , He.onClick <| ChangeTab tab
+                , He.onClick <| 
+                    if model.tab == tab then ChangeTab None
+                    else ChangeTab tab
                 , He.onMouseOver <| HoverTab <| Just tab 
                 , He.onMouseLeave <| HoverTab Nothing
                 ]

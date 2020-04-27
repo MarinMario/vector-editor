@@ -1,6 +1,7 @@
-/* html {
-    background-color: #90adb7;
-} */
+html {
+    width: 100vw;
+    height: 100vh;
+}
 
 .app {
     display: flex;
@@ -29,15 +30,18 @@
     grid-area: box;
     border-left: 1px solid;
     background-color: #3b6978;
+    transition-duration: 100ms;
 }
 
 .tab :first-child {
     border-bottom: 1px solid;
     padding: 10px;
     background-color: #84a9ac;
+    transition-duration: 100ms;
 }
 .selectedTab :first-child, .hoveredTab :first-child {
     border-bottom: 1px solid;
     background-color: #cae8d5;
     padding: 10px;
+    transition-duration: 100ms;
 }

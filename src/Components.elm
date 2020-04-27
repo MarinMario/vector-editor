@@ -10,7 +10,9 @@ import Svg.Attributes as Sa
 
 import CustomTypes exposing (..)
 import ResizeHandles exposing (..)
-import HelperFunctions exposing (pointsToString, getSelectedPoint, shapeProps, orderShapes)
+import HelperFunctions exposing (..)
+
+import Html.Events.Extra.Mouse as Mouse
 
 import Array
 
@@ -77,17 +79,43 @@ customPolyline shapeData selectedShape polytype =
 
 inputDataFields : Model -> Html Msg
 inputDataFields model =
-    Html.div [] 
-        [ customInputField Xpos model.inputShapeData.xPos "x"
-        , customInputField Ypos model.inputShapeData.yPos "y"
-        , customInputField Width model.inputShapeData.width "width"
-        , customInputField Height model.inputShapeData.height "height"
-        , customInputField StrokeWidth model.inputShapeData.strokeWidth "stroke-width"
-        , customInputField Zindex model.inputShapeData.zIndex "z-index"
-        , customInputField FillColor model.inputShapeData.fillColor "fill-color"
-        , customInputField StrokeColor model.inputShapeData.strokeColor "stroke-color"
-        , customInputField Points model.inputShapeData.points "points"
-        ]
+    let constantFields =
+            Html.div []
+            [ customInputField StrokeWidth model.inputShapeData.strokeWidth "stroke-width"
+            , customInputField Zindex model.inputShapeData.zIndex "z-index"
+            , customInputField FillColor model.inputShapeData.fillColor "fill-color"
+            , customInputField StrokeColor model.inputShapeData.strokeColor "stroke-color"
+            ]
+        xywh x y w h =
+            Html.div []
+                [ customInputField Xpos model.inputShapeData.xPos x
+                , customInputField Ypos model.inputShapeData.yPos y
+                , customInputField Width model.inputShapeData.width w
+                , customInputField Height model.inputShapeData.height h
+                ]
+    in
+    case (getSelectedShapeData model).shapeType of
+        Rect ->
+            Html.div []
+                [ xywh "x" "y" "width" "height"
+                , constantFields
+                -- , customInputField Points model.inputShapeData.points "points"
+                ]
+        Ellipse -> 
+            Html.div []
+                [ xywh "x" "y" "radius x" "radius y"
+                , constantFields
+                ]
+        Polyline ->
+            Html.div [] 
+                [ customInputField Points model.inputShapeData.points "points"
+                , constantFields
+                ]
+        Polygon ->
+            Html.div [] 
+                [ customInputField Points model.inputShapeData.points "points"
+                , constantFields
+                ]
 
 customInputField : InputProperty -> String -> String -> Html Msg
 customInputField property whatValue text =
@@ -148,3 +176,20 @@ convertDataToSvg model =
             Polygon ->
                 customPolyline shapeData model.selectedShape Svg.polygon
     ) <| orderShapes model.shapes
+
+newShapeButtons : Html Msg
+newShapeButtons =
+    Html.div [] 
+        [ newShapeButton Rect "Rect"
+        , newShapeButton Ellipse "Ellipse"
+        , newShapeButton Polyline "Line"
+        , newShapeButton Polygon "Polygon"
+        ]
+
+svgArea : Model -> Svg Msg
+svgArea model =
+    Svg.svg 
+        [ Sa.width "1000", Sa.height "400"
+        , Ha.style "border" "solid 1px"
+        , Mouse.onMove (\event -> MoveMouse event.clientPos)
+        ] <| convertDataToSvg model

@@ -83,6 +83,8 @@ update msg model =
                         StrokeColor -> { isd | strokeColor = val }
                         Points -> isd
                         LabelText -> { isd | labelText = val }
+                        SvgSizeX -> { isd | svgSizeX = val}
+                        SvgSizeY -> { isd | svgSizeY = val}
 
                 newShapes =
                     List.map (\shape ->

@@ -21,8 +21,8 @@ init : flags -> (Model, Cmd Msg)
 init _ =
     ( Model (1, 1) 
         [initShape] 1 1
-        (InputShapeData "0" "0" "50" "50" "blue" "0 0" "1" "5" "black" "This is a label")
-        1.5 None Nothing
+        (InputShapeData "0" "0" "50" "50" "blue" "0 0" "1" "5" "black" "This is a label" "800" "600")
+        1.5 None Nothing (800, 600)
     , Cmd.none
     )
 

@@ -11,9 +11,14 @@ import Components exposing (..)
 import CustomTypes exposing (..)
 import HelperFunctions exposing (..)
 
+import Html.Events.Extra.Mouse as Mouse
+
 view : Model -> Html Msg
 view model =
-    Html.div [ He.onMouseUp StopDrag,  Ha.class "app" ]
+    Html.div 
+        [ He.onMouseUp StopDrag, Ha.class "app"
+        , Mouse.onMove (\event -> MoveMouse event.clientPos)
+        ]
         [ svgArea model
         , menu model
         ]
@@ -28,7 +33,9 @@ menu model =
                 None -> Html.div [] []
                 Canvas ->
                     Html.div []
-                        [ newShapeButtons
+                        [ customInputField SvgSizeX model.inputShapeData.svgSizeX "canvas width"
+                        , customInputField SvgSizeY model.inputShapeData.svgSizeY "canvas height"
+                        , newShapeButtons
                         ]
                 Properties ->
                     Html.div []
@@ -40,6 +47,7 @@ menu model =
                 Save ->
                     Html.div []
                         [ Html.button [ He.onClick DownloadSvg ] [ Html.text "Download" ]
+                        , Html.textarea [ Ha.class "stringifiedCode" ] [ Html.text <| convertShapeDataToString model ]
                         ]
             ]
         , sidebar model

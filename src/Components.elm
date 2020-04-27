@@ -220,16 +220,18 @@ newShapeButtons =
 
 svgArea : Model -> Svg Msg
 svgArea model =
+    let width = model.inputShapeData.svgSizeX
+        height = model.inputShapeData.svgSizeY
+    in
     Svg.svg 
-        [ Sa.width "1000", Sa.height "400"
+        [ Sa.width width, Sa.height height
         , Ha.style "border" "solid 1px"
         , Sa.class "canvas"
-        , Mouse.onMove (\event -> MoveMouse event.clientPos)
         ] <| convertDataToSvg model
 
 sidebar : Model -> Html Msg
 sidebar model =
-    let tabButton tab imgsrc =  
+    let tabButton tab svgshape =  
             Html.div 
                 [ Ha.class <| 
                     if model.tab == tab then "selectedTab" 
@@ -241,12 +243,16 @@ sidebar model =
                 , He.onMouseOver <| HoverTab <| Just tab 
                 , He.onMouseLeave <| HoverTab Nothing
                 ]
-                [ Html.img [ Ha.src imgsrc ] [] 
+                [ Svg.svg [ Sa.width "30", Sa.height "30" ] [ svgshape ]
                 ]
+        
+        tabColor tab =
+            if model.tab == tab then Sa.fill "black"
+            else Sa.fill "#ececec"
     in
     Html.div [ Ha.class "sidebar" ]
-        [ tabButton None "https://img.icons8.com/material-rounded/48/000000/select-none.png"
-        , tabButton Canvas "https://img.icons8.com/material-rounded/48/000000/diversity.png"
-        , tabButton Properties "https://img.icons8.com/material-rounded/48/000000/add-property-1.png"
-        , tabButton Save "https://img.icons8.com/material-rounded/48/000000/save.png"
+        [ tabButton None <| Svg.rect [ Sa.width "30", Sa.height "30", tabColor None ] []
+        , tabButton Canvas <| Svg.rect [ Sa.width "30", Sa.height "30", tabColor Canvas ] []
+        , tabButton Properties <| Svg.rect [ Sa.width "30", Sa.height "30", tabColor Properties ] []
+        , tabButton Save <| Svg.rect [ Sa.width "30", Sa.height "30", tabColor Save ] []
         ]

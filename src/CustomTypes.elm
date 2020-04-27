@@ -9,6 +9,7 @@ type alias Model =
     , nextPoint : Float
     , tab : Tab
     , hoveredTab : Maybe Tab
+    , svgSize : (Float, Float)
     }
 
 type alias InputShapeData =
@@ -22,6 +23,8 @@ type alias InputShapeData =
     , strokeWidth : String
     , strokeColor : String
     , labelText : String
+    , svgSizeX : String
+    , svgSizeY : String
     }
 
 type Msg
@@ -80,6 +83,8 @@ type InputProperty
     | StrokeColor
     | Points
     | LabelText
+    | SvgSizeX
+    | SvgSizeY
 
 type Tab
     = None

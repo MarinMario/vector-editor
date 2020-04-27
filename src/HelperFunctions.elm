@@ -187,18 +187,18 @@ convertShapeDataToString model =
                         "<polyline" ++
                             " points=" ++ points ++
                             " stroke=" ++ sc ++
-                            " fill='none'" ++
+                            " fill=" ++ c ++
                             " stroke-width=" ++ sw ++
                         " />"
                     Polygon ->
                         "<polygon" ++
                             " points=" ++ points ++
                             " stroke=" ++ sc ++
-                            " fill='none'" ++
+                            " fill=" ++ c ++
                             " stroke-width=" ++ sw ++
                         " />"
             
-            ) model.shapes
+            ) <| orderShapes model.shapes
     in
     "<svg width='1000' height='400' xmlns='http://www.w3.org/2000/svg'>" ++ "\n" ++
         String.join "\n" shapeStringList ++ "\n" ++
@@ -207,3 +207,6 @@ convertShapeDataToString model =
 downloadSvg : Model -> Cmd Msg
 downloadSvg model =
     Download.string "svgeditor.svg" "image/svg+xml" (convertShapeDataToString model)
+
+orderShapes : List ShapeData -> List ShapeData
+orderShapes shapes = List.sortBy .zIndex shapes

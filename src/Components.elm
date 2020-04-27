@@ -10,7 +10,7 @@ import Svg.Attributes as Sa
 
 import CustomTypes exposing (..)
 import ResizeHandles exposing (..)
-import HelperFunctions exposing (pointsToString, getSelectedPoint, shapeProps)
+import HelperFunctions exposing (pointsToString, getSelectedPoint, shapeProps, orderShapes)
 
 import Array
 
@@ -137,9 +137,6 @@ hoverEventContainer shapeData =
         ]
 
 convertDataToSvg model =
-    let orderedData =
-            List.sortBy .zIndex model.shapes
-    in
     List.map (\shapeData -> 
         case shapeData.shapeType of
             Rect ->
@@ -150,4 +147,4 @@ convertDataToSvg model =
                 customPolyline shapeData model.selectedShape Svg.polyline
             Polygon ->
                 customPolyline shapeData model.selectedShape Svg.polygon
-    ) orderedData
+    ) <| orderShapes model.shapes

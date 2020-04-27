@@ -67,6 +67,7 @@ update msg model =
         InputSelectedShape val ->
             ({ model
             | selectedShape = val
+            , tab = Properties
             }, Cmd.none)
         
         InputData vtc val ->

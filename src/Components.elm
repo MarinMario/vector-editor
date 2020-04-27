@@ -134,7 +134,7 @@ inputDataFields model =
                 ]
         Polygon ->
             Html.div [] 
-                [ customInputField Points model.inputShapeData.labelText "text"
+                [ customInputField Points model.inputShapeData.points "points"
                 , constantFields
                 ]
         Label ->

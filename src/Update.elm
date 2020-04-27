@@ -67,7 +67,6 @@ update msg model =
         InputSelectedShape val ->
             ({ model
             | selectedShape = val
-            , tab = Properties
             }, Cmd.none)
         
         InputData vtc val ->
@@ -176,4 +175,8 @@ update msg model =
         
         ChangeTab tab ->
             ({ model | tab = tab }
+            , Cmd.none )
+        
+        HoverTab tab ->
+            ({ model | hoveredTab = tab }
             , Cmd.none )

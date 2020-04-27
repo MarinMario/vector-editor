@@ -22,7 +22,7 @@ init _ =
     ( Model (1, 1) 
         [initShape] 1 1
         (InputShapeData "0" "0" "50" "50" "blue" "0 0" "1" "5" "black" "This is a label")
-        1.5 None
+        1.5 None Nothing
     , Cmd.none
     )
 

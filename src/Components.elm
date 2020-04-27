@@ -182,7 +182,7 @@ createPointButton shapeData selectedShape pointOrder =
         Svg.circle 
             [ Sa.cx <| String.fromFloat x
             , Sa.cy <| String.fromFloat y
-            , Sa.r "10", Sa.fill "green"
+            , Sa.r "7", Sa.fill "#cae8d5"
             , Se.onMouseDown <| AddNewPoint testOrder
             ] []
     else Svg.g [] []
@@ -223,20 +223,28 @@ svgArea model =
     Svg.svg 
         [ Sa.width "1000", Sa.height "400"
         , Ha.style "border" "solid 1px"
+        , Sa.class "canvas"
         , Mouse.onMove (\event -> MoveMouse event.clientPos)
         ] <| convertDataToSvg model
 
-tabButtons : Model -> Html Msg
-tabButtons model =
-    let tabButton tab txt =  
-            Html.button 
-                [ Ha.class <| if model.tab == tab then "selectedTab" else "tab"
-                , He.onClick <| ChangeTab tab ] 
-                [ Html.text txt ]
+sidebar : Model -> Html Msg
+sidebar model =
+    let tabButton tab imgsrc =  
+            Html.div 
+                [ Ha.class <| 
+                    if model.tab == tab then "selectedTab" 
+                    else if model.hoveredTab == Just tab then "hoveredTab"
+                    else "tab"
+                , He.onClick <| ChangeTab tab
+                , He.onMouseOver <| HoverTab <| Just tab 
+                , He.onMouseLeave <| HoverTab Nothing
+                ]
+                [ Html.img [ Ha.src imgsrc ] [] 
+                ]
     in
-    Html.div []
-        [ tabButton None "None"
-        , tabButton Canvas "Canvas"
-        , tabButton Properties "Properties"
-        , tabButton Save "Save"
+    Html.div [ Ha.class "sidebar" ]
+        [ tabButton None "https://img.icons8.com/material-rounded/48/000000/select-none.png"
+        , tabButton Canvas "https://img.icons8.com/material-rounded/48/000000/diversity.png"
+        , tabButton Properties "https://img.icons8.com/material-rounded/48/000000/add-property-1.png"
+        , tabButton Save "https://img.icons8.com/material-rounded/48/000000/save.png"
         ]

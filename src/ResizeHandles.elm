@@ -46,7 +46,7 @@ handle shapeData selectedShape x y bool1 bool2=
         Svg.rect 
             [ Sa.x <| String.fromFloat x
             , Sa.y <| String.fromFloat y
-            , Sa.width "20", Sa.height "20", Sa.fill "yellow" 
+            , Sa.width "20", Sa.height "20", Sa.fill "#84a9ac" 
             , Sa.rx "2", Sa.ry "2"
             , Se.onMouseDown <| EditShape { shapeData | updateSize = (bool1, bool2) }
             ] []
@@ -81,14 +81,14 @@ polylineHandle shapeData selectedShape pointToHandle =
             [ Svg.circle 
                 [ Sa.cx x
                 , Sa.cy y
-                , Sa.r "10", Sa.fill "yellow"
+                , Sa.r "10", Sa.fill "#84a9ac"
                 , Se.onMouseDown <| EditShape { shapeData | updatePoint = Just pointToHandle }
                 -- , Sa.transform <| "translate(" ++ x ++ " " ++ y ++ ")"
                 ] []
             , Svg.rect 
                 [ Sa.x <| String.fromFloat (selectedPoint.x + 15)
                 , Sa.y <| String.fromFloat (selectedPoint.y- 15)
-                , Sa.width "10", Sa.height "10", Sa.fill "red"
+                , Sa.width "10", Sa.height "10", Sa.fill "#8b1919"
                 , Sa.rx "1", Sa.ry "2"
                 , He.onClick <| DeleteLinePoints pointToHandle
                 ] []
@@ -105,7 +105,7 @@ moveHandle shapeData selectedShape xpos ypos =
             [ Svg.rect
                 [ Sa.x <| String.fromFloat x
                 , Sa.y <| String.fromFloat y
-                , Sa.width "20", Sa.height "20", Sa.fill "blue" 
+                , Sa.width "20", Sa.height "20", Sa.fill "#3b6978" 
                 , Sa.rx "2", Sa.ry "2"
                 , Se.onMouseDown <| EditShape { shapeData | followMouse = True }
                 , He.onMouseOver <| EditShape { shapeData | hovered = True}

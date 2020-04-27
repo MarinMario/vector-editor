@@ -8,6 +8,7 @@ type alias Model =
     , inputShapeData : InputShapeData
     , nextPoint : Float
     , tab : Tab
+    , hoveredTab : Maybe Tab
     }
 
 type alias InputShapeData =
@@ -36,6 +37,7 @@ type Msg
     | DeleteLinePoints Float
     | DownloadSvg
     | ChangeTab Tab
+    | HoverTab (Maybe Tab)
 
 type alias ShapeData =
     { shapeType : ShapeType 

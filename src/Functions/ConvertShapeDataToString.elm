@@ -22,6 +22,7 @@ convertShapeDataToString model =
                     points = inQuotes <| convertPointsToString shapeData
                     labelText = shapeData.labelText
                     fontSize = inQuotes <| String.fromFloat p.width ++ "px"
+
                 in
                 case shapeData.shapeType of
                     Rect ->
@@ -71,8 +72,20 @@ convertShapeDataToString model =
                         "</text>"
             
             ) <| orderShapes model.shapes
+    
+        svgWidth =
+            model.svgProps.width
+                |> String.fromFloat
+                |> inQuotes
+            
+        svgHeight =
+            model.svgProps.height
+                |> String.fromFloat
+                |> inQuotes
     in
-    "<svg width='1000' height='400' xmlns='http://www.w3.org/2000/svg'>" ++ "\n" ++
+    "<svg width=" ++ svgWidth ++ 
+        " height=" ++ svgHeight ++ 
+        " xmlns='http://www.w3.org/2000/svg'>" ++ "\n" ++
         String.join "\n" shapeStringList ++ "\n" ++
     "</svg>"
 

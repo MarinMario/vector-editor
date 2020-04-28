@@ -66,7 +66,7 @@ menu model =
                 Save ->
                     Html.div []
                         [ Html.button [ He.onClick DownloadSvg ] [ Html.text "Download" ]
-                        , Html.textarea [ Ha.class "stringifiedCode" ] [ Html.text <| convertShapeDataToString model ]
+                        , Html.div [ Ha.class "stringifiedCode" ] [ Html.text <| convertShapeDataToString model ]
                         ]
             ]
         , sidebar model

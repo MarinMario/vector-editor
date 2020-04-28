@@ -6,12 +6,15 @@ html {
 
 .app {
     display: flex;
-    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
 }
 
 .canvas {
     grid-area: canvas;
     /* background-color: white; */
+    border: 1px solid;
+    overflow: scroll;
 }
 
 .menu {

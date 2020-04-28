@@ -1,7 +1,14 @@
 module Update exposing (update)
 
 import CustomTypes exposing (..)
-import HelperFunctions exposing (..)
+
+import Init exposing (initShape)
+
+
+import Functions.SaveLoad exposing (downloadSvg)
+import Functions.DragShape exposing (dragShape)
+import Functions.BasicsShape exposing (getSelectedShapeData, deleteSelectedShape)
+import Functions.BasicsPoints exposing (convertPointsToString, addNewPoint)
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -17,7 +24,7 @@ update msg model =
                     , width = String.fromFloat <| Tuple.first selectedShapeData.size
                     , height = String.fromFloat <| Tuple.second selectedShapeData.size
                     , fillColor = selectedShapeData.fillColor
-                    , points = pointsToString selectedShapeData
+                    , points = convertPointsToString selectedShapeData
                     , zIndex = String.fromInt <| selectedShapeData.zIndex
                     , strokeWidth = String.fromFloat <| selectedShapeData.strokeWidth
                     , strokeColor = selectedShapeData.strokeColor

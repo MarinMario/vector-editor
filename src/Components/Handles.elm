@@ -1,4 +1,4 @@
-module ResizeHandles exposing (..)
+module Components.Handles exposing (..)
 
 import Svg exposing (Svg)
 import Svg.Events as Se
@@ -7,7 +7,9 @@ import Svg.Attributes as Sa
 import Html.Events as He
 
 import CustomTypes exposing (..)
-import HelperFunctions exposing (getSelectedPoint, shapeProps)
+
+import Functions.BasicsPoints exposing (getSelectedPoint)
+import Functions.BasicsShape exposing (shapeProps)
 
 changeSizeHandle : ShapeData -> Int -> Svg Msg
 changeSizeHandle shapeData selectedShape =

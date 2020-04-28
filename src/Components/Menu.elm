@@ -64,8 +64,12 @@ menu model =
                         , inputDataFields model
                         ]
                 Save ->
+                    let btn msg str = Html.button [ He.onClick msg ] [ Html.text str ]
+                    in
                     Html.div []
-                        [ Html.button [ He.onClick DownloadSvg ] [ Html.text "Download" ]
+                        [ btn DownloadSvg "Download as Svg"
+                        , btn OpenFile "Load File"
+                        , btn SaveModel "Save File"
                         , Html.div [ Ha.class "stringifiedCode" ] [ Html.text <| convertShapeDataToString model ]
                         ]
             ]

@@ -1,5 +1,6 @@
 module CustomTypes exposing (..)
 
+import File exposing (File)
 type alias Model =
     { mousePosition : (Float, Float)
     , shapes : List ShapeData
@@ -40,6 +41,10 @@ type Msg
     | ChangeTab Tab
     | HoverTab (Maybe Tab)
     | InputSvgData InputSvgProperty String
+    | SaveModel
+    | RequestFile File
+    | LoadModel String
+    | OpenFile
 
 type alias ShapeData =
     { shapeType : ShapeType 
@@ -101,4 +106,9 @@ type alias SvgProps =
     , height : Float
     , color : String
     , updateSize : Bool
+    }
+
+type alias EncodedModel =
+    { lastId : Int
+    , selectedShape : Int
     }

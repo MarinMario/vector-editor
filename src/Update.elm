@@ -4,11 +4,15 @@ import CustomTypes exposing (..)
 
 import Init exposing (initShape)
 
-
-import Functions.SaveLoad exposing (downloadSvg)
+import Functions.SaveLoad exposing (downloadSvg, downloadModel, loadModel, selectFile)
 import Functions.Drag exposing (dragShape, dragSvgSize)
 import Functions.BasicsShape exposing (getSelectedShapeData, deleteSelectedShape)
 import Functions.BasicsPoints exposing (convertPointsToString, addNewPoint)
+
+import File
+import Task
+
+import Json.Decode as Dec
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -205,3 +209,28 @@ update msg model =
             in
             ({ model | svgProps = updatedSvgProps }
             , Cmd.none )
+        
+        SaveModel ->
+            (model, downloadModel model)
+        
+        OpenFile ->
+            (model, selectFile)
+
+        RequestFile file ->
+            (model, Task.perform LoadModel (File.toString file))
+
+        LoadModel theFile ->
+            let decodedModel = loadModel theFile
+                updatedModel =
+                    case decodedModel of
+                        Ok result -> result
+                        Err _ ->
+                            { lastId = model.lastId
+                            , selectedShape = model.selectedShape
+                            }
+            in
+            ({ model 
+            | lastId = updatedModel.lastId
+            , selectedShape = updatedModel.selectedShape
+            }
+            , Cmd.none)

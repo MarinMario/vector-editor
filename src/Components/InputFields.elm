@@ -62,3 +62,9 @@ customInputField property whatValue text =
         [ Html.text <| text ++ ": "
         , Html.input [ Ha.value whatValue, He.onInput <| InputData property ] []
         ]
+svgInputField : InputSvgProperty -> String -> String -> Html Msg
+svgInputField property whatValue text =
+    Html.div [] 
+        [ Html.text <| text ++ ": "
+        , Html.input [ Ha.value whatValue, He.onInput <| InputSvgData property ] []
+        ]

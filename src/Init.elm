@@ -6,12 +6,14 @@ init : flags -> (Model, Cmd Msg)
 init _ =
     ( Model (1, 1) 
         [initShape] 1 1
-        (InputShapeData "0" "0" "50" "50" "blue" "0 0" "1" "5" "black" "This is a label" "800" "600")
-        1.5 None Nothing (800, 600)
+        (InputShapeData "0" "0" "50" "50" "blue" "0 0" "1" "5" "black" "This is a label")
+        1.5 None Nothing initSvgProps
     , Cmd.none
     )
 
 initPoints = [PolylinePoint 1 20 20, PolylinePoint 2 100 100]
+
+initSvgProps = SvgProps 1000 600 "white" False
 
 initShape : ShapeData
 initShape = 
@@ -29,4 +31,5 @@ initShape =
     , strokeColor = "black"
     , hovered = False
     , labelText = "This is a label"
+    , rotation = 0
     }

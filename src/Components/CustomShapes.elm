@@ -25,6 +25,8 @@ hoverEventContainer shapeData =
 customRect : ShapeData -> Int -> Svg Msg
 customRect shapeData selectedShape =
     let p = shapeProps shapeData 
+        -- shapex = String.fromFloat p.xPos
+        -- shapey = String.fromFloat p.yPos
     in
     Svg.g []
         [ hoverEventContainer shapeData

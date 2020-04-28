@@ -9,7 +9,7 @@ type alias Model =
     , nextPoint : Float
     , tab : Tab
     , hoveredTab : Maybe Tab
-    , svgSize : (Float, Float)
+    , svgProps : SvgProps
     }
 
 type alias InputShapeData =
@@ -23,8 +23,6 @@ type alias InputShapeData =
     , strokeWidth : String
     , strokeColor : String
     , labelText : String
-    , svgSizeX : String
-    , svgSizeY : String
     }
 
 type Msg
@@ -41,6 +39,7 @@ type Msg
     | DownloadSvg
     | ChangeTab Tab
     | HoverTab (Maybe Tab)
+    | InputSvgData InputSvgProperty String
 
 type alias ShapeData =
     { shapeType : ShapeType 
@@ -57,6 +56,7 @@ type alias ShapeData =
     , strokeColor : String
     , hovered : Bool
     , labelText : String
+    , rotation : Float
     }
 
 type alias PolylinePoint =
@@ -72,7 +72,7 @@ type ShapeType
     | Polygon
     | Label
 
-type InputProperty 
+type InputProperty
     = Xpos
     | Ypos
     | Width
@@ -83,11 +83,22 @@ type InputProperty
     | StrokeColor
     | Points
     | LabelText
-    | SvgSizeX
-    | SvgSizeY
+
+type InputSvgProperty
+    = SvgWidth
+    | SvgHeight
+    | SvgColor
+    | UpdateSize
 
 type Tab
     = None
     | Canvas
     | Properties
     | Save
+
+type alias SvgProps =
+    { width : Float
+    , height : Float
+    , color : String
+    , updateSize : Bool
+    }

@@ -43,17 +43,17 @@ sidebar model =
 
 menu : Model -> Html Msg
 menu model =
-    let width =
+    let boxWidth =
             if model.tab == None then "0px" else "300px"
     in
     Html.div [ Ha.class "menu" ]
-        [ Html.div [ Ha.class "box", Ha.style "width" width ] 
+        [ Html.div [ Ha.class "box", Ha.style "width" boxWidth ] 
             [ case model.tab of
                 None -> Html.div [] []
                 Canvas ->
                     Html.div []
-                        [ customInputField SvgSizeX model.inputShapeData.svgSizeX "canvas width"
-                        , customInputField SvgSizeY model.inputShapeData.svgSizeY "canvas height"
+                        [ svgInputField SvgWidth (String.fromFloat model.svgProps.width) "canvas width"
+                        , svgInputField SvgHeight (String.fromFloat model.svgProps.height) "canvas height"
                         , newShapeButtons
                         ]
                 Properties ->

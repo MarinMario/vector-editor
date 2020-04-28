@@ -134,3 +134,18 @@ rectHandles shapeData selectedShape =
             , changeHeightHandle shapeData selectedShape
             ]
     else Svg.g [] []
+
+svgHandle model strbool =
+    let x = String.fromFloat <| model.svgProps.width - 10
+        y = String.fromFloat <| model.svgProps.height - 10
+    in
+    Svg.g [] 
+        [ Svg.rect 
+            [ Sa.x x
+            , Sa.y y
+            , Sa.width "20", Sa.height "20", Sa.fill "#84a9ac" 
+            , Sa.rx "2", Sa.ry "2"
+            , Sa.class "shape"
+            , Se.onMouseDown <| InputSvgData UpdateSize strbool
+            ] []
+        ]

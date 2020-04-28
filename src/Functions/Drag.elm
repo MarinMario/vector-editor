@@ -1,6 +1,6 @@
-module Functions.DragShape exposing (dragShape)
+module Functions.Drag exposing (..)
 
-import CustomTypes exposing (Model, ShapeData, ShapeType(..))
+import CustomTypes exposing (Model, ShapeData, ShapeType(..), SvgProps)
 
 dragShape : Model -> List ShapeData
 dragShape model =
@@ -26,7 +26,7 @@ dragShape model =
 
             newPosition =
                 case shape.shapeType of
-                    Rect -> 
+                    Rect ->
                         ( mousex - shapew / 2
                         , mousey - shapeh / 2
                         )
@@ -55,3 +55,16 @@ dragShape model =
             )
         , points = updatedPoints
         }) model.shapes
+
+dragSvgSize : Model -> SvgProps
+dragSvgSize model =
+    let sp = model.svgProps
+
+        updatedWidth = Tuple.first model.mousePosition + 5
+        updatedHeight = Tuple.second model.mousePosition + 5
+    in
+    { sp
+    | width = if sp.updateSize then updatedWidth else model.svgProps.width
+    , height = if sp.updateSize then updatedHeight else model.svgProps.height
+    }
+    

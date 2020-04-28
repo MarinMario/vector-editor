@@ -15,6 +15,7 @@ shapeProps shapeData =
     , fillColor = shapeData.fillColor
     , strokeWidth = shapeData.strokeWidth
     , strokeColor = shapeData.strokeColor
+    , rotation = shapeData.rotation
     }
 
 deleteSelectedShape model =

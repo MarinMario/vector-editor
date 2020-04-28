@@ -6,7 +6,7 @@ import Init exposing (initShape)
 
 
 import Functions.SaveLoad exposing (downloadSvg)
-import Functions.DragShape exposing (dragShape)
+import Functions.Drag exposing (dragShape, dragSvgSize)
 import Functions.BasicsShape exposing (getSelectedShapeData, deleteSelectedShape)
 import Functions.BasicsPoints exposing (convertPointsToString, addNewPoint)
 
@@ -34,6 +34,7 @@ update msg model =
             | mousePosition = pos
             , shapes = dragShape model
             , inputShapeData = newInputShapeData
+            , svgProps = dragSvgSize model
             }, Cmd.none)
         
         EditShape newData ->
@@ -90,8 +91,6 @@ update msg model =
                         StrokeColor -> { isd | strokeColor = val }
                         Points -> isd
                         LabelText -> { isd | labelText = val }
-                        SvgSizeX -> { isd | svgSizeX = val}
-                        SvgSizeY -> { isd | svgSizeY = val}
 
                 newShapes =
                     List.map (\shape ->
@@ -127,9 +126,11 @@ update msg model =
                         , updateSize = (False, False) 
                         , updatePoint = Nothing
                         }) model.shapes
+                sp = model.svgProps
             in
             ({ model
             | shapes = newShapes
+            , svgProps = { sp | updateSize = False }
             }, Cmd.none)
         
         AddNewPoint nextOrder ->
@@ -188,4 +189,19 @@ update msg model =
         
         HoverTab tab ->
             ({ model | hoveredTab = tab }
+            , Cmd.none )
+        
+        InputSvgData vtc val ->
+            let isd = model.svgProps
+                updatedSvgProps =
+                    case vtc of
+                        SvgWidth ->
+                            { isd | width = Maybe.withDefault 0 <| String.toFloat val }
+                        SvgHeight ->
+                            { isd | height = Maybe.withDefault 0 <| String.toFloat val }
+                        UpdateSize ->
+                            { isd | updateSize = val == "True" }
+                        _ -> isd
+            in
+            ({ model | svgProps = updatedSvgProps }
             , Cmd.none )

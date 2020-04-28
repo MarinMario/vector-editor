@@ -8,8 +8,9 @@ import Html.Events as He
 
 import CustomTypes exposing (..)
 
-import Functions.BasicsPoints exposing (getSelectedPoint)
 import Functions.BasicsShape exposing (shapeProps)
+import Functions.CustomEvents exposing (onRightClick)
+import Functions.BasicsPoints exposing (getSelectedPoint)
 
 changeSizeHandle : ShapeData -> Int -> Svg Msg
 changeSizeHandle shapeData selectedShape =
@@ -87,13 +88,7 @@ polylineHandle shapeData selectedShape pointToHandle =
                 , Sa.r "5", Sa.fill "#84a9ac"
                 , Se.onMouseDown <| EditShape { shapeData | updatePoint = Just pointToHandle }
                 -- , Sa.transform <| "translate(" ++ x ++ " " ++ y ++ ")"
-                ] []
-            , Svg.rect 
-                [ Sa.x <| String.fromFloat (selectedPoint.x + 10)
-                , Sa.y <| String.fromFloat (selectedPoint.y- 10)
-                , Sa.width "5", Sa.height "5", Sa.fill "#8b1919"
-                , Sa.rx "1", Sa.ry "1"
-                , He.onClick <| DeleteLinePoints pointToHandle
+                , onRightClick <| (DeleteLinePoints pointToHandle, True)
                 ] []
             ]
     else Svg.g [] []

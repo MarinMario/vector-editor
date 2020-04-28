@@ -52,15 +52,15 @@ menu model =
                 None -> Html.div [] []
                 Canvas ->
                     Html.div []
-                        [ svgInputField SvgWidth (String.fromFloat model.svgProps.width) "canvas width"
-                        , svgInputField SvgHeight (String.fromFloat model.svgProps.height) "canvas height"
+                        [ svgInputField SvgWidth (String.fromFloat model.svgProps.width) "width"
+                        , svgInputField SvgHeight (String.fromFloat model.svgProps.height) "height"
                         , newShapeButtons
                         ]
                 Properties ->
                     Html.div []
                         [ Html.button [ He.onClick DeleteSelectedShapes ] [ Html.text "Delete" ]
                         , Html.button [ He.onClick DuplicateSelectedShapes ] [ Html.text "Duplicate" ]
-                        , Html.div [] [ Html.text <| "Shape id: " ++ String.fromInt model.selectedShape ]
+                        , Html.div [ Ha.class "label" ] [ Html.text <| "Shape id: " ++ String.fromInt model.selectedShape ]
                         , inputDataFields model
                         ]
                 Save ->
@@ -72,15 +72,23 @@ menu model =
         , sidebar model
         ]
 
-newShapeButton : ShapeType -> String -> Html Msg
-newShapeButton shapeType text =
-    Html.button [ He.onClick <| NewShape shapeType ] [ Html.text text ]
+newShapeButton : ShapeType -> Svg Msg -> Html Msg
+newShapeButton shapeType someSvg =
+    Html.div [ Ha.class "createShapeButton", He.onClick <| NewShape shapeType ]
+        [ Svg.svg 
+            [ Sa.width "40", Sa.height "40" 
+            ] [ someSvg ] ]
 newShapeButtons : Html Msg
 newShapeButtons =
     Html.div [] 
-        [ newShapeButton Rect "Rect"
-        , newShapeButton Ellipse "Ellipse"
-        , newShapeButton Polyline "Line"
-        , newShapeButton Polygon "Polygon"
-        , newShapeButton Label "Label"
+        [ newShapeButton Rect 
+            <| Svg.rect [ Sa.width "40", Sa.height "40", Sa.fill "#f2a365" ] []
+        , newShapeButton Ellipse
+            <| Svg.circle [ Sa.cx "20", Sa.cy "20", Sa.r "20", Sa.fill "#f2a365" ] []
+        , newShapeButton Polyline 
+            <| Svg.polyline [ Sa.points "0,20 40,20", Sa.stroke "#f2a365", Sa.strokeWidth "10px" ] []
+        , newShapeButton Polygon
+            <| Svg.polyline [ Sa.points "0,40 20,0 40,40", Sa.fill "#f2a365" ] []
+        , newShapeButton Label
+            <| Svg.text_ [ Sa.y "25", Sa.fill "#f2a365" ] [ Svg.text "TEXT" ]
         ]

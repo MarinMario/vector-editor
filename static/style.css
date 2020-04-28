@@ -1,7 +1,6 @@
 html {
-    /* width: 100vw;
-    height: 100vh; */
     overflow: hidden;
+    background-color:#4f779e;
 }
 
 .app {
@@ -13,8 +12,10 @@ html {
 .canvas {
     grid-area: canvas;
     /* background-color: white; */
-    border: 1px solid;
+    border-right: 3px solid #222831;
+    border-bottom: 3px solid #222831;
     overflow: scroll;
+    background-color: #dbdbdb;
 }
 
 .menu {
@@ -27,25 +28,23 @@ html {
 
 .sidebar {
     grid-area: sidebar;
-    border-left: 1px solid;
     background-color: #222831;
 }
 
 .box {
     grid-area: box;
-    border-left: 1px solid;
     background-color: #30475e;
     transition-duration: 100ms;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .tab :first-child {
-    border-bottom: 1px solid;
     padding: 10px;
-    background-color: #222831;
+    background-color: #3f444d;
     transition-duration: 100ms;
 }
 .selectedTab :first-child, .hoveredTab :first-child {
-    border-bottom: 1px solid;
     background-color: #f2a365;
     padding: 10px;
     transition-duration: 100ms;
@@ -55,4 +54,65 @@ html {
     padding: 10px;
     color: white;
     background-color: black;
+}
+
+.inputField {
+    color: white;
+    text-align: center;
+    display: flex;
+    padding: 10px;
+}
+.inputField :first-child {
+    width: 100px;
+    border-radius: 5px 0px 0px 5px;
+    padding: 10px;
+    background-color: #222831;
+    color: white;
+
+}
+.inputField > div {
+}
+
+input {
+    height: 40px;
+    border-radius: 0px 5px 5px 0px;
+    padding: 10px;
+    width: 150px;
+    color: black;
+    border: 5px solid #222831;
+    border-left: none;
+    background-color:white;
+}
+
+/* .inputFields :first-child {
+    margin-top: 100px;
+} */
+
+button {
+    padding: 20px;
+    background-color: #222831;
+    color: #f2a365;
+    outline: none;
+    border: none;
+    max-width: 100%;
+    margin: 10px;
+    border-radius: 5px;
+    width: 262px;
+}
+
+.createShapeButton {
+    padding: 5px;
+    text-align: center;
+    background-color: #222831;
+    margin: 10px;
+    border-radius: 5px;
+}
+
+.label {
+    border-radius: 5px;
+    padding: 20px;
+    color: black;
+    margin: 10px;
+    background-color:#222831;
+    color: white;
 }

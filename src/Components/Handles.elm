@@ -17,8 +17,8 @@ changeSizeHandle shapeData selectedShape =
     in
     handle 
         shapeData selectedShape 
-        (p.xPos + p.width - 10) 
-        (p.yPos + p.height - 10) 
+        (p.xPos + p.width - 5) 
+        (p.yPos + p.height - 5) 
         True True
 
 
@@ -28,8 +28,8 @@ changeWidthHandle shapeData selectedShape =
     in
     handle 
         shapeData selectedShape 
-        (p.xPos + p.width - 10) 
-        (p.yPos + p.height / 2 - 10) 
+        (p.xPos + p.width - 5) 
+        (p.yPos + p.height / 2 - 5) 
         True False
 
 changeHeightHandle : ShapeData -> Int -> Svg Msg
@@ -38,8 +38,8 @@ changeHeightHandle shapeData selectedShape =
     in
     handle 
         shapeData selectedShape 
-        (p.xPos + p.width / 2 - 10) 
-        (p.yPos + p.height - 10) 
+        (p.xPos + p.width / 2 - 5) 
+        (p.yPos + p.height - 5) 
         False True
 
 
@@ -48,7 +48,7 @@ handle shapeData selectedShape x y bool1 bool2=
         Svg.rect 
             [ Sa.x <| String.fromFloat x
             , Sa.y <| String.fromFloat y
-            , Sa.width "20", Sa.height "20", Sa.fill "#84a9ac" 
+            , Sa.width "10", Sa.height "10", Sa.fill "#84a9ac" 
             , Sa.rx "2", Sa.ry "2"
             , Sa.class "shape"
             , Se.onMouseDown <| EditShape { shapeData | updateSize = (bool1, bool2) }
@@ -60,8 +60,8 @@ ellipseHeightHandle shapeData selectedShape =
     in
     handle 
         shapeData selectedShape 
-        (p.xPos - 10) 
-        (p.yPos + p.height - 10) 
+        (p.xPos - 5) 
+        (p.yPos + p.height - 5) 
         False True
 
 ellipseWidthHandle shapeData selectedShape =
@@ -69,8 +69,8 @@ ellipseWidthHandle shapeData selectedShape =
     in
     handle 
         shapeData selectedShape 
-        (p.xPos + p.width - 10) 
-        (p.yPos - 10) 
+        (p.xPos + p.width - 5) 
+        (p.yPos - 5) 
         True False
 
 polylineHandle : ShapeData -> Int -> Float -> Svg Msg
@@ -84,15 +84,15 @@ polylineHandle shapeData selectedShape pointToHandle =
             [ Svg.circle 
                 [ Sa.cx x
                 , Sa.cy y
-                , Sa.r "10", Sa.fill "#84a9ac"
+                , Sa.r "5", Sa.fill "#84a9ac"
                 , Se.onMouseDown <| EditShape { shapeData | updatePoint = Just pointToHandle }
                 -- , Sa.transform <| "translate(" ++ x ++ " " ++ y ++ ")"
                 ] []
             , Svg.rect 
-                [ Sa.x <| String.fromFloat (selectedPoint.x + 15)
-                , Sa.y <| String.fromFloat (selectedPoint.y- 15)
-                , Sa.width "10", Sa.height "10", Sa.fill "#8b1919"
-                , Sa.rx "1", Sa.ry "2"
+                [ Sa.x <| String.fromFloat (selectedPoint.x + 10)
+                , Sa.y <| String.fromFloat (selectedPoint.y- 10)
+                , Sa.width "5", Sa.height "5", Sa.fill "#8b1919"
+                , Sa.rx "1", Sa.ry "1"
                 , He.onClick <| DeleteLinePoints pointToHandle
                 ] []
             ]
@@ -100,15 +100,15 @@ polylineHandle shapeData selectedShape pointToHandle =
 
 moveHandle : ShapeData -> Int -> Float -> Float -> Svg Msg
 moveHandle shapeData selectedShape xpos ypos =
-    let x = Tuple.first shapeData.position - 10 + xpos
-        y = Tuple.second shapeData.position - 10 + ypos
+    let x = Tuple.first shapeData.position - 5 + xpos
+        y = Tuple.second shapeData.position - 5 + ypos
     in
     if shapeData.hovered || shapeData.id == selectedShape then
         Svg.g [ He.onMouseDown <| InputSelectedShape shapeData.id ] 
             [ Svg.rect
                 [ Sa.x <| String.fromFloat x
                 , Sa.y <| String.fromFloat y
-                , Sa.width "20", Sa.height "20", Sa.fill "#3b6978" 
+                , Sa.width "10", Sa.height "10", Sa.fill "#3b6978" 
                 , Sa.rx "2", Sa.ry "2"
                 , Se.onMouseDown <| EditShape { shapeData | followMouse = True }
                 , He.onMouseOver <| EditShape { shapeData | hovered = True}
@@ -147,5 +147,6 @@ svgHandle model strbool =
             , Sa.rx "2", Sa.ry "2"
             , Sa.class "shape"
             , Se.onMouseDown <| InputSvgData UpdateSize strbool
+            , Se.onClick <| InputSelectedShape 0
             ] []
         ]

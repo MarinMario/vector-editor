@@ -38,7 +38,7 @@ createPointButton shapeData selectedShape pointOrder =
         Svg.circle 
             [ Sa.cx <| String.fromFloat x
             , Sa.cy <| String.fromFloat y
-            , Sa.r "7", Sa.fill "#cae8d5"
+            , Sa.r "5", Sa.fill "#cae8d5"
             , Se.onMouseDown <| AddNewPoint testOrder
             ] []
     else Svg.g [] []

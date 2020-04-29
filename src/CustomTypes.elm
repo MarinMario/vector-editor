@@ -65,10 +65,10 @@ type alias ShapeData =
     }
 
 type alias PolylinePoint =
-        { order : Float
-        , x : Float
-        , y : Float 
-        }
+    { order : Float
+    , x : Float
+    , y : Float 
+    }
 
 type ShapeType
     = Rect
@@ -106,9 +106,4 @@ type alias SvgProps =
     , height : Float
     , color : String
     , updateSize : Bool
-    }
-
-type alias EncodedModel =
-    { lastId : Int
-    , selectedShape : Int
     }

@@ -15,33 +15,34 @@ dragShape model =
 
             newSizeX = mousex - shapex
             newSizeY = mousey - shapey
+            tff = toFloat << floor
             newSize =
                 if newSizeX > 10 && newSizeY > 10 then
-                    (newSizeX, newSizeY)
+                    ( tff newSizeX, tff newSizeY)
                 else if newSizeX > 10 && newSizeY < 10 then
-                    (newSizeX, 10)
+                    ( tff newSizeX, 10)
                 else if newSizeX < 10 && newSizeY > 10 then
-                    (10, newSizeY)
+                    (10, tff newSizeY)
                 else (10, 10)
 
             newPosition =
                 case shape.shapeType of
                     Rect ->
-                        ( mousex - shapew / 2
-                        , mousey - shapeh / 2
+                        ( tff <| mousex - shapew / 2
+                        , tff <| mousey - shapeh / 2
                         )
                     Label ->
-                        ( mousex + 10
-                        , mousey + 10
+                        ( tff <| mousex + 10
+                        , tff <| mousey + 10
                         )
-                    _ -> (mousex, mousey)
+                    _ -> (tff mousex, tff mousey)
 
             updatedPoints =
                 case shape.updatePoint of
                     Just one ->
                         List.map (\point ->
                             if point.order == one then
-                                { point | x = mousex, y = mousey }
+                                { point | x = tff mousex, y = tff mousey }
                             else point
                         ) shape.points
                     Nothing -> shape.points

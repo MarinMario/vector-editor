@@ -13,12 +13,14 @@ import CustomTypes exposing (..)
 import Components.Menu exposing (menu)
 import Components.SvgArea exposing (svgArea)
 
+import Functions.CustomEvents exposing (onRightClick)
 
 view : Model -> Html Msg
 view model =
     Html.div 
         [ He.onMouseUp StopDrag, Ha.class "app"
         , Mouse.onMove (\event -> MoveMouse event.clientPos)
+        , onRightClick <| (InputSelectedShape 0, True)
         ]
         [ svgArea model
         , menu model

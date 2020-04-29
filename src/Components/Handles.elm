@@ -1,6 +1,7 @@
 module Components.Handles exposing (..)
 
 import Svg exposing (Svg)
+import Svg.Lazy as L
 import Svg.Events as Se
 import Svg.Attributes as Sa
 
@@ -134,7 +135,7 @@ svgHandle model strbool =
     let x = String.fromFloat <| model.svgProps.width - 10
         y = String.fromFloat <| model.svgProps.height - 10
     in
-    Svg.g [] 
+    Svg.g [ Se.onMouseDown <| InputSelectedShape 0] 
         [ Svg.rect 
             [ Sa.x x
             , Sa.y y
@@ -142,6 +143,5 @@ svgHandle model strbool =
             , Sa.rx "2", Sa.ry "2"
             , Sa.class "shape"
             , Se.onMouseDown <| InputSvgData UpdateSize strbool
-            , Se.onClick <| InputSelectedShape 0
             ] []
         ]

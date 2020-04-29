@@ -4,7 +4,8 @@ import CustomTypes exposing (..)
 
 import Init exposing (initShape)
 
-import Functions.SaveLoad exposing (downloadSvg, downloadModel)
+import Functions.Save exposing (downloadSvg, downloadModel)
+import Functions.Load exposing (loadModel, selectFile)
 import Functions.Drag exposing (dragShape, dragSvgSize)
 import Functions.BasicsShape exposing (getSelectedShapeData, deleteSelectedShape)
 import Functions.BasicsPoints exposing (convertPointsToString, addNewPoint)
@@ -214,24 +215,55 @@ update msg model =
             (model, downloadModel model)
         
         OpenFile ->
-            (model, --selecstFile
-            Cmd.none
-            )
+            (model, selectFile)
 
         RequestFile file ->
             (model, Task.perform LoadModel (File.toString file))
 
         LoadModel theFile ->
-            -- let decodedModel = loadModel theFile
-            --     updatedModel =
-            --         case decodedModel of
-            --             Ok result -> result
-            --             Err _ ->
-            --                 { lastId = model.lastId
-            --                 }
-            -- in
-            -- ({ model 
-            -- | lastId = updatedModel.lastId
-            -- }
-            -- , Cmd.none)
-            (model, Cmd.none)
+            let decodedModel = loadModel theFile
+                updatedModel =
+                    case decodedModel of
+                        Ok result -> result
+                        Err _ ->
+                            { lastId = model.lastId
+                            , nextPoint = model.nextPoint
+                            , shapes =
+                                [{shapeType = "Rect"
+                                , positionx = 0
+                                , positiony = 0
+                                , sizex = 0
+                                , sizey = 0
+                                , id = 0
+                                , fillColor = "blue"
+                                , strokeWidth = 10
+                                , strokeColor = "red"
+                                , points = Init.initPoints
+                                , zIndex = 1
+                                , labelText = "this shouldn't exist really"
+                                }]
+                            }
+                updatedShapes = 
+                    List.map (\shape ->
+                        { initShape 
+                        | position = (shape.positionx, shape.positiony)
+                        , size = (shape.sizex, shape.sizey)
+                        , shapeType =
+                            case shape.shapeType of
+                                "Rect" -> Rect
+                                "Ellipse" -> Ellipse
+                                "Polygon" -> Polygon
+                                "Polyline" -> Polyline
+                                _ -> Label
+                        , id = shape.id, fillColor = shape.fillColor, strokeWidth = shape.strokeWidth
+                        , points = shape.points, zIndex = shape.zIndex, labelText = shape.labelText
+                        , strokeColor = shape.strokeColor
+                        }
+                    ) updatedModel.shapes
+            in
+            ({ model 
+            | lastId = updatedModel.lastId
+            , nextPoint = updatedModel.nextPoint
+            , shapes = updatedShapes
+            }
+            , Cmd.none)

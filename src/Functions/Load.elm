@@ -57,8 +57,8 @@ decodeShape =
         |> Jde.andMap (Dec.field "fillColor" Dec.string)
         |> Jde.andMap (Dec.field "zIndex" Dec.int)
         |> Jde.andMap (Dec.field "strokeWidth" Dec.float)
-        |> Jde.andMap (Dec.field "labelText" Dec.string)
         |> Jde.andMap (Dec.field "strokeColor" Dec.string)
+        |> Jde.andMap (Dec.field "labelText" Dec.string)
         |> Jde.andMap (Dec.field "points" (Dec.list decodePoints))
         |> Jde.andMap (Dec.field "id" Dec.int)
 

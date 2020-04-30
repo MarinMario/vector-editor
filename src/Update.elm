@@ -91,6 +91,7 @@ update msg model =
             ({ model
             | shapes = model.shapes ++ [newShape]
             , lastId = newId
+            , selectedShape = newShape.id
             }, Cmd.none)
         
         InputSelectedShape val ->
@@ -253,6 +254,7 @@ update msg model =
                                 , zIndex = 1
                                 , labelText = "this shouldn't exist really"
                                 }]
+                            , svgProps = {width = 800, height = 600}
                             }
                 updatedShapes = 
                     List.map (\shape ->
@@ -271,10 +273,17 @@ update msg model =
                         , strokeColor = shape.strokeColor
                         }
                     ) updatedModel.shapes
+            
+                sp = model.svgProps
             in
             ({ model 
             | lastId = updatedModel.lastId
             , nextPoint = updatedModel.nextPoint
             , shapes = updatedShapes
+            , svgProps = 
+                { sp 
+                | width = updatedModel.svgProps.width
+                , height = updatedModel.svgProps.height
+                }
             }
             , Cmd.none)

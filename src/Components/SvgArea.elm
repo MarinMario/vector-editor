@@ -8,8 +8,8 @@ import CustomTypes exposing (Model, Msg(..), ShapeType(..))
 
 import Components.Handles exposing (svgHandle)
 
-import Functions.ConvertDataToSvg exposing (convertDataToSvg)
 import Functions.CustomEvents exposing(propagationMouseDown)
+import Functions.ConvertDataToSvg exposing (convertDataToSvg)
 
 svgArea : Model -> Svg Msg
 svgArea model =

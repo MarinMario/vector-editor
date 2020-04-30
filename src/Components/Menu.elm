@@ -28,7 +28,7 @@ sidebar model =
                         {model | selectHover = 
                             {sh | tab = if sh.tab == tab then None else tab} 
                         }
-                , He.onMouseOver <| EditModel {model | selectHover = {sh | hoveredTab = Just tab} }
+                , He.onMouseEnter <| EditModel {model | selectHover = {sh | hoveredTab = Just tab} }
                 , He.onMouseLeave <| EditModel {model | selectHover = {sh | hoveredTab = Nothing} }
                 ]
                 [ Svg.svg [ Sa.width "30", Sa.height "30" ] [ svgshape ]
@@ -88,8 +88,8 @@ newShapeButton model shapeType someSvg =
     in
     Html.div 
         [ He.onClick <| EditModel { model | selectHover = {sh | shape = shapeType} }
-        , He.onMouseOver <| EditModel { model | selectHover = {sh | hoveredShape = Just shapeType} }
-        , He.onMouseOut <| EditModel { model | selectHover = {sh | hoveredShape = Nothing} }
+        , He.onMouseEnter <| EditModel { model | selectHover = {sh | hoveredShape = Just shapeType} }
+        , He.onMouseLeave <| EditModel { model | selectHover = {sh | hoveredShape = Nothing} }
         , 
         if sh.shape == shapeType then
             Ha.class "selectedShapeButton"

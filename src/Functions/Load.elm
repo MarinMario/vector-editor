@@ -17,6 +17,7 @@ type alias EncodedModel =
     { lastId : Int
     , shapes : List EncodedShape
     , nextPoint : Float
+    , svgProps : EncodedSvgProps
     }
 
 type alias EncodedShape =
@@ -45,6 +46,7 @@ decodeModel =
         |> Jde.andMap (Dec.field "lastId" Dec.int)
         |> Jde.andMap (Dec.field "shapes" (Dec.list decodeShape))
         |> Jde.andMap (Dec.field "nextPoint" Dec.float)
+        |> Jde.andMap (Dec.field "svgProps" decodeSvgProps)
 
 decodeShape : Dec.Decoder EncodedShape
 decodeShape =
@@ -68,6 +70,10 @@ decodePoints =
         |> Jde.andMap (Dec.field "x" Dec.float)
         |> Jde.andMap (Dec.field "y" Dec.float)
 
+decodeSvgProps =
+    Dec.succeed EncodedSvgProps
+        |> Jde.andMap (Dec.field "width" Dec.float)
+        |> Jde.andMap (Dec.field "height" Dec.float)
 
 loadModel encodedModel =
     Dec.decodeString decodeModel encodedModel

@@ -57,7 +57,8 @@ menu model =
                 None -> Html.div [] []
                 Canvas ->
                     Html.div []
-                        [ svgInputField SvgWidth (String.fromFloat model.svgProps.width) "width"
+                        [ svgInputField SvgName model.svgProps.name "name"
+                        , svgInputField SvgWidth (String.fromFloat model.svgProps.width) "width"
                         , svgInputField SvgHeight (String.fromFloat model.svgProps.height) "height"
                         ]
                 Properties ->
@@ -72,8 +73,9 @@ menu model =
                     in
                     Html.div []
                         [ btn DownloadSvg "Download as Svg"
-                        , btn OpenFile "Load File"
+                        , svgInputField SvgName model.svgProps.name "name"
                         , btn SaveModel "Save File"
+                        , btn OpenFile "Load File"
                         , Html.div [ Ha.class "stringifiedCode" ] [ Html.text <| convertShapeDataToString model ]
                         ]
                 Tools ->

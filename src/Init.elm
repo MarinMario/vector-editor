@@ -13,7 +13,7 @@ init _ =
 
 initPoints = [PolylinePoint 1 20 20, PolylinePoint 2 100 100]
 
-initSvgProps = SvgProps 1000 600 "white" False
+initSvgProps = SvgProps 1000 600 "white" False "mySvg"
 
 initShape : ShapeData
 initShape = 

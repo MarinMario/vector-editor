@@ -13,7 +13,7 @@ import Functions.ConvertShapeDataToString exposing (convertShapeDataToString)
 
 downloadSvg : Model -> Cmd Msg
 downloadSvg model =
-    Download.string "svgeditor.svg" "image/svg+xml" (convertShapeDataToString model)
+    Download.string (model.svgProps.name ++ ".svg") "image/svg+xml" (convertShapeDataToString model)
 
 encodeModel : Model -> Enc.Value
 encodeModel model =
@@ -66,10 +66,11 @@ encodeSvgProps : SvgProps -> List (String, Enc.Value)
 encodeSvgProps svgProps =
     [ ("width", Enc.float svgProps.width)
     , ("height", Enc.float svgProps.height)
+    , ("name", Enc.string svgProps.name)
     ]
 
 downloadModel : Model -> Cmd Msg
 downloadModel model =
     Enc.encode 4 (encodeModel model)
-        |> Download.string "svgeditor.json" "text/json"
+        |> Download.string (model.svgProps.name ++ ".json") "text/json"
 

@@ -218,7 +218,8 @@ update msg model =
                             { isd | height = Maybe.withDefault 0 <| String.toFloat val }
                         UpdateSize ->
                             { isd | updateSize = val == "True" }
-                        _ -> isd
+                        SvgName -> { isd | name = val }
+                        SvgColor -> isd
             in
             ({ model | svgProps = updatedSvgProps }
             , Cmd.none )
@@ -254,7 +255,7 @@ update msg model =
                                 , zIndex = 1
                                 , labelText = "this shouldn't exist really"
                                 }]
-                            , svgProps = {width = 800, height = 600}
+                            , svgProps = {width = 800, height = 600, name = "myName"}
                             }
                 updatedShapes = 
                     List.map (\shape ->
@@ -284,6 +285,7 @@ update msg model =
                 { sp 
                 | width = updatedModel.svgProps.width
                 , height = updatedModel.svgProps.height
+                , name = updatedModel.svgProps.name
                 }
             }
             , Cmd.none)

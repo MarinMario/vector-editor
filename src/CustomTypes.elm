@@ -93,6 +93,7 @@ type InputSvgProperty
     | SvgHeight
     | SvgColor
     | UpdateSize
+    | SvgName
 
 type Tab
     = None
@@ -106,6 +107,7 @@ type alias SvgProps =
     , height : Float
     , color : String
     , updateSize : Bool
+    , name : String
     }
 
 type alias SelectHover =

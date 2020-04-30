@@ -20,11 +20,11 @@ svgArea model =
         [ Sa.width width, Sa.height height
         , Sa.class "canvas"
         , case model.selectHover.shape of 
-                NoShape -> propagationMouseDown <| (EditModel model, True)
+                Selector -> propagationMouseDown <| (EditModel model, True)
                 _ -> Se.onMouseDown <| NewShape <| Just model.selectHover.shape
         ] 
         [ Svg.g [] <| convertDataToSvg model
         , case model.selectHover.shape of
-            NoShape -> svgHandle model "True"
+            Selector -> svgHandle model "True"
             _ -> Svg.g [] []
         ]

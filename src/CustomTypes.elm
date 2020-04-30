@@ -74,7 +74,7 @@ type ShapeType
     | Polyline
     | Polygon
     | Label
-    | NoShape
+    | Selector
 
 type InputProperty
     = Xpos

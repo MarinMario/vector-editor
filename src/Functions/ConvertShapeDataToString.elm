@@ -70,7 +70,7 @@ convertShapeDataToString model =
                         " >" ++ "\n" ++
                             labelText ++ "\n" ++
                         "</text>"
-                    NoShape -> ""
+                    Selector -> ""
             
             ) <| orderShapes model.shapes
     

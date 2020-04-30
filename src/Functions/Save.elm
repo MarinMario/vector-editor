@@ -36,7 +36,7 @@ convertShapeTypeToString shapeType =
         Polyline -> "Polyline"
         Polygon -> "Polygon"
         Label -> "Label"
-        NoShape -> "NoShape"
+        Selector -> "Selector"
 
 
 encodeShape : ShapeData -> List (String, Enc.Value)

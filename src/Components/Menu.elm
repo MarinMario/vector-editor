@@ -108,14 +108,14 @@ newShapeButtons model =
             else "#f2a365"
     in
     Html.div [] 
-        [ newShapeButton model NoShape
+        [ newShapeButton model Selector
             <| Svg.g [] 
                 [ Svg.polygon 
                     [ Sa.points "0,0 30,10 10,30"
-                    , Sa.fill (fill NoShape)] []
+                    , Sa.fill (fill Selector)] []
                 , Svg.polyline 
                     [ Sa.points "10,10 40,40"
-                    , Sa.stroke (fill NoShape)
+                    , Sa.stroke (fill Selector)
                     , Sa.strokeWidth "5" ] []
                 ]
         , newShapeButton model Rect 

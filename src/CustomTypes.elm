@@ -8,8 +8,7 @@ type alias Model =
     , selectedShape : Int
     , inputShapeData : InputShapeData
     , nextPoint : Float
-    , tab : Tab
-    , hoveredTab : Maybe Tab
+    , selectHover : SelectHover
     , svgProps : SvgProps
     }
 
@@ -38,13 +37,12 @@ type Msg
     | DuplicateSelectedShapes
     | DeleteLinePoints Float
     | DownloadSvg
-    | ChangeTab Tab
-    | HoverTab (Maybe Tab)
     | InputSvgData InputSvgProperty String
     | SaveModel
     | RequestFile File
     | LoadModel String
     | OpenFile
+    | EditModel Model
 
 type alias ShapeData =
     { shapeType : ShapeType 
@@ -106,4 +104,10 @@ type alias SvgProps =
     , height : Float
     , color : String
     , updateSize : Bool
+    }
+
+type alias SelectHover =
+    { tab : Tab
+    , hoveredTab : Maybe Tab
+    , shape : Maybe ShapeType
     }

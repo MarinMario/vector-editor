@@ -54,7 +54,7 @@ update msg model =
             | shapes = newShapes
             }, Cmd.none)
             
-        NewShape shapeType ->
+        NewShape shapeType->
             let newId = model.lastId + 1
                 newShape = 
                     { initShape 
@@ -188,13 +188,8 @@ update msg model =
         DownloadSvg ->
             (model, downloadSvg model)
         
-        ChangeTab tab ->
-            ({ model | tab = tab }
-            , Cmd.none )
-        
-        HoverTab tab ->
-            ({ model | hoveredTab = tab }
-            , Cmd.none )
+        EditModel newModel ->
+            (newModel, Cmd.none)
         
         InputSvgData vtc val ->
             let isd = model.svgProps

@@ -15,23 +15,27 @@ import Functions.ConvertShapeDataToString exposing (convertShapeDataToString)
 
 sidebar : Model -> Html Msg
 sidebar model =
+    let sh = model.selectHover
+    in
     let tabButton tab svgshape =  
             Html.div 
                 [ Ha.class <| 
-                    if model.tab == tab then "selectedTab" 
-                    else if model.hoveredTab == Just tab then "hoveredTab"
+                    if model.selectHover.tab == tab then "selectedTab" 
+                    else if model.selectHover.hoveredTab == Just tab then "hoveredTab"
                     else "tab"
-                , He.onClick <| 
-                    if model.tab == tab then ChangeTab None
-                    else ChangeTab tab
-                , He.onMouseOver <| HoverTab <| Just tab 
-                , He.onMouseLeave <| HoverTab Nothing
+                , He.onClick 
+                    <| EditModel 
+                        {model | selectHover = 
+                            {sh | tab = if sh.tab == tab then None else tab} 
+                        }
+                , He.onMouseOver <| EditModel {model | selectHover = {sh | hoveredTab = Just tab} }
+                , He.onMouseLeave <| EditModel {model | selectHover = {sh | hoveredTab = Nothing} }
                 ]
                 [ Svg.svg [ Sa.width "30", Sa.height "30" ] [ svgshape ]
                 ]
         
         tabColor tab =
-            if model.tab == tab then Sa.fill "black"
+            if model.selectHover.tab == tab then Sa.fill "black"
             else Sa.fill "#ececec"
     in
     Html.div [ Ha.class "sidebar" ]
@@ -44,11 +48,11 @@ sidebar model =
 menu : Model -> Html Msg
 menu model =
     let boxWidth =
-            if model.tab == None then "0px" else "300px"
+            if model.selectHover.tab == None then "0px" else "300px"
     in
     Html.div [ Ha.class "menu" ]
         [ Html.div [ Ha.class "box", Ha.style "width" boxWidth ] 
-            [ case model.tab of
+            [ case model.selectHover.tab of
                 None -> Html.div [] []
                 Canvas ->
                     Html.div []

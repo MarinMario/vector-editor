@@ -24,5 +24,7 @@ svgArea model =
                 _ -> Se.onMouseDown <| NewShape <| Just model.selectHover.shape
         ] 
         [ Svg.g [] <| convertDataToSvg model
-        , svgHandle model "True"
+        , case model.selectHover.shape of
+            NoShape -> svgHandle model "True"
+            _ -> Svg.g [] []
         ]

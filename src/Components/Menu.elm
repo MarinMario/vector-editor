@@ -107,7 +107,15 @@ newShapeButtons model =
     in
     Html.div [] 
         [ newShapeButton model NoShape
-            <| Svg.text_ [ Sa.y "25", Sa.fill (fill NoShape) ] [ Svg.text "" ]
+            <| Svg.g [] 
+                [ Svg.polygon 
+                    [ Sa.points "0,0 30,10 10,30"
+                    , Sa.fill (fill NoShape)] []
+                , Svg.polyline 
+                    [ Sa.points "10,10 40,40"
+                    , Sa.stroke (fill NoShape)
+                    , Sa.strokeWidth "5" ] []
+                ]
         , newShapeButton model Rect 
             <| Svg.rect [ Sa.width "40", Sa.height "40", Sa.fill (fill Rect) ] []
         , newShapeButton model Ellipse

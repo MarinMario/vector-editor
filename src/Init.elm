@@ -7,7 +7,7 @@ init _ =
     ( Model (1, 1) 
         [] 1 1
         (InputShapeData "0" "0" "50" "50" "blue" "0 0" "1" "5" "black" "This is a label")
-        1.5 (SelectHover None Nothing Nothing) initSvgProps
+        1.5 (SelectHover Canvas Nothing Polyline Nothing) initSvgProps
     , Cmd.none
     )
 

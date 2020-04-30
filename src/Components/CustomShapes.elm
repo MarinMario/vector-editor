@@ -25,7 +25,7 @@ hoverEventContainer shapeData =
 handlesIfNoShape : Model -> Html Msg -> Html Msg
 handlesIfNoShape model handles =
     case model.selectHover.shape of
-        Nothing -> handles
+        NoShape -> handles
         _ -> Svg.g [] []
 
 customRect : ShapeData -> Model -> Svg Msg

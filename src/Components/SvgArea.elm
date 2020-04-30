@@ -4,7 +4,7 @@ import Svg exposing (Svg)
 import Svg.Events as Se
 import Svg.Attributes as Sa
 
-import CustomTypes exposing (Model, Msg(..))
+import CustomTypes exposing (Model, Msg(..), ShapeType(..))
 
 import Components.Handles exposing (svgHandle)
 
@@ -20,8 +20,8 @@ svgArea model =
         [ Sa.width width, Sa.height height
         , Sa.class "canvas"
         , case model.selectHover.shape of 
-                Just _ -> Se.onMouseDown <| NewShape model.selectHover.shape
-                Nothing -> propagationMouseDown <| (EditModel model, True)
+                NoShape -> propagationMouseDown <| (EditModel model, True)
+                _ -> Se.onMouseDown <| NewShape <| Just model.selectHover.shape
         ] 
         [ Svg.g [] <| convertDataToSvg model
         , svgHandle model "True"

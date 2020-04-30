@@ -49,7 +49,8 @@ dragShape model =
         in
         { shape
         | position =
-            if shape.followMouse then newPosition else shape.position
+            if shape.followMouse then newPosition 
+            else shape.position
         , size = 
             ( if Tuple.first shape.updateSize then Tuple.first newSize else Tuple.first shape.size
             , if Tuple.second shape.updateSize then Tuple.second newSize else Tuple.second shape.size

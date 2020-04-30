@@ -35,8 +35,8 @@ html {
     grid-area: box;
     background-color: #30475e;
     transition-duration: 100ms;
-    overflow-y: scroll;
-    overflow-x: hidden;
+    overflow: auto;
+    border-left: 3px solid #222831 ;
 }
 
 .tab :first-child {
@@ -100,16 +100,24 @@ button {
     width: 262px;
 }
 
-.shapeButton, .selectedShapeButton {
+.shapeButton, .selectedShapeButton, .hoveredShapeButton {
     padding: 5px;
     text-align: center;
     background-color: #222831;
     margin: 10px;
     border-radius: 5px;
+    border: 3px solid #222831;
+    transition-duration: 50ms;
 }
 
 .selectedShapeButton {
     background-color: #f2a365;
+    transition-duration: 100ms;
+    border-color:#f2a365;
+}
+
+.hoveredShapeButton {
+    border-color: #f2a365;
     transition-duration: 100ms;
 }
 

@@ -62,16 +62,16 @@ update msg model =
                     { initShape 
                     | shapeType = Maybe.withDefault Rect shapeType
                     , id = newId
-                    , size = (0, 0)
+                    , size = (10, 10)
                     , fillColor =
                         if shapeType == Just Polyline then "none"
                         else initShape.fillColor
                     , points =
                         case shapeType of 
                             Just Polygon -> 
-                                [ PolylinePoint 1 mousex mousey
+                                [ PolylinePoint 1 (mousex + 100) (mousey + 100)
                                 , PolylinePoint 1.5 mousex mousey
-                                , PolylinePoint 2 mousex (mousey +100)
+                                , PolylinePoint 2 (mousex - 100) (mousey + 100)
                                 ]
                             Just Polyline -> 
                                 [ PolylinePoint 1 mousex mousey

@@ -22,4 +22,5 @@ convertDataToSvg model =
                 customPolyline shapeData model Svg.polygon
             Label ->
                 customLabel shapeData model
+            NoShape -> Svg.g [] []
     ) <| orderShapes model.shapes

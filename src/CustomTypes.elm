@@ -74,6 +74,7 @@ type ShapeType
     | Polyline
     | Polygon
     | Label
+    | NoShape
 
 type InputProperty
     = Xpos
@@ -109,5 +110,6 @@ type alias SvgProps =
 type alias SelectHover =
     { tab : Tab
     , hoveredTab : Maybe Tab
-    , shape : Maybe ShapeType
+    , shape : ShapeType
+    , hoveredShape : Maybe ShapeType
     }

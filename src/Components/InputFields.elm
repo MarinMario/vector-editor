@@ -58,6 +58,7 @@ inputDataFields model =
                 , customInputField LabelText model.inputShapeData.labelText "text"
                 , constantFields
                 ]
+        NoShape -> Html.div [] []
 
 customInputField : InputProperty -> String -> String -> Html Msg
 customInputField property whatValue text =

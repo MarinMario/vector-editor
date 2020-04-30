@@ -80,15 +80,19 @@ menu model =
         , sidebar model
         ]
 
-newShapeButton : Model -> Maybe ShapeType -> Svg Msg -> Html Msg
+newShapeButton : Model -> ShapeType -> Svg Msg -> Html Msg
 newShapeButton model shapeType someSvg =
     let sh = model.selectHover  
     in
     Html.div 
         [ He.onClick <| EditModel { model | selectHover = {sh | shape = shapeType} }
+        , He.onMouseOver <| EditModel { model | selectHover = {sh | hoveredShape = Just shapeType} }
+        , He.onMouseOut <| EditModel { model | selectHover = {sh | hoveredShape = Nothing} }
         , 
         if sh.shape == shapeType then
             Ha.class "selectedShapeButton"
+        else if sh.hoveredShape == Just shapeType then
+            Ha.class "hoveredShapeButton"
         else Ha.class "shapeButton"
         ]
         [ Svg.svg 
@@ -102,16 +106,16 @@ newShapeButtons model =
             else "#f2a365"
     in
     Html.div [] 
-        [newShapeButton model Nothing
-            <| Svg.text_ [ Sa.y "25", Sa.fill (fill Nothing) ] [ Svg.text "" ]
-        , newShapeButton model (Just Rect) 
-            <| Svg.rect [ Sa.width "40", Sa.height "40", Sa.fill (fill <| Just Rect) ] []
-        , newShapeButton model (Just Ellipse)
-            <| Svg.circle [ Sa.cx "20", Sa.cy "20", Sa.r "20", Sa.fill (fill <| Just Ellipse) ] []
-        , newShapeButton model (Just Polyline)
-            <| Svg.polyline [ Sa.points "0,20 40,20", Sa.stroke (fill <| Just Polyline), Sa.strokeWidth "10px" ] []
-        , newShapeButton model (Just Polygon)
-            <| Svg.polyline [ Sa.points "0,40 20,0 40,40", Sa.fill (fill <| Just Polygon) ] []
-        , newShapeButton model (Just Label)
-            <| Svg.text_ [ Sa.y "25", Sa.fill (fill <| Just Label) ] [ Svg.text "TEXT" ]
+        [ newShapeButton model NoShape
+            <| Svg.text_ [ Sa.y "25", Sa.fill (fill NoShape) ] [ Svg.text "" ]
+        , newShapeButton model Rect 
+            <| Svg.rect [ Sa.width "40", Sa.height "40", Sa.fill (fill Rect) ] []
+        , newShapeButton model Ellipse
+            <| Svg.circle [ Sa.cx "20", Sa.cy "20", Sa.r "20", Sa.fill (fill Ellipse) ] []
+        , newShapeButton model Polyline
+            <| Svg.polyline [ Sa.points "0,20 40,20", Sa.stroke (fill Polyline), Sa.strokeWidth "10px" ] []
+        , newShapeButton model Polygon
+            <| Svg.polyline [ Sa.points "0,40 20,0 40,40", Sa.fill (fill Polygon) ] []
+        , newShapeButton model Label
+            <| Svg.text_ [ Sa.y "25", Sa.fill (fill Label) ] [ Svg.text "TEXT" ]
         ]

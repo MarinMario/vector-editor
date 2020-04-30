@@ -97,6 +97,7 @@ type InputSvgProperty
 type Tab
     = None
     | Canvas
+    | Tools
     | Properties
     | Save
 

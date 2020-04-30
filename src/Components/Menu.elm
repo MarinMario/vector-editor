@@ -41,6 +41,7 @@ sidebar model =
     Html.div [ Ha.class "sidebar" ]
         [ tabButton None <| Svg.rect [ Sa.width "30", Sa.height "30", tabColor None ] []
         , tabButton Canvas <| Svg.rect [ Sa.width "30", Sa.height "30", tabColor Canvas ] []
+        , tabButton Tools <| Svg.rect [ Sa.width "30", Sa.height "30", tabColor Tools ] []
         , tabButton Properties <| Svg.rect [ Sa.width "30", Sa.height "30", tabColor Properties ] []
         , tabButton Save <| Svg.rect [ Sa.width "30", Sa.height "30", tabColor Save ] []
         ]
@@ -58,7 +59,6 @@ menu model =
                     Html.div []
                         [ svgInputField SvgWidth (String.fromFloat model.svgProps.width) "width"
                         , svgInputField SvgHeight (String.fromFloat model.svgProps.height) "height"
-                        , newShapeButtons model
                         ]
                 Properties ->
                     Html.div []
@@ -76,6 +76,8 @@ menu model =
                         , btn SaveModel "Save File"
                         , Html.div [ Ha.class "stringifiedCode" ] [ Html.text <| convertShapeDataToString model ]
                         ]
+                Tools ->
+                    Html.div [] [ newShapeButtons model ]
             ]
         , sidebar model
         ]

@@ -54,22 +54,38 @@ update msg model =
             | shapes = newShapes
             }, Cmd.none)
             
-        NewShape shapeType->
+        NewShape shapeType ->
             let newId = model.lastId + 1
-                newShape = 
+                mousex = Tuple.first model.mousePosition
+                mousey = Tuple.second model.mousePosition
+                newShape =
                     { initShape 
-                    | shapeType = shapeType
+                    | shapeType = Maybe.withDefault Rect shapeType
                     , id = newId
+                    , size = (0, 0)
                     , fillColor =
-                        if shapeType == Polyline then "none"
+                        if shapeType == Just Polyline then "none"
                         else initShape.fillColor
                     , points =
                         case shapeType of 
-                            Polygon -> 
-                                [PolylinePoint 1 20 20, PolylinePoint 1.5 20 100, PolylinePoint 2 100 100]
-                            _ -> initShape.points
+                            Just Polygon -> 
+                                [ PolylinePoint 1 mousex mousey
+                                , PolylinePoint 1.5 mousex mousey
+                                , PolylinePoint 2 mousex (mousey +100)
+                                ]
+                            Just Polyline -> 
+                                [ PolylinePoint 1 mousex mousey
+                                , PolylinePoint 2 mousex mousey
+                                ]
+                            _ -> []
                     , strokeWidth =
-                        if shapeType == Label then 1 else initShape.strokeWidth
+                        if shapeType == Just Label then 1 else initShape.strokeWidth
+                    , position = model.mousePosition
+                    , updateSize = (True, True)
+                    , updatePoint =
+                        case shapeType of
+                            Just Polygon -> Just 1.5
+                            _ -> Just 2
                     }
             in
             ({ model

@@ -22,8 +22,14 @@ hoverEventContainer shapeData =
         , Se.onMouseOut <| EditShape { shapeData | hovered = False }
         ]
 
-customRect : ShapeData -> Int -> Svg Msg
-customRect shapeData selectedShape =
+handlesIfNoShape : Model -> Html Msg -> Html Msg
+handlesIfNoShape model handles =
+    case model.selectHover.shape of
+        Nothing -> handles
+        _ -> Svg.g [] []
+
+customRect : ShapeData -> Model -> Svg Msg
+customRect shapeData model =
     let p = shapeProps shapeData 
         -- shapex = String.fromFloat p.xPos
         -- shapey = String.fromFloat p.yPos
@@ -39,12 +45,14 @@ customRect shapeData selectedShape =
                 , He.onMouseDown <| InputSelectedShape shapeData.id
                 ] []
             ]
-        , rectHandles shapeData selectedShape
-        , moveHandle shapeData selectedShape (p.width / 2) ( p.height / 2)
+        , handlesIfNoShape model (Svg.g []
+            [ rectHandles shapeData model.selectedShape
+            , moveHandle shapeData model.selectedShape (p.width / 2) ( p.height / 2)
+            ])
         ]
 
-customEllipse : ShapeData -> Int -> Svg Msg
-customEllipse shapeData selectedShape =
+customEllipse : ShapeData -> Model -> Svg Msg
+customEllipse shapeData model =
     let p = shapeProps shapeData 
     in
     Svg.g []
@@ -58,11 +66,13 @@ customEllipse shapeData selectedShape =
                 , He.onMouseDown <| InputSelectedShape shapeData.id
                 ] []
             ]
-        , ellipseHandles shapeData selectedShape
-        , moveHandle shapeData selectedShape 0 0
+        , handlesIfNoShape model ( Svg.g []
+            [ ellipseHandles shapeData model.selectedShape
+            , moveHandle shapeData model.selectedShape 0 0
+            ])
         ]
 
-customPolyline shapeData selectedShape polytype =
+customPolyline shapeData model polytype =
     let strokeWidth = String.fromFloat shapeData.strokeWidth
     in
     Svg.g []
@@ -76,16 +86,19 @@ customPolyline shapeData selectedShape polytype =
                 , He.onClick <| InputSelectedShape shapeData.id
                 ] []
             ]
-        , Svg.g [] 
-            <| List.map (\point -> polylineHandle shapeData selectedShape point.order) shapeData.points
-        , Svg.g []
-            <| List.map (\point -> 
-                    createPointButton shapeData selectedShape point.order) 
-            <| List.take (List.length shapeData.points - 1) shapeData.points
+        , handlesIfNoShape model (Svg.g []
+            [ Svg.g [] 
+                <| List.map (\point -> 
+                    polylineHandle shapeData model.selectedShape point.order) shapeData.points
+            , Svg.g []
+                <| List.map (\point -> 
+                    createPointButton shapeData model.selectedShape point.order) 
+                <| List.take (List.length shapeData.points - 1) shapeData.points
+            ])
         -- , moveHandle shapeData
         ]
 
-customLabel shapeData selectedShape =
+customLabel shapeData model =
     let p = shapeProps shapeData
         x = String.fromFloat p.xPos
         y = String.fromFloat p.yPos
@@ -102,6 +115,8 @@ customLabel shapeData selectedShape =
                 ] 
                 [ Svg.text shapeData.labelText ]
             ]
-        , moveHandle shapeData selectedShape -10 -10
-        , changeWidthHandle shapeData selectedShape
+        , handlesIfNoShape model (Svg.g []
+            [ moveHandle shapeData model.selectedShape -10 -10
+            , changeWidthHandle shapeData model.selectedShape
+            ])
         ]

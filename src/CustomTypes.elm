@@ -28,7 +28,7 @@ type alias InputShapeData =
 type Msg
     = MoveMouse (Float, Float)
     | EditShape ShapeData
-    | NewShape ShapeType
+    | NewShape (Maybe ShapeType)
     | InputSelectedShape Int
     | InputData InputProperty String
     | StopDrag

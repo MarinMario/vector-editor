@@ -13,13 +13,13 @@ convertDataToSvg model =
     List.map (\shapeData -> 
         case shapeData.shapeType of
             Rect ->
-                customRect shapeData model.selectedShape
+                customRect shapeData model
             Ellipse -> 
-                customEllipse shapeData model.selectedShape
+                customEllipse shapeData model
             Polyline ->
-                customPolyline shapeData model.selectedShape Svg.polyline
+                customPolyline shapeData model Svg.polyline
             Polygon ->
-                customPolyline shapeData model.selectedShape Svg.polygon
+                customPolyline shapeData model Svg.polygon
             Label ->
-                customLabel shapeData model.selectedShape
+                customLabel shapeData model
     ) <| orderShapes model.shapes

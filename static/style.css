@@ -100,12 +100,17 @@ button {
     width: 262px;
 }
 
-.createShapeButton {
+.shapeButton, .selectedShapeButton {
     padding: 5px;
     text-align: center;
     background-color: #222831;
     margin: 10px;
     border-radius: 5px;
+}
+
+.selectedShapeButton {
+    background-color: #f2a365;
+    transition-duration: 100ms;
 }
 
 .label {

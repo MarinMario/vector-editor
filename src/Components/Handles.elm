@@ -10,7 +10,7 @@ import Html.Events as He
 import CustomTypes exposing (..)
 
 import Functions.BasicsShape exposing (shapeProps)
-import Functions.CustomEvents exposing (onRightClick)
+import Functions.CustomEvents exposing (onRightClick, propagationMouseDown)
 import Functions.BasicsPoints exposing (getSelectedPoint)
 
 changeSizeHandle : ShapeData -> Int -> Svg Msg

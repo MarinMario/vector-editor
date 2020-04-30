@@ -23,7 +23,7 @@ sidebar model =
                     if model.selectHover.tab == tab then "selectedTab" 
                     else if model.selectHover.hoveredTab == Just tab then "hoveredTab"
                     else "tab"
-                , He.onClick 
+                , He.onClick
                     <| EditModel 
                         {model | selectHover = 
                             {sh | tab = if sh.tab == tab then None else tab} 
@@ -58,7 +58,7 @@ menu model =
                     Html.div []
                         [ svgInputField SvgWidth (String.fromFloat model.svgProps.width) "width"
                         , svgInputField SvgHeight (String.fromFloat model.svgProps.height) "height"
-                        , newShapeButtons
+                        , newShapeButtons model
                         ]
                 Properties ->
                     Html.div []
@@ -80,23 +80,38 @@ menu model =
         , sidebar model
         ]
 
-newShapeButton : ShapeType -> Svg Msg -> Html Msg
-newShapeButton shapeType someSvg =
-    Html.div [ Ha.class "createShapeButton", He.onClick <| NewShape shapeType ]
+newShapeButton : Model -> Maybe ShapeType -> Svg Msg -> Html Msg
+newShapeButton model shapeType someSvg =
+    let sh = model.selectHover  
+    in
+    Html.div 
+        [ He.onClick <| EditModel { model | selectHover = {sh | shape = shapeType} }
+        , 
+        if sh.shape == shapeType then
+            Ha.class "selectedShapeButton"
+        else Ha.class "shapeButton"
+        ]
         [ Svg.svg 
             [ Sa.width "40", Sa.height "40" 
             ] [ someSvg ] ]
-newShapeButtons : Html Msg
-newShapeButtons =
+newShapeButtons : Model -> Html Msg
+newShapeButtons model =
+    let sh = model.selectHover
+        fill shape =
+            if sh.shape == shape then "#222831"
+            else "#f2a365"
+    in
     Html.div [] 
-        [ newShapeButton Rect 
-            <| Svg.rect [ Sa.width "40", Sa.height "40", Sa.fill "#f2a365" ] []
-        , newShapeButton Ellipse
-            <| Svg.circle [ Sa.cx "20", Sa.cy "20", Sa.r "20", Sa.fill "#f2a365" ] []
-        , newShapeButton Polyline 
-            <| Svg.polyline [ Sa.points "0,20 40,20", Sa.stroke "#f2a365", Sa.strokeWidth "10px" ] []
-        , newShapeButton Polygon
-            <| Svg.polyline [ Sa.points "0,40 20,0 40,40", Sa.fill "#f2a365" ] []
-        , newShapeButton Label
-            <| Svg.text_ [ Sa.y "25", Sa.fill "#f2a365" ] [ Svg.text "TEXT" ]
+        [newShapeButton model Nothing
+            <| Svg.text_ [ Sa.y "25", Sa.fill (fill Nothing) ] [ Svg.text "" ]
+        , newShapeButton model (Just Rect) 
+            <| Svg.rect [ Sa.width "40", Sa.height "40", Sa.fill (fill <| Just Rect) ] []
+        , newShapeButton model (Just Ellipse)
+            <| Svg.circle [ Sa.cx "20", Sa.cy "20", Sa.r "20", Sa.fill (fill <| Just Ellipse) ] []
+        , newShapeButton model (Just Polyline)
+            <| Svg.polyline [ Sa.points "0,20 40,20", Sa.stroke (fill <| Just Polyline), Sa.strokeWidth "10px" ] []
+        , newShapeButton model (Just Polygon)
+            <| Svg.polyline [ Sa.points "0,40 20,0 40,40", Sa.fill (fill <| Just Polygon) ] []
+        , newShapeButton model (Just Label)
+            <| Svg.text_ [ Sa.y "25", Sa.fill (fill <| Just Label) ] [ Svg.text "TEXT" ]
         ]

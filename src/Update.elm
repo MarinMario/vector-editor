@@ -79,7 +79,7 @@ update msg model =
                                 ]
                             _ -> []
                     , strokeWidth =
-                        if shapeType == Just Label then 1 else initShape.strokeWidth
+                        if shapeType == Just Label then 0 else initShape.strokeWidth
                     , position = model.mousePosition
                     , updateSize = (True, True)
                     , updatePoint =

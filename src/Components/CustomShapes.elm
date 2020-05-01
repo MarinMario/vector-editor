@@ -112,7 +112,7 @@ customLabel shapeData model =
                 , Sa.fontSize <| w ++ "px"
                 , Sa.stroke shapeData.strokeColor, Sa.strokeWidth sw
                 , He.onMouseDown <| InputSelectedShape shapeData.id
-                , Ha.style "pointer-events" "none"
+                , Ha.style "user-select" "none"
                 ] 
                 [ Svg.text shapeData.labelText ]
             ]

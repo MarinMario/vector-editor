@@ -65,6 +65,7 @@ update msg model =
                     , size = (10, 10)
                     , fillColor =
                         if shapeType == Just Polyline then "none"
+                        else if shapeType == Just Label then "black"
                         else initShape.fillColor
                     , points =
                         case shapeType of 

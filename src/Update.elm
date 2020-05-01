@@ -255,7 +255,7 @@ update msg model =
                                 , zIndex = 1
                                 , labelText = "this shouldn't exist really"
                                 }]
-                            , svgProps = {width = 800, height = 600, name = "myName"}
+                            , svgProps = {width = 800, height = 600, name = "what did you do noober"}
                             }
                 updatedShapes = 
                     List.map (\shape ->

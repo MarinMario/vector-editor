@@ -9,6 +9,7 @@ import Svg.Attributes as Sa
 
 import CustomTypes exposing (..)
 
+import Components.Icons exposing (..)
 import Components.InputFields exposing (..)
 
 import Functions.ConvertShapeDataToString exposing (convertShapeDataToString)
@@ -26,7 +27,12 @@ sidebar model =
                 , He.onClick
                     <| EditModel 
                         {model | selectHover = 
-                            {sh | tab = if sh.tab == tab then None else tab} 
+                            { sh | tab = if sh.tab == tab then None else tab
+                            , shape =
+                                case tab of
+                                    Properties -> Selector
+                                    _ -> model.selectHover.shape
+                            } 
                         }
                 , He.onMouseEnter <| EditModel {model | selectHover = {sh | hoveredTab = Just tab} }
                 , He.onMouseLeave <| EditModel {model | selectHover = {sh | hoveredTab = Nothing} }
@@ -39,11 +45,11 @@ sidebar model =
             else Sa.fill "#ececec"
     in
     Html.div [ Ha.class "sidebar" ]
-        [ tabButton None <| Svg.rect [ Sa.width "30", Sa.height "30", tabColor None ] []
-        , tabButton Canvas <| Svg.rect [ Sa.width "30", Sa.height "30", tabColor Canvas ] []
-        , tabButton Tools <| Svg.rect [ Sa.width "30", Sa.height "30", tabColor Tools ] []
-        , tabButton Properties <| Svg.rect [ Sa.width "30", Sa.height "30", tabColor Properties ] []
-        , tabButton Save <| Svg.rect [ Sa.width "30", Sa.height "30", tabColor Save ] []
+        [ tabButton None       <| closeIcon model
+        , tabButton Canvas     <| canvasIcon model
+        , tabButton Tools      <| toolsIcon model
+        , tabButton Properties <| propertiesIcon model
+        , tabButton Save       <| saveIcon model
         ]
 
 menu : Model -> Html Msg
@@ -100,8 +106,10 @@ newShapeButton model shapeType someSvg =
         else Ha.class "shapeButton"
         ]
         [ Svg.svg 
-            [ Sa.width "40", Sa.height "40" 
+            [ Sa.width "40", Sa.height "40"
             ] [ someSvg ] ]
+
+
 newShapeButtons : Model -> Html Msg
 newShapeButtons model =
     let sh = model.selectHover
@@ -113,7 +121,7 @@ newShapeButtons model =
         [ newShapeButton model Selector
             <| Svg.g [] 
                 [ Svg.polygon 
-                    [ Sa.points "0,0 30,10 10,30"
+                    [ Sa.points "0,0 35,10 20,20 10,35"
                     , Sa.fill (fill Selector)] []
                 , Svg.polyline 
                     [ Sa.points "10,10 40,40"
@@ -121,7 +129,7 @@ newShapeButtons model =
                     , Sa.strokeWidth "5" ] []
                 ]
         , newShapeButton model Rect 
-            <| Svg.rect [ Sa.width "40", Sa.height "40", Sa.fill (fill Rect) ] []
+            <| Svg.rect [ Sa.width "40", Sa.height "40", Sa.fill (fill Rect)] []
         , newShapeButton model Ellipse
             <| Svg.circle [ Sa.cx "20", Sa.cy "20", Sa.r "20", Sa.fill (fill Ellipse) ] []
         , newShapeButton model Polyline

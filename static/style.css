@@ -1,6 +1,7 @@
 html {
     overflow: hidden;
     background-color:#4f779e;
+    font-family: 'Oswald', sans-serif;
 }
 
 .app {
@@ -106,7 +107,6 @@ button {
     margin: 10px;
     border-radius: 5px;
     border: 3px solid #222831;
-    transition-duration: 50ms;
 }
 
 .selectedShapeButton {
@@ -117,7 +117,7 @@ button {
 
 .hoveredShapeButton {
     border-color: #f2a365;
-    transition-duration: 100ms;
+    
 }
 
 .label {

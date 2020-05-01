@@ -13,17 +13,9 @@ dragShape model =
             shapew = Tuple.first shape.size
             shapeh = Tuple.second shape.size
 
-            newSizeX = mousex - shapex
-            newSizeY = mousey - shapey
+            newSizeX = abs <| mousex - shapex
+            newSizeY = abs <| mousey - shapey
             tff = toFloat << floor
-            newSize =
-                if newSizeX > 10 && newSizeY > 10 then
-                    ( tff newSizeX, tff newSizeY)
-                else if newSizeX > 10 && newSizeY < 10 then
-                    ( tff newSizeX, 10)
-                else if newSizeX < 10 && newSizeY > 10 then
-                    (10, tff newSizeY)
-                else (10, 10)
 
             newPosition =
                 case shape.shapeType of
@@ -46,14 +38,15 @@ dragShape model =
                             else point
                         ) shape.points
                     Nothing -> shape.points
+            
         in
         { shape
         | position =
-            if shape.followMouse then newPosition 
+            if shape.followMouse then newPosition
             else shape.position
         , size = 
-            ( if Tuple.first shape.updateSize then Tuple.first newSize else Tuple.first shape.size
-            , if Tuple.second shape.updateSize then Tuple.second newSize else Tuple.second shape.size
+            ( if Tuple.first shape.updateSize then newSizeX else Tuple.first shape.size
+            , if Tuple.second shape.updateSize then newSizeY else Tuple.second shape.size
             )
         , points = updatedPoints
         }) model.shapes

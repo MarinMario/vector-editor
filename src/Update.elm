@@ -208,14 +208,7 @@ update msg model =
             (model, downloadSvg model)
         
         EditModel newModel ->
-            let sh = newModel.selectHover
-            in
-            ({ newModel
-            | selectedShape =
-                if sh.tab == Canvas then 0 
-                else model.selectedShape
-            }
-            , Cmd.none)
+            (newModel, Cmd.none)
         
         InputSvgData vtc val ->
             let isd = model.svgProps

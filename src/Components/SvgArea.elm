@@ -15,7 +15,6 @@ svgArea : Model -> Svg Msg
 svgArea model =
     let width = String.fromFloat model.svgProps.width
         height = String.fromFloat model.svgProps.height
-        sh = model.selectHover
     in
     Svg.svg 
         [ Sa.width width, Sa.height height
@@ -27,9 +26,9 @@ svgArea model =
         [ Svg.rect
             [ Sa.width width, Sa.height height, Sa.fill model.svgProps.color
             , 
-            if sh.shape == Selector then
+            if model.selectHover.shape == Selector then
                 Se.onClick 
-                    <| EditModel { model | selectHover = { sh | tab = Canvas } }
+                    <| EditModel { model | selectedShape = 0}
             else propagationMouseDown <| (EditModel model, True)
             ] []
         , Svg.g [] <| convertDataToSvg model

@@ -62,7 +62,7 @@ update msg model =
                     { initShape 
                     | shapeType = Maybe.withDefault Rect shapeType
                     , id = newId
-                    , size = (10, 10)
+                    , size = (0, 0)
                     , fillColor =
                         if shapeType == Just Polyline then "none"
                         else if shapeType == Just Label then "black"
@@ -70,9 +70,9 @@ update msg model =
                     , points =
                         case shapeType of 
                             Just Polygon -> 
-                                [ PolylinePoint 1 (mousex + 100) (mousey + 100)
+                                [ PolylinePoint 1 (mousex + 100) mousey
                                 , PolylinePoint 1.5 mousex mousey
-                                , PolylinePoint 2 (mousex - 100) (mousey + 100)
+                                , PolylinePoint 2 mousex (mousey - 100)
                                 ]
                             Just Polyline -> 
                                 [ PolylinePoint 1 mousex mousey
@@ -86,7 +86,8 @@ update msg model =
                     , updatePoint =
                         case shapeType of
                             Just Polygon -> Just 1.5
-                            _ -> Just 2
+                            Just Polyline -> Just 2
+                            _ -> Nothing
                     }
             in
             ({ model
@@ -207,7 +208,14 @@ update msg model =
             (model, downloadSvg model)
         
         EditModel newModel ->
-            (newModel, Cmd.none)
+            let sh = newModel.selectHover
+            in
+            ({ newModel
+            | selectedShape =
+                if sh.tab == Canvas then 0 
+                else model.selectedShape
+            }
+            , Cmd.none)
         
         InputSvgData vtc val ->
             let isd = model.svgProps
@@ -220,9 +228,12 @@ update msg model =
                         UpdateSize ->
                             { isd | updateSize = val == "True" }
                         SvgName -> { isd | name = val }
-                        SvgColor -> isd
+                        SvgColor -> { isd | color = val }
+                
             in
-            ({ model | svgProps = updatedSvgProps }
+            ({ model 
+            | svgProps = updatedSvgProps
+            }
             , Cmd.none )
         
         SaveModel ->
@@ -256,7 +267,12 @@ update msg model =
                                 , zIndex = 1
                                 , labelText = "this shouldn't exist really"
                                 }]
-                            , svgProps = {width = 800, height = 600, name = "what did you do noober"}
+                            , svgProps = 
+                                { width = 800
+                                , height = 600
+                                , name = "what did you do noober"
+                                , color = "red"
+                                }
                             }
                 updatedShapes = 
                     List.map (\shape ->

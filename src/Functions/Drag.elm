@@ -32,7 +32,6 @@ dragShape model =
                         else (tff init.x, tff init.y)
                     _ -> (tff init.x, tff init.y)
 
-
             newPosition =
                 case shape.shapeType of
                     Rect ->

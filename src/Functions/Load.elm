@@ -39,6 +39,7 @@ type alias EncodedSvgProps =
     { width : Float
     , height : Float
     , name : String
+    , color : String
     }
 
 decodeModel : Dec.Decoder EncodedModel
@@ -76,6 +77,7 @@ decodeSvgProps =
         |> Jde.andMap (Dec.field "width" Dec.float)
         |> Jde.andMap (Dec.field "height" Dec.float)
         |> Jde.andMap (Dec.field "name" Dec.string)
+        |> Jde.andMap (Dec.field "color" Dec.string)
 
 loadModel encodedModel =
     Dec.decodeString decodeModel encodedModel

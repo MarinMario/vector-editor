@@ -4,7 +4,7 @@ import Svg exposing (Svg)
 import Svg.Events as Se
 import Svg.Attributes as Sa
 
-import CustomTypes exposing (Model, Msg(..), ShapeType(..))
+import CustomTypes exposing (..)
 
 import Components.Handles exposing (svgHandle)
 
@@ -15,6 +15,7 @@ svgArea : Model -> Svg Msg
 svgArea model =
     let width = String.fromFloat model.svgProps.width
         height = String.fromFloat model.svgProps.height
+        sh = model.selectHover
     in
     Svg.svg 
         [ Sa.width width, Sa.height height
@@ -22,8 +23,19 @@ svgArea model =
         , case model.selectHover.shape of 
                 Selector -> propagationMouseDown <| (EditModel model, True)
                 _ -> Se.onMouseDown <| NewShape <| Just model.selectHover.shape
-        ] 
-        [ Svg.g [] <| convertDataToSvg model
+        ]
+        [ Svg.rect
+            [ Sa.width width, Sa.height height, Sa.fill model.svgProps.color 
+            , Se.onClick 
+                <| EditModel 
+                    { model | selectHover = 
+                    { sh 
+                    | tab = 
+                        if sh.shape == Selector then Canvas 
+                        else sh.tab
+                    } }
+            ] []
+        , Svg.g [] <| convertDataToSvg model
         , case model.selectHover.shape of
             Selector -> svgHandle model "True"
             _ -> Svg.g [] []

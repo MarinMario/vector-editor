@@ -5,7 +5,7 @@ import CustomTypes exposing (..)
 init : flags -> (Model, Cmd Msg)
 init _ =
     ( Model (1, 1) 
-        [] 1 1
+        [] 1 0
         (InputShapeData "0" "0" "50" "50" "blue" "0 0" "1" "5" "black" "This is a label")
         1.5 (SelectHover Tools Nothing Polyline Nothing) initSvgProps
     , Cmd.none

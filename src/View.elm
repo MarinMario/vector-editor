@@ -20,7 +20,6 @@ view model =
     Html.div 
         [ He.onMouseUp StopDrag, Ha.class "app"
         , Mouse.onMove (\event -> MoveMouse event.clientPos)
-        , onRightClick <| (InputSelectedShape 0, True)
         ]
         [ svgArea model
         , menu model

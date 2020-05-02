@@ -39,10 +39,6 @@ sidebar model =
                 ]
                 [ Svg.svg [ Sa.width "30", Sa.height "30" ] [ svgshape ]
                 ]
-        
-        tabColor tab =
-            if model.selectHover.tab == tab then Sa.fill "black"
-            else Sa.fill "#ececec"
     in
     Html.div [ Ha.class "sidebar" ]
         [ tabButton None       <| closeIcon model
@@ -66,14 +62,22 @@ menu model =
                         [ svgInputField SvgName model.svgProps.name "name"
                         , svgInputField SvgWidth (String.fromFloat model.svgProps.width) "width"
                         , svgInputField SvgHeight (String.fromFloat model.svgProps.height) "height"
+                        , svgInputField SvgColor model.svgProps.color "background"
                         ]
                 Properties ->
-                    Html.div []
-                        [ Html.button [ He.onClick DeleteSelectedShapes ] [ Html.text "Delete" ]
-                        , Html.button [ He.onClick DuplicateSelectedShapes ] [ Html.text "Duplicate" ]
-                        , Html.div [ Ha.class "label" ] [ Html.text <| "Shape id: " ++ String.fromInt model.selectedShape ]
-                        , inputDataFields model
-                        ]
+                    let selectedShapeLabel =
+                            Html.div [ Ha.class "label" ] 
+                                [ Html.text <| "Shape id: " ++ String.fromInt model.selectedShape ]
+                    in
+                    if model.selectedShape == 0 then
+                        selectedShapeLabel
+                    else
+                        Html.div []
+                            [ Html.button [ He.onClick DeleteSelectedShapes ] [ Html.text "Delete" ]
+                            , Html.button [ He.onClick DuplicateSelectedShapes ] [ Html.text "Duplicate" ]
+                            , selectedShapeLabel
+                            , inputDataFields model
+                            ]
                 Save ->
                     let btn msg str = Html.button [ He.onClick msg ] [ Html.text str ]
                     in

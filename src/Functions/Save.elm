@@ -67,6 +67,7 @@ encodeSvgProps svgProps =
     [ ("width", Enc.float svgProps.width)
     , ("height", Enc.float svgProps.height)
     , ("name", Enc.string svgProps.name)
+    , ("color", Enc.string svgProps.color)
     ]
 
 downloadModel : Model -> Cmd Msg

@@ -303,6 +303,7 @@ update msg model =
                 | width = updatedModel.svgProps.width
                 , height = updatedModel.svgProps.height
                 , name = updatedModel.svgProps.name
+                , color = updatedModel.svgProps.color
                 }
             }
             , Cmd.none)

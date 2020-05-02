@@ -18,8 +18,9 @@ import Functions.CustomEvents exposing (onRightClick)
 view : Model -> Html Msg
 view model =
     Html.div 
-        [ He.onMouseUp StopDrag, Ha.class "app"
+        [ Ha.class "app"
         , Mouse.onMove (\event -> MoveMouse event.clientPos)
+        , He.onMouseUp StopDrag
         ]
         [ svgArea model
         , menu model

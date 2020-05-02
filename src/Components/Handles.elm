@@ -46,6 +46,9 @@ changeHeightHandle shapeData selectedShape =
 
 
 handle shapeData selectedShape x y bool1 bool2=
+    let initx = Tuple.first shapeData.position
+        inity = Tuple.second shapeData.position
+    in
     if shapeData.id == selectedShape then
         Svg.rect 
             [ Sa.x <| String.fromFloat x
@@ -53,7 +56,12 @@ handle shapeData selectedShape x y bool1 bool2=
             , Sa.width "10", Sa.height "10", Sa.fill "#84a9ac" 
             , Sa.rx "2", Sa.ry "2"
             , Sa.class "shape"
-            , Se.onMouseDown <| EditShape { shapeData | updateSize = (bool1, bool2) }
+            , Se.onMouseDown 
+                <| EditShape 
+                    { shapeData 
+                    | updateSize = (bool1, bool2) 
+                    , points = [PolylinePoint 1 initx inity]
+                    }
             ] []
     else Svg.g [] []
 

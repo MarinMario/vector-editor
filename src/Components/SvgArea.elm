@@ -26,10 +26,11 @@ svgArea model =
         ]
         [ Svg.rect
             [ Sa.width width, Sa.height height, Sa.fill model.svgProps.color
-            , if sh.shape == Selector then
+            , 
+            if sh.shape == Selector then
                 Se.onClick 
                     <| EditModel { model | selectHover = { sh | tab = Canvas } }
-                else propagationMouseDown <| (EditModel model, True)
+            else propagationMouseDown <| (EditModel model, True)
             ] []
         , Svg.g [] <| convertDataToSvg model
         , case model.selectHover.shape of

@@ -78,7 +78,7 @@ update msg model =
                                 [ PolylinePoint 1 mousex mousey
                                 , PolylinePoint 2 mousex mousey
                                 ]
-                            _ -> []
+                            _ -> [ PolylinePoint 1 mousex mousey ]
                     , strokeWidth =
                         if shapeType == Just Label then 0 else initShape.strokeWidth
                     , position = model.mousePosition

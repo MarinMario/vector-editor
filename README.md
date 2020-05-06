@@ -19,12 +19,12 @@
 		2. Fila de unelte - folosita pentru a alege unealta potrivita situatiei.
 		3. Fila de proprietati - folosita pentru a modifica proprietatiile formei gemoetrice selectate.
 		4. Fila de salvare - folosita pentru descarcarea proiectelor sub forma de imagini svg, pentru salvarea lor sub format json sau pentru incarcarea proiectelor editate in trecut.
- - Uneltele de creare sau editare a formelor prezente sunt urmatoarele:
-	 1. Selector - aceasta unealta poate fi folosita pentru selectarea formelor si editarea lor prin drag and drop.
-	 2. Rect - unealta pentru crearea de dreptunghiuri
-	 3. Ellipse - unealta pentru crearea de elipse
-	 4. Polyline - unealta pentru creare de linii simple sau linii frante deschise
-	 5. Polygon - unealta pentru crearea de poligoane
+	 - Uneltele de creare sau editare a formelor prezente sunt urmatoarele:
+		 1. Selector - aceasta unealta poate fi folosita pentru selectarea formelor si editarea lor prin drag and drop.
+		 2. Rect - unealta pentru crearea de dreptunghiuri
+		 3. Ellipse - unealta pentru crearea de elipse
+		 4. Polyline - unealta pentru creare de linii simple sau linii frante deschise
+		 5. Polygon - unealta pentru crearea de poligoane
 
 ## Ghid de instalare
 Instalarea se face prin descarcarea acestui repository si rularea comenzii urmatoare in folderul radacina.

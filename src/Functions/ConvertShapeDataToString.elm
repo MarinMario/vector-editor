@@ -83,10 +83,15 @@ convertShapeDataToString model =
             model.svgProps.height
                 |> String.fromFloat
                 |> inQuotes
+        
+        svgColor = inQuotes model.svgProps.color
     in
     "<svg width=" ++ svgWidth ++ 
         " height=" ++ svgHeight ++ 
         " xmlns='http://www.w3.org/2000/svg'>" ++ "\n" ++
+        " <rect width=" ++ svgWidth ++
+        " height=" ++ svgHeight ++ 
+        " fill=" ++ svgColor ++ "/>" ++
         String.join "\n" shapeStringList ++ "\n" ++
     "</svg>"
 
